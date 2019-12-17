@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Meeter.Models;
 
 namespace Meeter.Controllers
 {
@@ -10,6 +11,47 @@ namespace Meeter.Controllers
     [ApiController]
     public class MeeterController : ControllerBase
     {
+        private readonly MeeterDbContext context;
+
+        public MeeterController(MeeterDbContext ctx)
+        {
+            context = ctx;
+        }
+
+        // GET api/meeter/users
+        [HttpGet("users")]
+        public IEnumerable<User> GetUsers()
+        {
+            return context.Users.AsEnumerable();
+        }
+
+        // GET api/meeter/events
+        [HttpGet("events")]
+        public IEnumerable<Event> GetEvents()
+        {
+            return context.Events.OrderBy(e => e.DateTime).AsEnumerable();
+        }
+
+        // POST api/meeter/events
+        [HttpPost]
+        public async Task<IActionResult> PostEvent([FromBody] Event @event)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            if (@event.GroupId == 0)
+                return BadRequest(ModelState);
+
+            context.Events.Add(@event);
+
+            await context.SaveChangesAsync();
+
+            return CreatedAtAction("GetEvents", new { id = @event.Id }, @event);
+        }
+
+
+
+
         // GET api/meeter
         [HttpGet]
         public ActionResult<IEnumerable<string>> Get()
