@@ -10,9 +10,19 @@ namespace Meeter.Models
 
         public int GroupId { get; set; }
 
-        public List<int> Preferences { get; set; } // ids of UserPreference objects
+        //public List<int> Preferences { get; set; } // ids of UserPreference objects
 
-        // Public Place Place { get; set; }
+        public int PlaceId { get; set; }
+
+        public DateTime DateTime { get; set; }
+
+        public virtual ICollection<UserPreference> Preferences { get; set; }
+
+        public virtual Group Group { get; set; }
+
+        public virtual Place Place { get; set; }
+
+
 
         public void SetPlace(MeeterDbContext _context)
         {

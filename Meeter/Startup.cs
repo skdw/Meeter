@@ -30,9 +30,9 @@ namespace Meeter
         {
             services.AddDbContext<MeeterDbContext>(opts => opts.UseInMemoryDatabase("MeeterDatabase"));
 
-            // identity - in work
-            //services.AddIdentity<IdentityUser, IdentityRole>()
-            //    .AddEntityFrameworkStores<MeeterDbContext>();
+            // identity - work in progress
+            services.AddIdentity<IdentityUser, IdentityRole>()
+                .AddEntityFrameworkStores<MeeterDbContext>();
 
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);

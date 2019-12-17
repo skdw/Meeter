@@ -16,6 +16,8 @@ namespace Meeter.Models
 
         public DbSet<Group> Groups { get; set; }
 
+        public DbSet<GroupMember> GroupMembers { get; set; }
+
         public DbSet<UserPreference> UserPreferences { get; set; }
 
         public DbSet<Event> Events { get; set; }
