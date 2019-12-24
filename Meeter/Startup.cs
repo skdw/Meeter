@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Meeter.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -16,6 +17,29 @@ using Microsoft.Extensions.Options;
 
 namespace Meeter
 {
+    //public class EventAuthorizationHandler :
+    //AuthorizationHandler<SameAuthorRequirement, Event>
+    //{
+    //    protected override Task HandleRequirementAsync(AuthorizationHandlerContext context,
+    //                                                   SameAuthorRequirement requirement,
+    //                                                   Event resource)
+    //    {
+    //        if (context.User.Identity?.Name == resource.Group.Creator.Name) // visible only to the group creator
+    //        {
+    //            context.Succeed(requirement);
+    //        }
+
+    //        return Task.CompletedTask;
+    //    }
+    //}
+
+    //public class SameAuthorRequirement : IAuthorizationRequirement { }
+
+
+
+
+
+
     public class Startup
     {
         public Startup(IConfiguration configuration)
@@ -30,12 +54,37 @@ namespace Meeter
         {
             services.AddDbContext<MeeterDbContext>(opts => opts.UseInMemoryDatabase("MeeterDatabase"));
 
-            // identity - work in progress
-            services.AddIdentity<IdentityUser, IdentityRole>()
-                .AddEntityFrameworkStores<MeeterDbContext>();
+            services.AddIdentity<IdentityUser, IdentityRole>(config =>
+            {
+                config.Password.RequireDigit = false;
+                config.Password.RequiredLength = 4;
+                config.Password.RequireUppercase = false;
+                config.Password.RequireNonAlphanumeric = false;
+            })
+                .AddEntityFrameworkStores<MeeterDbContext>()
+                .AddDefaultTokenProviders();
+            //.AddRoles<IdentityRole>();
 
+            services.ConfigureApplicationCookie(config =>
+            {
+                config.Cookie.Name = "Identity.cookie";
+                config.LoginPath = "/api/meeter/Login";
+            });
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+            /*
+            services.AddAuthorization(options =>
+            {
+
+                //options.AddPolicy("RequireAdministratorRole",
+                //    policy => policy.RequireRole("Administrator"));
+
+                //options.AddPolicy(Operations.Read.Name, policy =>
+                //    policy.Requirements.Add(new SameAuthorRequirement()));
+            }); */
+
+            //services.AddSingleton<IAuthorizationHandler, EventAuthorizationHandler>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -46,7 +95,8 @@ namespace Meeter
                 app.UseDeveloperExceptionPage();
             }
 
-            //app.UseAuthentication();
+            app.UseAuthentication();
+           // app.UseAuthorization();
             app.UseDefaultFiles();
             app.UseStaticFiles();
             app.UseMvc();
