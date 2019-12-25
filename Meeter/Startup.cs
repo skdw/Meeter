@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using Meeter.AuthorizationRequirements;
 using Meeter.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -70,6 +72,29 @@ namespace Meeter
                 config.Cookie.Name = "Identity.cookie";
                 config.LoginPath = "/api/meeter/Login";
             });
+
+            services.AddAuthorization(options =>
+            {
+                //var defaultAuthBuilder = new AuthorizationPolicyBuilder();
+                //var defaultAuthPolicy = defaultAuthBuilder
+                //    .RequireAuthenticatedUser()
+                //    .Build();
+
+                //options.DefaultPolicy = defaultAuthPolicy;
+
+                //options.AddPolicy("Claim.DoB", policyBuilder =>
+                //{
+                //    policyBuilder.RequireClaim(ClaimTypes.DateOfBirth);
+                //});
+
+                options.AddPolicy("Claim.DoB", policyBuilder =>
+                {
+                    //policyBuilder.AddRequirements(new CustomRequireClaim(ClaimTypes.DateOfBirth));
+                    policyBuilder.RequireCustomClaim(ClaimTypes.DateOfBirth);
+                });
+            });
+
+            services.AddScoped<IAuthorizationHandler, CustomRequireClaimHandler>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 

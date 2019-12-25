@@ -80,6 +80,13 @@ namespace Meeter.Controllers
             return "Secret page";
         }
 
+        [HttpGet("secretpolicy")]
+        [Authorize(Policy = "Claim.DoB")]
+        public ActionResult<string> SecretPolicy()
+        {
+            return "Secret policy page";
+        }
+
         [HttpGet("login")]
         public ActionResult<string> Login()
         {
