@@ -9,9 +9,7 @@ namespace Meeter.Models
     {
         public MeeterDbContext(DbContextOptions<MeeterDbContext> options) : base(options) { }
 
-        public DbSet<IdentityUser> IdentityUsers { get; set; }
-
-        //public DbSet<User> Users { get; set; } // partially from identity
+       // public DbSet<User> Users { get; set; } // already implemented !!!
 
         public DbSet<Place> Places { get; set; }
 

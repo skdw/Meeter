@@ -73,26 +73,26 @@ namespace Meeter
                 config.LoginPath = "/api/meeter/Login";
             });
 
-            services.AddAuthorization(options =>
-            {
-                //var defaultAuthBuilder = new AuthorizationPolicyBuilder();
-                //var defaultAuthPolicy = defaultAuthBuilder
-                //    .RequireAuthenticatedUser()
-                //    .Build();
+            //services.AddAuthorization(options =>
+            //{
+            //    //var defaultAuthBuilder = new AuthorizationPolicyBuilder();
+            //    //var defaultAuthPolicy = defaultAuthBuilder
+            //    //    .RequireAuthenticatedUser()
+            //    //    .Build();
 
-                //options.DefaultPolicy = defaultAuthPolicy;
+            //    //options.DefaultPolicy = defaultAuthPolicy;
 
-                //options.AddPolicy("Claim.DoB", policyBuilder =>
-                //{
-                //    policyBuilder.RequireClaim(ClaimTypes.DateOfBirth);
-                //});
+            //    //options.AddPolicy("Claim.DoB", policyBuilder =>
+            //    //{
+            //    //    policyBuilder.RequireClaim(ClaimTypes.DateOfBirth);
+            //    //});
 
-                options.AddPolicy("Claim.DoB", policyBuilder =>
-                {
-                    //policyBuilder.AddRequirements(new CustomRequireClaim(ClaimTypes.DateOfBirth));
-                    policyBuilder.RequireCustomClaim(ClaimTypes.DateOfBirth);
-                });
-            });
+            //    options.AddPolicy("Claim.DoB", policyBuilder =>
+            //    {
+            //        //policyBuilder.AddRequirements(new CustomRequireClaim(ClaimTypes.DateOfBirth));
+            //        policyBuilder.RequireCustomClaim(ClaimTypes.DateOfBirth);
+            //    });
+            //});
 
             services.AddScoped<IAuthorizationHandler, CustomRequireClaimHandler>();
 

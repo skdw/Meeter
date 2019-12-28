@@ -70,7 +70,11 @@ namespace Meeter.Controllers
         [HttpGet("index")]
         public ActionResult<string> Index()
         {
-            return "Home page";
+            var signed = signInManager.IsSignedIn(User);
+            var id = userManager.GetUserId(User);
+            var name = userManager.GetUserName(User);
+
+            return "Home page - username: " + name + "  id: " + id + "  signed " + signed;
         }
 
         [HttpGet("secret")]
@@ -80,12 +84,12 @@ namespace Meeter.Controllers
             return "Secret page";
         }
 
-        [HttpGet("secretpolicy")]
-        [Authorize(Policy = "Claim.DoB")]
-        public ActionResult<string> SecretPolicy()
-        {
-            return "Secret policy page";
-        }
+        //[HttpGet("secretpolicy")]
+        //[Authorize(Policy = "Claim.DoB")]
+        //public ActionResult<string> SecretPolicy()
+        //{
+        //    return "Secret policy page";
+        //}
 
         [HttpGet("login")]
         public ActionResult<string> Login()
@@ -109,7 +113,7 @@ namespace Meeter.Controllers
                 }
             }
 
-            return RedirectToAction("Index");
+            return Unauthorized();
         }
 
         [HttpGet("register")]
@@ -119,12 +123,14 @@ namespace Meeter.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<ActionResult<string>> Register([FromForm] string username, [FromForm] string password)
+        public async Task<ActionResult<string>> Register([FromForm] string username, [FromForm] string password, [FromForm] string email, [FromForm] string fname, [FromForm] string lname)
         {
-            var user = new IdentityUser
+            var user = new User
             {
                 UserName = username,
-                Email = ""
+                Email = email,
+                FirstName = fname,
+                LastName = lname
             };
 
             var result = await userManager.CreateAsync(user, password);
@@ -149,10 +155,6 @@ namespace Meeter.Controllers
             return RedirectToAction("Index");
         }
 
-
-
-
-
         // GET api/meeter/users
         [HttpGet("users")]
         public IEnumerable<IdentityUser> GetUsers()
@@ -168,7 +170,7 @@ namespace Meeter.Controllers
         }
 
         // POST api/meeter/events
-        [HttpPost]
+        [HttpPost("events")]
         public async Task<IActionResult> PostEvent([FromBody] Event @event)
         {
             if (!ModelState.IsValid)
