@@ -155,12 +155,48 @@ namespace Meeter.Controllers
             return RedirectToAction("Index");
         }
 
-        // GET api/meeter/users
         [HttpGet("users")]
         public IEnumerable<IdentityUser> GetUsers()
         {
             return context.Users.AsEnumerable();
         }
+
+        [HttpGet("groups")]
+        public IEnumerable<Group> GetGroups()
+        {
+            return context.Groups.AsEnumerable();
+        }
+
+        [HttpPost("groups")]
+        public async Task<IActionResult> PostGroup([FromForm] string groupName, [FromForm] string[] user)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var selectedUsersTasks = user.Select(async user_id => await context.Users.FindAsync(user_id) as User);
+            var selectedUsers = await Task.WhenAll(selectedUsersTasks);
+
+            var groupMembers = selectedUsers.Select(u => new GroupMember { User = u }).ToArray();
+
+            var creator = await userManager.GetUserAsync(User) as User;
+
+            Group group = new Group()
+            {
+                Name = groupName,
+                Creator = creator,
+                Memberships = groupMembers
+            };
+
+            foreach (var member in group.Memberships)
+                member.Group = group;
+
+            context.Groups.Add(group);
+
+            await context.SaveChangesAsync();
+
+            return CreatedAtAction("GetGroups", new { id = group.Id }, group);
+        }
+
 
         // GET api/meeter/events
         [HttpGet("events")]

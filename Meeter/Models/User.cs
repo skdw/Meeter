@@ -20,6 +20,6 @@ namespace Meeter.Models
 
         //public virtual IdentityUser IdentityUser { get; set; }
 
-        public virtual ICollection<GroupMember> Members { get; set; }
+        public virtual ICollection<GroupMember> Memberships { get; set; }
     }
 }
