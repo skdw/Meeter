@@ -1,0 +1,31 @@
+﻿@model Meeter.Models.Group
+@{
+    ViewData["Title"] = "GroupCreate";
+}
+
+<h2>GroupCreate</h2>
+
+
+<div class="row page-box">
+    <div class="col-sm-12">
+        <h2>New Group</h2>
+        @using (Html.BeginForm("Create"))
+        {
+            @Html.AntiForgeryToken()
+            <div class="form-group">
+                @Html.LabelFor(m => m.Name)
+                @Html.EditorFor(m => m.Name, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(m => m.Name, "", new { @class = "text-danger" })
+            </div>
+            @Html.HiddenFor(m => m.Creator)
+            <div class="form-group">
+
+                <button type="submit" class="btn btn-primary">Create</button>
+
+            </div>
+
+        }
+    </div>
+   
+</div>
+

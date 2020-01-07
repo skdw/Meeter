@@ -1,8 +1,11 @@
 ﻿using System;
+
+using System.ComponentModel.DataAnnotations;
 namespace Meeter.Models
 {
     public class Place
     {
+        [System.ComponentModel.DataAnnotations.Schema.NotMapped]
         public PlaceGeometry Geometry { get; set; }
 
         public string Icon { get; set; }
@@ -10,7 +13,7 @@ namespace Meeter.Models
         public string Id { get; set; }
 
         public string Name { get; set; }
-
+        [System.ComponentModel.DataAnnotations.Schema.NotMapped]
         public PlaceOpeningHours OpeningHours { get; set; }
 
         public string PlaceId { get; set; }

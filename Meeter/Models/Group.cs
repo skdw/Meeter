@@ -12,10 +12,12 @@ namespace Meeter.Models
 
        // public List<int> Members { get; set; } <- many to many relation, data stored in 'GroupMember' junction table
 
-        public int CreatorId { get; set; }
+      //  public int CreatorId { get; set; }
+
+        public string Name { get; set; }
 
         public virtual User Creator { get; set; }
 
-        public virtual ICollection<GroupMember> Members { get; set; }
+      //  public virtual ICollection<GroupMember> Memberships { get; set; }
     }
 }

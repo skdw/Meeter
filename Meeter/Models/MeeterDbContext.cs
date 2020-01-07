@@ -1,17 +1,22 @@
 ﻿using System;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 
 namespace Meeter.Models
 {
-    public class MeeterDbContext : DbContext
+    public class MeeterDbContext : IdentityDbContext
     {
         public MeeterDbContext(DbContextOptions<MeeterDbContext> options) : base(options) { }
 
-        public DbSet<IdentityUser> IdentityUsers { get; set; }
+       // public DbSet<User> Users { get; set; } // already implemented !!!
 
-        public DbSet<User> Users { get; set; }
-
+       
+    }
+    public class NormalDataContext:DbContext
+    {
+        public NormalDataContext(DbContextOptions<NormalDataContext> options) : base(options) { }
         public DbSet<Place> Places { get; set; }
 
         public DbSet<Group> Groups { get; set; }
