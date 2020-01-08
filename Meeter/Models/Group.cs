@@ -8,15 +8,14 @@ namespace Meeter.Models
 {
     public class Group
     {
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-       [Key]
+       // [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+       // [Key]
         public int Id { get; set; }
 
         // public List<int> Members { get; set; } <- many to many relation, data stored in 'GroupMember' junction table
 
         //  public int CreatorId { get; set; }
-        [Required]
-        [MinLength(5)]
+       
         public string Name { get; set; }
         public string Creatorid { get; set; }
 

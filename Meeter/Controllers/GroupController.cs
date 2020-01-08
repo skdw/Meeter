@@ -37,6 +37,14 @@ namespace Meeter.Controllers
         {
             return normalDataContext.Groups.AsEnumerable();
         }
+        public async Task<IActionResult> GetGroupInfo(int? groupid)
+        {
+            Group model = await normalDataContext.Groups.FirstOrDefaultAsync(x => x.Id == groupid);
+            User creator = await normalDataContext.Users.FirstOrDefaultAsync(x => x.Id == model.Creatorid); 
+            ViewData["CreatorName"] = creator.FirstName;
+            return View(model);
+
+        }
         public async Task<IActionResult> GroupCreate()
         {
             // string 
@@ -54,17 +62,17 @@ namespace Meeter.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> GroupCreate([FromForm]Group model)
         {
-            model.Creator = (User)await normalDataContext.Set<User>().FirstOrDefaultAsync(x => x.Id == model.Creatorid.ToString());
+            model.Creator = (User)await normalDataContext.Set<User>().FirstOrDefaultAsync(x => x.Id == model.Creatorid);
 
 
-            normalDataContext.Groups.Add(model);
-            await normalDataContext.GroupMembers.AddAsync(new GroupMember
-            {
-                GroupId = model.Id,
-                User = model.Creator
-            });
+            normalDataContext.Add(model);
+            //await normalDataContext.GroupMembers.AddAsync(new GroupMember
+            //{
+            //    GroupId = model.Id,
+            //    User = model.Creator
+            //});
             await normalDataContext.SaveChangesAsync();
-            return RedirectToAction("Index");
+            return RedirectToAction("GetGroupInfo",new { groupid=model.Id });
         }
     }
 }

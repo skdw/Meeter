@@ -17,29 +17,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
+
 namespace Meeter
 {
-    //public class EventAuthorizationHandler :
-    //AuthorizationHandler<SameAuthorRequirement, Event>
-    //{
-    //    protected override Task HandleRequirementAsync(AuthorizationHandlerContext context,
-    //                                                   SameAuthorRequirement requirement,
-    //                                                   Event resource)
-    //    {
-    //        if (context.User.Identity?.Name == resource.Group.Creator.Name) // visible only to the group creator
-    //        {
-    //            context.Succeed(requirement);
-    //        }
-
-    //        return Task.CompletedTask;
-    //    }
-    //}
-
-    //public class SameAuthorRequirement : IAuthorizationRequirement { }
-
-
-
-
+  
 
 
     public class Startup

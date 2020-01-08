@@ -7,6 +7,7 @@ namespace Meeter.Models
     public class Event
     {
         public int Id { get; set; }
+        public string EventName { get; set; }
 
         public int GroupId { get; set; }
 
@@ -21,7 +22,6 @@ namespace Meeter.Models
         public virtual Group Group { get; set; }
 
         public virtual Place Place { get; set; }
-
 
 
         //public void SetPlace(MeeterDbContext _context)

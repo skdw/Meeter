@@ -1,0 +1,48 @@
+﻿@model Event
+@{
+    ViewData["Title"] = "GetEventInfo";
+}
+
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <div class="d-flex align-items-center">
+            <div class="pr-3" style="font-size: 25px">
+                <a href="@Url.Action("GetGroupInfo", "Group", new { Model.GroupId })">
+                    <i class="fas fa-chevron-circle-left"></i>
+                </a>
+            </div>
+            <h3 class="mb-1">
+                Event Info
+            </h3>
+        </div>
+    </div>
+
+    <div class="pt-2">
+        <div>
+            <div class="offer-details">
+                <h4 class="mb-0 mt-2">@Model.EventName</h4>
+
+                <label>Date:</label>
+                <div class="content">@Model.DateTime</div>
+
+
+                <div class="pt-4">
+                    <a asp-action="AddPreferences" asp-route-id="@Model.Id">
+                        <button class="btn btn-rounded btn-primary mx-2">
+                            <i class="fas fa-edit pr-2"></i>
+                            Add Member Preferences
+                        </button>
+                    </a>
+
+                    <button class="btn btn-rounded btn-danger mx-2"
+                            data-toggle="modal"
+                            data-target="#confirm-delete">
+                        <i class="fas fa-trash-alt pr-2"></i>
+                        Delete
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

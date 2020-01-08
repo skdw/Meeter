@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Meeter.Migrations
 {
     [DbContext(typeof(NormalDataContext))]
-    [Migration("20200108004942_o")]
-    partial class o
+    [Migration("20200108204527_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -21,13 +21,15 @@ namespace Meeter.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("Meeter.Models.Event", b =>
+            modelBuilder.Entity("MeeterAplication.Models.Event", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<DateTime>("DateTime");
+
+                    b.Property<string>("EventName");
 
                     b.Property<int>("GroupId");
 
@@ -44,7 +46,7 @@ namespace Meeter.Migrations
                     b.ToTable("Events");
                 });
 
-            modelBuilder.Entity("Meeter.Models.Group", b =>
+            modelBuilder.Entity("MeeterAplication.Models.Group", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -52,8 +54,7 @@ namespace Meeter.Migrations
 
                     b.Property<string>("Creatorid");
 
-                    b.Property<string>("Name")
-                        .IsRequired();
+                    b.Property<string>("Name");
 
                     b.HasKey("Id");
 
@@ -62,7 +63,7 @@ namespace Meeter.Migrations
                     b.ToTable("Groups");
                 });
 
-            modelBuilder.Entity("Meeter.Models.GroupMember", b =>
+            modelBuilder.Entity("MeeterAplication.Models.GroupMember", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -70,16 +71,16 @@ namespace Meeter.Migrations
 
                     b.Property<int>("GroupId");
 
-                    b.Property<string>("UserId");
+                    b.Property<string>("Userid");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("Userid");
 
                     b.ToTable("GroupMembers");
                 });
 
-            modelBuilder.Entity("Meeter.Models.Place", b =>
+            modelBuilder.Entity("MeeterAplication.Models.Place", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
@@ -101,7 +102,7 @@ namespace Meeter.Migrations
                     b.ToTable("Places");
                 });
 
-            modelBuilder.Entity("Meeter.Models.Role", b =>
+            modelBuilder.Entity("MeeterAplication.Models.Role", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
@@ -125,7 +126,7 @@ namespace Meeter.Migrations
                     b.ToTable("AspNetRoles");
                 });
 
-            modelBuilder.Entity("Meeter.Models.User", b =>
+            modelBuilder.Entity("MeeterAplication.Models.User", b =>
                 {
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
@@ -182,23 +183,23 @@ namespace Meeter.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("Meeter.Models.UserPreference", b =>
+            modelBuilder.Entity("MeeterAplication.Models.UserPreference", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("EventId");
+                    b.Property<int>("EventId");
 
                     b.Property<string>("Preference");
 
-                    b.Property<string>("UserId");
+                    b.Property<string>("Userid");
 
                     b.HasKey("Id");
 
                     b.HasIndex("EventId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("Userid");
 
                     b.ToTable("UserPreferences");
                 });
@@ -289,46 +290,47 @@ namespace Meeter.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("Meeter.Models.Event", b =>
+            modelBuilder.Entity("MeeterAplication.Models.Event", b =>
                 {
-                    b.HasOne("Meeter.Models.Group", "Group")
+                    b.HasOne("MeeterAplication.Models.Group", "Group")
                         .WithMany()
                         .HasForeignKey("GroupId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("Meeter.Models.Place", "Place")
+                    b.HasOne("MeeterAplication.Models.Place", "Place")
                         .WithMany()
                         .HasForeignKey("PlaceId1");
                 });
 
-            modelBuilder.Entity("Meeter.Models.Group", b =>
+            modelBuilder.Entity("MeeterAplication.Models.Group", b =>
                 {
-                    b.HasOne("Meeter.Models.User", "Creator")
+                    b.HasOne("MeeterAplication.Models.User", "Creator")
                         .WithMany()
                         .HasForeignKey("Creatorid");
                 });
 
-            modelBuilder.Entity("Meeter.Models.GroupMember", b =>
+            modelBuilder.Entity("MeeterAplication.Models.GroupMember", b =>
                 {
-                    b.HasOne("Meeter.Models.User", "User")
+                    b.HasOne("MeeterAplication.Models.User", "User")
                         .WithMany("Memberships")
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("Userid");
                 });
 
-            modelBuilder.Entity("Meeter.Models.UserPreference", b =>
+            modelBuilder.Entity("MeeterAplication.Models.UserPreference", b =>
                 {
-                    b.HasOne("Meeter.Models.Event", "Event")
+                    b.HasOne("MeeterAplication.Models.Event", "Event")
                         .WithMany("Preferences")
-                        .HasForeignKey("EventId");
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("Meeter.Models.User", "User")
+                    b.HasOne("MeeterAplication.Models.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("Userid");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
-                    b.HasOne("Meeter.Models.Role")
+                    b.HasOne("MeeterAplication.Models.Role")
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -336,7 +338,7 @@ namespace Meeter.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("Meeter.Models.User")
+                    b.HasOne("MeeterAplication.Models.User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -344,7 +346,7 @@ namespace Meeter.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("Meeter.Models.User")
+                    b.HasOne("MeeterAplication.Models.User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -352,12 +354,12 @@ namespace Meeter.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
                 {
-                    b.HasOne("Meeter.Models.Role")
+                    b.HasOne("MeeterAplication.Models.Role")
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("Meeter.Models.User")
+                    b.HasOne("MeeterAplication.Models.User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -365,7 +367,7 @@ namespace Meeter.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("Meeter.Models.User")
+                    b.HasOne("MeeterAplication.Models.User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
