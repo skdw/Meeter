@@ -6,15 +6,14 @@ using System.Collections.Generic;
 
 namespace Meeter.Models
 {
-    public class MeeterDbContext : IdentityDbContext
-    {
-        public MeeterDbContext(DbContextOptions<MeeterDbContext> options) : base(options) { }
+    //public class MeeterDbContext : IdentityDbContext<User, Role, string>
+    //{
+    //    public MeeterDbContext(DbContextOptions<MeeterDbContext> options) : base(options) { }
 
-       // public DbSet<User> Users { get; set; } // already implemented !!!
 
-       
-    }
-    public class NormalDataContext:DbContext
+    //    public DbSet<Group> Groups { get; set; }
+    //}
+    public class NormalDataContext : IdentityDbContext<User, Role, string>
     {
         public NormalDataContext(DbContextOptions<NormalDataContext> options) : base(options) { }
         public DbSet<Place> Places { get; set; }

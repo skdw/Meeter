@@ -1,0 +1,39 @@
+﻿@model IEnumerable<Group>
+@{
+    ViewData["Title"] = "GroupIndex";
+}
+
+    <div class="panel panel-default">
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">Id</th>
+                    <th scope="col">GroupName</th>
+                    <th scope="col">Creator</th>
+                    @*<th style="width: 20px"></th>*@
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var group in Model)
+                {
+                    <tr>
+                        
+                       
+                        <td>@group.Id</td>
+                        <td>@group.Name</td>
+                        <td>@group.Creator</td>
+                        @*<td>
+                            <a href="@Url.Action("Edit", "JobOffer", new { id = offer.Id })"
+                               class="text-primary">
+                                <i class="fas fa-edit"
+                                   title="Edit"></i>
+                            </a>
+                        </td>*@
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+        @Html.ActionLink("Create Group", "GroupCreate", "Greoup", null, new { @class = "btn btn-primary" })
+
+    </div>

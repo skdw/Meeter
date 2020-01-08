@@ -54,9 +54,9 @@ namespace Meeter
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<MeeterDbContext>(opts => opts.UseInMemoryDatabase("MeeterDatabase"));
+            //services.AddDbContext<MeeterDbContext>(opts => opts.UseInMemoryDatabase("MeeterDatabase"));
             var connection = Configuration["DatabaseConnectionString"];
-            services.AddDbContext<MeeterDbContext>(options => options.UseSqlServer(connection));
+            // services.AddDbContext<MeeterDbContext>(options => options.UseSqlServer(connection));
             services.AddDbContext<NormalDataContext>(options => options.UseSqlServer(connection));
             services.AddIdentity<IdentityUser, IdentityRole>(config =>
             {
@@ -65,7 +65,7 @@ namespace Meeter
                 config.Password.RequireUppercase = false;
                 config.Password.RequireNonAlphanumeric = false;
             })
-                .AddEntityFrameworkStores<MeeterDbContext>()
+                .AddEntityFrameworkStores<NormalDataContext>()
                 .AddDefaultTokenProviders();
             //.AddRoles<IdentityRole>();
 
@@ -123,10 +123,16 @@ namespace Meeter
             }
 
             app.UseAuthentication();
-           // app.UseAuthorization();
+            // app.UseAuthorization();
             app.UseDefaultFiles();
             app.UseStaticFiles();
-            app.UseMvc();
+            //app.UseMvc();
+            app.UseMvc(routes =>
+            {
+                routes.MapRoute(
+                    name: "default",
+                    template: "{controller=Meeter}/{action=Index}/{id?}");
+            });
         }
     }
 }

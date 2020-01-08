@@ -13,22 +13,19 @@ using Microsoft.EntityFrameworkCore;
 namespace Meeter.Controllers
 {
     [Route("api/[controller]/[action]")]
-   // [ApiController]
+    // [ApiController]
     public class MeeterController : Controller
     {
-        private readonly MeeterDbContext context;
         private readonly NormalDataContext normalDataContext;
         private readonly UserManager<IdentityUser> userManager;
         private readonly SignInManager<IdentityUser> signInManager;
 
         public MeeterController(
             UserManager<IdentityUser> usm,
-            SignInManager<IdentityUser> sim,
-            MeeterDbContext ctx,NormalDataContext normalD)
+            SignInManager<IdentityUser> sim, NormalDataContext normalD)
         {
             userManager = usm;
             signInManager = sim;
-            context = ctx;
             normalDataContext = normalD;
         }
 
@@ -106,11 +103,11 @@ namespace Meeter.Controllers
             // login functionality
             var user = await userManager.FindByNameAsync(username);
 
-            if(user != null)
+            if (user != null)
             {
                 // sign in
                 var signInResult = await signInManager.PasswordSignInAsync(user, password, false, false);
-                if(signInResult.Succeeded)
+                if (signInResult.Succeeded)
                 {
                     return RedirectToAction("Index");
                 }
@@ -137,7 +134,7 @@ namespace Meeter.Controllers
             };
 
             var result = await userManager.CreateAsync(user, password);
-            if(result.Succeeded)
+            if (result.Succeeded)
             {
                 // sign in
                 var signInResult = await signInManager.PasswordSignInAsync(user, password, false, false);
@@ -158,11 +155,11 @@ namespace Meeter.Controllers
             return RedirectToAction("Index");
         }
 
-        [HttpGet("users")]
-        public IEnumerable<IdentityUser> GetUsers()
-        {
-            return context.Users.AsEnumerable();
-        }
+        //[HttpGet("users")]
+        //public IEnumerable<IdentityUser> GetUsers()
+        //{
+        //    return context.Users.AsEnumerable();
+        //}
 
         //[HttpGet("groups")]
         //public IEnumerable<Group> GetGroups()
@@ -170,34 +167,34 @@ namespace Meeter.Controllers
         //    return normalDataContext.Groups.AsEnumerable();
         //}
 
-        [HttpPost("groups")]
-        public async Task<IActionResult> PostGroup([FromForm] string groupName, [FromForm] string[] user)
-        {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+        //[HttpPost("groups")]
+        //public async Task<IActionResult> PostGroup([FromForm] string groupName, [FromForm] string[] user)
+        //{
+        //    if (!ModelState.IsValid)
+        //        return BadRequest(ModelState);
 
-            var selectedUsersTasks = user.Select(async user_id => await context.Users.FindAsync(user_id) as User);
-            var selectedUsers = await Task.WhenAll(selectedUsersTasks);
+        //    var selectedUsersTasks = user.Select(async user_id => await context.Users.FindAsync(user_id) as User);
+        //    var selectedUsers = await Task.WhenAll(selectedUsersTasks);
 
-            var groupMembers = selectedUsers.Select(u => new GroupMember { User = u }).ToArray();
+        //    var groupMembers = selectedUsers.Select(u => new GroupMember { User = u }).ToArray();
 
-            var creator = await userManager.GetUserAsync(User) as User;
+        //    var creator = await userManager.GetUserAsync(User) as User;
 
-            Group group = new Group()
-            {
-                Name = groupName,
-              //  Creator = creator
-            };
+        //    Group group = new Group()
+        //    {
+        //        Name = groupName,
+        //      //  Creator = creator
+        //    };
 
-            //foreach (var member in group.Memberships)
-            //    member.Group = group;
+        //    //foreach (var member in group.Memberships)
+        //    //    member.Group = group;
 
-            normalDataContext.Groups.Add(group);
+        //    normalDataContext.Groups.Add(group);
 
-            await context.SaveChangesAsync();
+        //    await context.SaveChangesAsync();
 
-            return CreatedAtAction("GetGroups", new { id = group.Id }, group);
-        }
+        //    return CreatedAtAction("GetGroups", new { id = group.Id }, group);
+        //}
 
 
         // GET api/meeter/events
@@ -219,11 +216,11 @@ namespace Meeter.Controllers
 
             normalDataContext.Events.Add(@event);
 
-            await context.SaveChangesAsync();
+            await normalDataContext.SaveChangesAsync();
 
             return CreatedAtAction("GetEvents", new { id = @event.Id }, @event);
         }
-       
+
 
 
         // GET api/meeter

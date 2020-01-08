@@ -12,7 +12,6 @@ namespace Meeter.Controllers
     [Route("api/[controller]/[action]")]
     public class GroupController : Controller
     {
-        private readonly MeeterDbContext context;
         private readonly NormalDataContext normalDataContext;
         private readonly UserManager<IdentityUser> userManager;
         private readonly SignInManager<IdentityUser> signInManager;
@@ -20,16 +19,17 @@ namespace Meeter.Controllers
         public GroupController(
             UserManager<IdentityUser> usm,
             SignInManager<IdentityUser> sim,
-            MeeterDbContext ctx, NormalDataContext normalD)
+            NormalDataContext normalD)
         {
             userManager = usm;
             signInManager = sim;
-            context = ctx;
+
             normalDataContext = normalD;
         }
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            List<Group> groups = await normalDataContext.Groups.ToListAsync();
+            return View(groups);
         }
 
         [HttpGet("groups")]
@@ -42,35 +42,28 @@ namespace Meeter.Controllers
             // string 
 
             var model = new Group();
+            //var test = context.Set<User>().ToArray();
 
-            model.Creator = (User)await context.Users.FirstOrDefaultAsync(x => x.Id == "1");
-            
-
-
+            // var test2 = await userManager.FindByIdAsync("1");
+            model.Creator = (User)await normalDataContext.Set<User>().FirstOrDefaultAsync(x => x.Id == "1");
+            model.Creatorid = model.Creator.Id;
             return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> GroupCreate(Group model)
+        public async Task<ActionResult> GroupCreate([FromForm]Group model)
         {
-            //if (!ModelState.IsValid)
-            //{
+            model.Creator = (User)await normalDataContext.Set<User>().FirstOrDefaultAsync(x => x.Id == model.Creatorid.ToString());
 
-            //    return View(model);
-            //}
-            Group group = new Group
-            {
-                Name = model.Name,
 
-                Creator = model.Creator
-            };
-            await normalDataContext.Groups.AddAsync(group);
+            normalDataContext.Groups.Add(model);
             await normalDataContext.GroupMembers.AddAsync(new GroupMember
             {
-                GroupId = group.Id
-                //, User = group.Creator
+                GroupId = model.Id,
+                User = model.Creator
             });
+            await normalDataContext.SaveChangesAsync();
             return RedirectToAction("Index");
         }
     }
