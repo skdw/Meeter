@@ -64,7 +64,7 @@ namespace Meeter.Controllers
             await normalDataContext.Events.AddAsync(model);
             await normalDataContext.SaveChangesAsync();
 
-            return RedirectToAction("GetGroupInfo", "Group", new { groupid = model.Id });
+            return RedirectToAction("GetGroupInfo", "Group", new { groupid = model.GroupId });
 
 
         }

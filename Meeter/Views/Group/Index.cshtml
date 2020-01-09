@@ -2,7 +2,7 @@
 @{
     ViewData["Title"] = "GroupIndex";
 }
-
+    <h2>Every group</h2>
     <div class="panel panel-default">
         <table class="table table-striped table-hover">
             <thead>
@@ -21,7 +21,7 @@
                        
                         <td>@group.Id</td>
                         <td>@group.Name</td>
-                        <td>@group.Creator</td>
+                        <td>@group.CreatorName</td>
                         @*<td>
                             <a href="@Url.Action("Edit", "JobOffer", new { id = offer.Id })"
                                class="text-primary">

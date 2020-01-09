@@ -1,7 +1,43 @@
 ﻿
+@model IEnumerable<Event>
 @{
     ViewData["Title"] = "Index";
 }
 
-<h2>Index</h2>
+<h2>Every Event</h2>
+<div class="panel panel-default">
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Event Name</th>
+                <th scope="col">Date Time</th>
+                <th scope="col">Place</th>
+                @*<th style="width: 20px"></th>*@
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var eve in Model)
+            {
+            <tr>
 
+
+                <td>@eve.Id</td>
+                <td>@eve.EventName</td>
+                <td>@eve.DateTime</td>
+                <td>@eve.Place</td>
+                @*<td>
+            <a href="@Url.Action("Edit", "JobOffer", new { id = offer.Id })"
+               class="text-primary">
+                <i class="fas fa-edit"
+                   title="Edit"></i>
+            </a>
+        </td>*@
+            </tr>
+            }
+
+        </tbody>
+    </table>
+    @Html.ActionLink("Create Group", "GroupCreate", "Group", null, new { @class = "btn btn-primary" })
+
+</div>

@@ -32,15 +32,21 @@ namespace Meeter.Controllers
             return View(groups);
         }
 
-        [HttpGet("groups")]
-        public IEnumerable<Group> GetGroups()
-        {
-            return normalDataContext.Groups.AsEnumerable();
-        }
-        public async Task<IActionResult> GetGroupInfo(int? groupid)
+        //[HttpGet("groups")]
+        //public IEnumerable<Group> GetGroups()
+        //{
+        //    return normalDataContext.Groups.AsEnumerable();
+        //}
+        [HttpGet]
+        public async Task<IActionResult> GetGroupInfo(int? groupid, [FromForm(Name ="search")] string searchString)
         {
             Group model = await normalDataContext.Groups.FirstOrDefaultAsync(x => x.Id == groupid);
             User creator = await normalDataContext.Users.FirstOrDefaultAsync(x => x.Id == model.Creatorid); 
+            if(!string.IsNullOrEmpty(searchString))
+            model.Events= await normalDataContext.Events.Include(x=>x.Group).Where(x => x.GroupId == groupid && x.EventName.Contains(searchString)).ToListAsync();
+            else
+                model.Events = await normalDataContext.Events.Include(x => x.Group).Where(x => x.GroupId == groupid).ToListAsync();
+            model.Memberships= await normalDataContext.GroupMembers.Include(x => x.User).Where(x => x.GroupId== groupid).ToListAsync();
             ViewData["CreatorName"] = creator.FirstName;
             return View(model);
 
@@ -63,7 +69,7 @@ namespace Meeter.Controllers
         public async Task<ActionResult> GroupCreate([FromForm]Group model)
         {
             model.Creator = (User)await normalDataContext.Set<User>().FirstOrDefaultAsync(x => x.Id == model.Creatorid);
-
+            model.CreatorName = model.Creator.UserName;
 
             normalDataContext.Add(model);
             //await normalDataContext.GroupMembers.AddAsync(new GroupMember
