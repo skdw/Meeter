@@ -67,7 +67,7 @@ namespace Meeter.Controllers
        }
    */
 
-        [HttpGet("index")]
+        [HttpGet]
         public ActionResult<string> Index()
         {
             var signed = signInManager.IsSignedIn(User);
@@ -77,7 +77,7 @@ namespace Meeter.Controllers
             return "Home page - username: " + name + "  id: " + id + "  signed " + signed;
         }
 
-        [HttpGet("secret")]
+        [HttpGet]
         [Authorize]
         public ActionResult<string> Secret()
         {
@@ -91,13 +91,13 @@ namespace Meeter.Controllers
         //    return "Secret policy page";
         //}
 
-        [HttpGet("login")]
+        [HttpGet]
         public ActionResult<string> Login()
         {
             return Redirect("/login.html");
         }
 
-        [HttpPost("login")]
+        [HttpPost]
         public async Task<ActionResult<string>> Login([FromForm] string username, [FromForm] string password)
         {
             // login functionality
@@ -116,13 +116,13 @@ namespace Meeter.Controllers
             return Unauthorized();
         }
 
-        [HttpGet("register")]
+        [HttpGet]
         public ActionResult<string> Register()
         {
             return Redirect("/register.html");
         }
 
-        [HttpPost("register")]
+        [HttpPost]
         public async Task<ActionResult<string>> Register([FromForm] string username, [FromForm] string password, [FromForm] string email, [FromForm] string fname, [FromForm] string lname)
         {
             var user = new User
@@ -147,7 +147,7 @@ namespace Meeter.Controllers
             return RedirectToAction("Index");
         }
 
-        [HttpGet("logout")]
+        [HttpGet]
         public async Task<ActionResult<string>> Logout()
         {
             await signInManager.SignOutAsync();

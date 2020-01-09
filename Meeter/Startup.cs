@@ -39,6 +39,7 @@ namespace Meeter
             var connection = Configuration["DatabaseConnectionString"];
             // services.AddDbContext<MeeterDbContext>(options => options.UseSqlServer(connection));
             services.AddDbContext<NormalDataContext>(options => options.UseSqlServer(connection));
+            //services.AddDefaultIdentity<User>()
             services.AddIdentity<IdentityUser, IdentityRole>(config =>
             {
                 config.Password.RequireDigit = false;

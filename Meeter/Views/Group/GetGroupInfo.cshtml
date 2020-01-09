@@ -72,6 +72,8 @@
                 }
             </tbody>
         </table>
+        <a href="@Url.Action("AddMember","Group", new {id= Model.Id })"
+           class="btn btn-primary btn-lg">Add Group Member</a>
         @*<div>
             @using (Html.BeginForm("GetGroupInfo", "Group", FormMethod.Get,new { groupid=Model.Id}))
             {
@@ -106,16 +108,16 @@
 
                 @foreach (var eve in Model.Events)
                 {
-                <tr>
+                    <tr>
 
-                    <td>@eve.Id</td>
-                    <td>@eve.EventName</td>
-                    <td>@eve.DateTime</td>
-                    <td>@eve.Place</td>
-                    @*<td>
-            <a asp-action="AddPreference" asp-route-id="@eve.Id">Add preference</a>
-        </td>*@
-                </tr>
+                        <td>@eve.Id</td>
+                        <td>@eve.EventName</td>
+                        <td>@eve.DateTime</td>
+                        <td>@eve.Place</td>
+                        @*<td>
+                            <a asp-action="AddPreference" asp-route-id="@eve.Id">Add preference</a>
+                        </td>*@
+                    </tr>
                 }
             </tbody>
         </table>

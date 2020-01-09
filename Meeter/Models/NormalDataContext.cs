@@ -25,5 +25,13 @@ namespace Meeter.Models
         public DbSet<UserPreference> UserPreferences { get; set; }
 
         public DbSet<Event> Events { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+            // Customize the ASP.NET Core Identity model and override the defaults if needed. 
+
+            //builder.Entity<IdentityUserRole<Guid>>().HasKey(p => new { p.UserId, p.RoleId });
+        }
     }
 }

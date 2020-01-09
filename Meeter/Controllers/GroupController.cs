@@ -38,29 +38,53 @@ namespace Meeter.Controllers
         //    return normalDataContext.Groups.AsEnumerable();
         //}
         [HttpGet]
-        public async Task<IActionResult> GetGroupInfo(int? groupid, [FromForm(Name ="search")] string searchString)
+        public async Task<IActionResult> GetGroupInfo(int? groupid, [FromForm(Name = "search")] string searchString)
         {
             Group model = await normalDataContext.Groups.FirstOrDefaultAsync(x => x.Id == groupid);
-            User creator = await normalDataContext.Users.FirstOrDefaultAsync(x => x.Id == model.Creatorid); 
-            if(!string.IsNullOrEmpty(searchString))
-            model.Events= await normalDataContext.Events.Include(x=>x.Group).Where(x => x.GroupId == groupid && x.EventName.Contains(searchString)).ToListAsync();
+            User creator = (User)await normalDataContext.Users.FirstOrDefaultAsync(x => x.Id == model.Creatorid);
+            if (!string.IsNullOrEmpty(searchString))
+                model.Events = await normalDataContext.Events.Include(x => x.Group).Where(x => x.GroupId == groupid && x.EventName.Contains(searchString)).ToListAsync();
             else
                 model.Events = await normalDataContext.Events.Include(x => x.Group).Where(x => x.GroupId == groupid).ToListAsync();
-            model.Memberships= await normalDataContext.GroupMembers.Include(x => x.User).Where(x => x.GroupId== groupid).ToListAsync();
+            model.Memberships = await normalDataContext.GroupMembers.Include(x => x.User).Where(x => x.GroupId == groupid).ToListAsync();
             ViewData["CreatorName"] = creator.FirstName;
             return View(model);
 
+        }
+        public async Task<IActionResult> AddMember(int? id)
+        {
+            GroupMember groupMember = new GroupMember() { GroupId = (int)id }; // tutaj nie powinno iść inne id dla grupy? 
+            groupMember.User = new User() ;
+            
+            return View(groupMember);
+
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> AddMember([FromForm]GroupMember model,[FromQuery(Name ="username")] int id)
+        {
+            
+            await normalDataContext.Users.AddAsync(model.User);
+            
+            await normalDataContext.GroupMembers.AddAsync(model);
+            await normalDataContext.SaveChangesAsync();
+            return RedirectToAction("GetGroupInfo", new { groupid = model.GroupId });
         }
         public async Task<IActionResult> GroupCreate()
         {
             // string 
 
-            var model = new Group();
+            var creator = await userManager.GetUserAsync(User) as User;
+
+            var model = new Group()
+            {
+                Creator = creator
+            };
             //var test = context.Set<User>().ToArray();
 
             // var test2 = await userManager.FindByIdAsync("1");
-            model.Creator = (User)await normalDataContext.Set<User>().FirstOrDefaultAsync(x => x.Id == "1");
-            model.Creatorid = model.Creator.Id;
+           model.Creator = await normalDataContext.Set<User>().FirstOrDefaultAsync(x => x.Id == "1");
+           model.Creatorid = model.Creator.Id;
             return View(model);
         }
 
@@ -70,13 +94,14 @@ namespace Meeter.Controllers
         {
             model.Creator = (User)await normalDataContext.Set<User>().FirstOrDefaultAsync(x => x.Id == model.Creatorid);
             model.CreatorName = model.Creator.UserName;
-
+            model.Creator.isPesudoUser = false;
             normalDataContext.Add(model);
-            //await normalDataContext.GroupMembers.AddAsync(new GroupMember
-            //{
-            //    GroupId = model.Id,
-            //    User = model.Creator
-            //});
+            await normalDataContext.GroupMembers.AddAsync(new GroupMember
+            {
+                GroupId = model.Id,
+                User = model.Creator,
+               Userid = model.Creator.Id
+            }); 
             await normalDataContext.SaveChangesAsync();
             return RedirectToAction("GetGroupInfo",new { groupid=model.Id });
         }
