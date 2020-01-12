@@ -8,7 +8,7 @@
     <div class="panel-heading">
         <div class="d-flex align-items-center">
             <div class="pr-3" style="font-size: 25px">
-                <a href="@Url.Action("Index", "Meeter")">
+                <a href="@Url.Action("Secret", "Meeter")">
                     <i class="fas fa-chevron-circle-left"></i>
                 </a>
             </div>
@@ -28,16 +28,16 @@
 
 
                 <div class="pt-4">
-                    <a href="@Url.Action("Create","Event", new {id= Model.Id })"
-                       class="btn btn-primary btn-lg">Create Event</a>
+                    <a href="@Url.Action("AddMember","Group", new {id= Model.Id })"
+                       class="btn btn-primary btn-lg">Add Group Member</a>
                     @*<a asp-action="Edit" asp-route-id="@Model.Id">
-                        <button class="btn btn-rounded btn-primary mx-2">
-                            <i class="fas fa-edit pr-2"></i>
-                            Edit
-                        </button>
-                    </a>*@
+            <button class="btn btn-rounded btn-primary mx-2">
+                <i class="fas fa-edit pr-2"></i>
+                Edit
+            </button>
+        </a>*@
 
-                    <button class="btn btn-rounded btn-danger mx-2"
+                    <button class="btn btn-lg btn-danger mx-2"
                             data-toggle="modal"
                             data-target="#confirm-delete">
                         <i class="fas fa-trash-alt pr-2"></i>
@@ -72,8 +72,9 @@
                 }
             </tbody>
         </table>
-        <a href="@Url.Action("AddMember","Group", new {id= Model.Id })"
-           class="btn btn-primary btn-lg">Add Group Member</a>
+        <a href="@Url.Action("Create","Event", new {id= Model.Id })"
+           class="btn btn-primary btn-lg">Create Event</a>
+       
         @*<div>
             @using (Html.BeginForm("GetGroupInfo", "Group", FormMethod.Get,new { groupid=Model.Id}))
             {
@@ -122,6 +123,6 @@
             </tbody>
         </table>
         <br />
-        @Html.ActionLink("Go back to Profile", "GetUserProfile", "Meeter", null, new { @class = "btn btn-primary" })
+        @*@Html.ActionLink("Go back to Profile", "GetUserProfile", "Meeter", null, new { @class = "btn btn-primary" })*@
     </div>
 </div>

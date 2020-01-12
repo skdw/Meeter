@@ -13,7 +13,7 @@ namespace Meeter.Models
 
     //    public DbSet<Group> Groups { get; set; }
     //}
-    public class NormalDataContext : IdentityDbContext<User, Role, string>
+    public class NormalDataContext : IdentityDbContext<User, IdentityRole, string>
     {
         public NormalDataContext(DbContextOptions<NormalDataContext> options) : base(options) { }
         public DbSet<Place> Places { get; set; }

@@ -40,7 +40,7 @@ namespace Meeter
             // services.AddDbContext<MeeterDbContext>(options => options.UseSqlServer(connection));
             services.AddDbContext<NormalDataContext>(options => options.UseSqlServer(connection));
             //services.AddDefaultIdentity<User>()
-            services.AddIdentity<User, Role>(config =>
+            services.AddIdentity<User, IdentityRole>(config =>
             {
                 config.Password.RequireDigit = false;
                 config.Password.RequiredLength = 4;
@@ -48,8 +48,8 @@ namespace Meeter
                 config.Password.RequireNonAlphanumeric = false;
             })
                 .AddEntityFrameworkStores<NormalDataContext>()
-                .AddDefaultTokenProviders();
-            //.AddRoles<IdentityRole>();
+                .AddDefaultTokenProviders()
+                .AddRoles<IdentityRole>();
 
             services.ConfigureApplicationCookie(config =>
             {
@@ -97,7 +97,7 @@ namespace Meeter
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env,IServiceProvider serviceProvider)
         {
             if (env.IsDevelopment())
             {
@@ -115,6 +115,27 @@ namespace Meeter
                     name: "default",
                     template: "{controller=Meeter}/{action=Index}/{id?}");
             });
+            CreateUserRoles(serviceProvider).Wait();
+            
+        }
+        private async Task CreateUserRoles(IServiceProvider serviceProvider)
+        {
+            var RoleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+            var UserManager = serviceProvider.GetRequiredService<UserManager<User>>();
+
+            IdentityResult roleResult;
+            //Adding Admin Role
+            var roleCheck = await RoleManager.RoleExistsAsync("Admin");
+            if (!roleCheck)
+            {
+                //create the roles and seed them to the database
+                roleResult = await RoleManager.CreateAsync(new IdentityRole("Admin"));
+            }
+            //Assign Admin role to the main User here we have given our newly registered 
+            //login id for Admin management
+            User user = await UserManager.FindByEmailAsync("anna.m.buchman@gmail.com");
+            var User = new User();
+            await UserManager.AddToRoleAsync(user, "Admin");
         }
     }
 }
