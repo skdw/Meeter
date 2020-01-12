@@ -13,12 +13,12 @@ namespace Meeter.Controllers
     public class GroupController : Controller
     {
         private readonly NormalDataContext normalDataContext;
-        private readonly UserManager<IdentityUser> userManager;
-        private readonly SignInManager<IdentityUser> signInManager;
+        private readonly UserManager<User> userManager;
+        private readonly SignInManager<User> signInManager;
 
         public GroupController(
-            UserManager<IdentityUser> usm,
-            SignInManager<IdentityUser> sim,
+            UserManager<User> usm,
+            SignInManager<User> sim,
             NormalDataContext normalD)
         {
             userManager = usm;

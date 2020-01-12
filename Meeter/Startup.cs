@@ -40,7 +40,7 @@ namespace Meeter
             // services.AddDbContext<MeeterDbContext>(options => options.UseSqlServer(connection));
             services.AddDbContext<NormalDataContext>(options => options.UseSqlServer(connection));
             //services.AddDefaultIdentity<User>()
-            services.AddIdentity<IdentityUser, IdentityRole>(config =>
+            services.AddIdentity<User, Role>(config =>
             {
                 config.Password.RequireDigit = false;
                 config.Password.RequiredLength = 4;
