@@ -102,11 +102,14 @@ namespace Meeter.Controllers
             if(signed)
             {
                 var user = await userManager.GetUserAsync(User);
-                user.Location = new Location()
+
+                Location location = new Location()
                 {
                     Lat = lat,
                     Lng = lng
                 };
+
+                user.Location = location;
                 await userManager.UpdateAsync(user);
                 await normalDataContext.SaveChangesAsync();
                 return View("Secret", user);

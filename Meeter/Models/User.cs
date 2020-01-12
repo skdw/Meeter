@@ -15,8 +15,10 @@ namespace Meeter.Models
         public bool isPesudoUser { get; set; }
         [Display(Name ="Last Name")]
         public string LastName { get; set; }
-        [System.ComponentModel.DataAnnotations.Schema.NotMapped]
-        public Location Location { get; set; }
+
+        public string LocationId { get; set; }
+
+        public virtual Location Location { get; set; }
 
         public string Photo { get; set; }
 
