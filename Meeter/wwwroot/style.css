@@ -10,6 +10,20 @@ html, body {
   padding: 0;
 }
 
+.btn {
+    margin: 5px;
+    padding: 20px;
+}
+
+#buttons {
+    position: fixed;
+    margin: auto;
+    text-align: center;
+    transform: translate(-50%, -50%);
+    left: 50%;
+    top: 50px;
+}
+
 #mainlogo {
   max-height: 70%;
   max-width: 90%;

@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using Meeter.AuthorizationRequirements;
 using Meeter.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -14,8 +17,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
+
 namespace Meeter
 {
+  
+
+
     public class Startup
     {
         public Startup(IConfiguration configuration)
@@ -28,14 +35,65 @@ namespace Meeter
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<MeeterDbContext>(opts => opts.UseInMemoryDatabase("MeeterDatabase"));
+            //services.AddDbContext<MeeterDbContext>(opts => opts.UseInMemoryDatabase("MeeterDatabase"));
+            var connection = Configuration["DatabaseConnectionString"];
+            // services.AddDbContext<MeeterDbContext>(options => options.UseSqlServer(connection));
+            services.AddDbContext<NormalDataContext>(options => options.UseSqlServer(connection));
+            //services.AddDefaultIdentity<User>()
+            services.AddIdentity<User, Role>(config =>
+            {
+                config.Password.RequireDigit = false;
+                config.Password.RequiredLength = 4;
+                config.Password.RequireUppercase = false;
+                config.Password.RequireNonAlphanumeric = false;
+            })
+                .AddEntityFrameworkStores<NormalDataContext>()
+                .AddDefaultTokenProviders();
+            //.AddRoles<IdentityRole>();
 
-            // identity - work in progress
-            services.AddIdentity<IdentityUser, IdentityRole>()
-                .AddEntityFrameworkStores<MeeterDbContext>();
+            services.ConfigureApplicationCookie(config =>
+            {
+                config.Cookie.Name = "Identity.cookie";
+                config.LoginPath = "/api/meeter/Login";
+            });
 
+            //services.AddAuthorization(options =>
+            //{
+            //    //var defaultAuthBuilder = new AuthorizationPolicyBuilder();
+            //    //var defaultAuthPolicy = defaultAuthBuilder
+            //    //    .RequireAuthenticatedUser()
+            //    //    .Build();
+
+            //    //options.DefaultPolicy = defaultAuthPolicy;
+
+            //    //options.AddPolicy("Claim.DoB", policyBuilder =>
+            //    //{
+            //    //    policyBuilder.RequireClaim(ClaimTypes.DateOfBirth);
+            //    //});
+
+            //    options.AddPolicy("Claim.DoB", policyBuilder =>
+            //    {
+            //        //policyBuilder.AddRequirements(new CustomRequireClaim(ClaimTypes.DateOfBirth));
+            //        policyBuilder.RequireCustomClaim(ClaimTypes.DateOfBirth);
+            //    });
+            //});
+
+            services.AddScoped<IAuthorizationHandler, CustomRequireClaimHandler>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+            /*
+            services.AddAuthorization(options =>
+            {
+
+                //options.AddPolicy("RequireAdministratorRole",
+                //    policy => policy.RequireRole("Administrator"));
+
+                //options.AddPolicy(Operations.Read.Name, policy =>
+                //    policy.Requirements.Add(new SameAuthorRequirement()));
+            }); */
+
+            //services.AddSingleton<IAuthorizationHandler, EventAuthorizationHandler>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -46,10 +104,17 @@ namespace Meeter
                 app.UseDeveloperExceptionPage();
             }
 
-            //app.UseAuthentication();
+            app.UseAuthentication();
+            // app.UseAuthorization();
             app.UseDefaultFiles();
             app.UseStaticFiles();
-            app.UseMvc();
+            //app.UseMvc();
+            app.UseMvc(routes =>
+            {
+                routes.MapRoute(
+                    name: "default",
+                    template: "{controller=Meeter}/{action=Index}/{id?}");
+            });
         }
     }
 }

@@ -7,6 +7,7 @@ namespace Meeter.Models
     public class Event
     {
         public int Id { get; set; }
+        public string EventName { get; set; }
 
         public int GroupId { get; set; }
 
@@ -23,15 +24,15 @@ namespace Meeter.Models
         public virtual Place Place { get; set; }
 
 
+        //public void SetPlace(MeeterDbContext _context)
+        //{
+        //    // sets the best place for the meeting
 
-        public void SetPlace(MeeterDbContext _context)
-        {
-            // sets the best place for the meeting
-            var locations = _context.Groups.Find(GroupId)
-                .Members.Select(member_id => _context.Users.Find(member_id).Location).ToArray();
+        //    //var locations = _context.Groups.Find(GroupId)
+        //    //    .Members.Select(member_id => _context.Users.Find(member_id).Location).ToArray();
 
 
-        }
+        //}
 
         public void CalculatePreferences()
         {
