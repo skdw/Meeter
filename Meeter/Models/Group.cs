@@ -17,9 +17,10 @@ namespace Meeter.Models
         //  public int CreatorId { get; set; }
        
         public string Name { get; set; }
-        //public string Creatorid { get; set; }
+        public string Creatorid { get; set; }
         //public string CreatorName { get; set; }
 
+       
         public virtual User Creator { get; set; }
 
         public virtual ICollection<GroupMember> Memberships { get; set; }

@@ -113,7 +113,7 @@ namespace Meeter
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Group}/{action=index}/{id?}");
+                    template: "{controller=Meeter}/{action=Index}/{id?}");
             });
         }
     }

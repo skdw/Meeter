@@ -4,14 +4,16 @@ using Meeter.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace MeeterAplication.Migrations
+namespace Meeter.Migrations
 {
     [DbContext(typeof(NormalDataContext))]
-    partial class NormalDataContextModelSnapshot : ModelSnapshot
+    [Migration("20200112180424_kamil-pull")]
+    partial class kamilpull
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -50,13 +52,13 @@ namespace MeeterAplication.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Creatorid");
+                    b.Property<string>("CreatorId");
 
                     b.Property<string>("Name");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Creatorid");
+                    b.HasIndex("CreatorId");
 
                     b.ToTable("Groups");
                 });
@@ -308,7 +310,7 @@ namespace MeeterAplication.Migrations
                 {
                     b.HasOne("Meeter.Models.User", "Creator")
                         .WithMany()
-                        .HasForeignKey("Creatorid");
+                        .HasForeignKey("CreatorId");
                 });
 
             modelBuilder.Entity("Meeter.Models.GroupMember", b =>

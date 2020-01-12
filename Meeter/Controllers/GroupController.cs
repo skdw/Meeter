@@ -29,6 +29,11 @@ namespace Meeter.Controllers
         public async Task<IActionResult> Index()
         {
             List<Group> groups = await normalDataContext.Groups.ToListAsync();
+            //foreach (var gr in groups)
+            //{
+            //    gr.Creator = await normalDataContext.Users.FirstOrDefaultAsync(x=>x.Id==groups.
+
+            //}
             return View(groups);
         }
 
@@ -38,13 +43,14 @@ namespace Meeter.Controllers
         //    return normalDataContext.Groups.AsEnumerable();
         //}
         [HttpGet]
-        public async Task<IActionResult> GetGroupInfo(int? groupid, [FromForm(Name = "search")] string searchString)
+        public async Task<IActionResult> GetGroupInfo(int? groupid)// [FromForm(Name = "search")] string searchString)
         {
             Group model = await normalDataContext.Groups.FirstOrDefaultAsync(x => x.Id == groupid);
-            User creator = (User)await normalDataContext.Users.FirstOrDefaultAsync(x => x.Id == model.Creator.Id);
-            if (!string.IsNullOrEmpty(searchString))
-                model.Events = await normalDataContext.Events.Include(x => x.Group).Where(x => x.GroupId == groupid && x.EventName.Contains(searchString)).ToListAsync();
-            else
+            
+            User creator = (User)await normalDataContext.Users.FirstOrDefaultAsync(x => x.Id == model.Creatorid);
+            //if (!string.IsNullOrEmpty(searchString))
+               // model.Events = await normalDataContext.Events.Include(x => x.Group).Where(x => x.GroupId == groupid && x.EventName.Contains(searchString)).ToListAsync();
+            //else
                 model.Events = await normalDataContext.Events.Include(x => x.Group).Where(x => x.GroupId == groupid).ToListAsync();
             model.Memberships = await normalDataContext.GroupMembers.Include(x => x.User).Where(x => x.GroupId == groupid).ToListAsync();
             ViewData["CreatorName"] = creator.FirstName;
@@ -80,7 +86,8 @@ namespace Meeter.Controllers
 
             var model = new Group()
             {
-                Creator = creator
+                Creator = creator,
+                Creatorid = creator.Id
             };
             //var test = context.Set<User>().ToArray();
 
@@ -99,6 +106,7 @@ namespace Meeter.Controllers
             User creator = await userManager.GetUserAsync(User);
             //var creator = await normalDataContext.Set<User>().FirstOrDefaultAsync(x => x.Id == id);
             model.Creator = creator;
+            model.Creatorid = creator.Id;
             //model.Creator = await normalDataContext.Set<User>().FirstOrDefaultAsync(x => x.Id == model.Creator.Id);
             //model.CreatorName = model.Creator.UserName;
             model.Creator.isPesudoUser = false;

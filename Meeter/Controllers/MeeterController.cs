@@ -68,20 +68,26 @@ namespace Meeter.Controllers
    */
 
         [HttpGet]
-        public ActionResult<string> Index()
+        public async Task<ActionResult<string>> Index()
         {
             var signed = signInManager.IsSignedIn(User);
             var id = userManager.GetUserId(User);
             var name = userManager.GetUserName(User);
-
-            return "Home page - username: " + name + "  id: " + id + "  signed " + signed;
+            if (signed)
+                return await Secret();
+            else
+                return Redirect("/splashscreen.html");
+            //return "Home page - username: " + name + "  id: " + id + "  signed " + signed;
         }
 
         [HttpGet]
         [Authorize]
-        public ActionResult<string> Secret()
+        public async Task<ActionResult> Secret()
         {
-            return "Secret page";
+            var id = userManager.GetUserId(User);
+            var Us = await userManager.GetUserAsync(User);
+            // return "Secret page";
+            return View("Secret",Us);
         }
 
         //[HttpGet("secretpolicy")]

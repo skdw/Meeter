@@ -8,8 +8,8 @@
             <thead>
                 <tr>
                     <th scope="col">Id</th>
-                    <th scope="col">GroupName</th>
-                    <th scope="col">Creator</th>
+                    <th scope="col">Group Name</th>
+                    <th scope="col">Creator ID</th>
                     @*<th style="width: 20px"></th>*@
                 </tr>
             </thead>
@@ -19,9 +19,9 @@
                     <tr>
                         
                        
-                        <td>@group.Id</td>
-                        <td>@group.Name</td>
-                        <td>@group.Creator.FirstName</td>
+                        <td>@Html.DisplayFor(modelItem=>group.Id)</td>
+                        <td>@Html.DisplayFor(modelItem=>group.Name)</td>
+                        <td>@Html.DisplayFor(modelItem=>group.Creatorid)</td>
                         @*<td>
                             <a href="@Url.Action("Edit", "JobOffer", new { id = offer.Id })"
                                class="text-primary">
