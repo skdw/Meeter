@@ -18,7 +18,7 @@
                 @Html.ValidationMessageFor(m => m.Name, "", new { @class = "text-danger" })
             </div>
 
-            @Html.HiddenFor(m => m.Creatorid)
+            @Html.HiddenFor(m => m.Creator.Id)
             <div class="form-group">
 
                 <button type="submit" class="btn btn-primary">Create</button>

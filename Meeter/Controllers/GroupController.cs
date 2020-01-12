@@ -41,7 +41,7 @@ namespace Meeter.Controllers
         public async Task<IActionResult> GetGroupInfo(int? groupid, [FromForm(Name = "search")] string searchString)
         {
             Group model = await normalDataContext.Groups.FirstOrDefaultAsync(x => x.Id == groupid);
-            User creator = (User)await normalDataContext.Users.FirstOrDefaultAsync(x => x.Id == model.Creatorid);
+            User creator = (User)await normalDataContext.Users.FirstOrDefaultAsync(x => x.Id == model.Creator.Id);
             if (!string.IsNullOrEmpty(searchString))
                 model.Events = await normalDataContext.Events.Include(x => x.Group).Where(x => x.GroupId == groupid && x.EventName.Contains(searchString)).ToListAsync();
             else
@@ -63,18 +63,20 @@ namespace Meeter.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> AddMember([FromForm]GroupMember model,[FromQuery(Name ="username")] int id)
         {
-            
             await normalDataContext.Users.AddAsync(model.User);
             
             await normalDataContext.GroupMembers.AddAsync(model);
             await normalDataContext.SaveChangesAsync();
             return RedirectToAction("GetGroupInfo", new { groupid = model.GroupId });
         }
+
         public async Task<IActionResult> GroupCreate()
         {
-            // string 
-
-            var creator = await userManager.GetUserAsync(User) as User;
+            var signed = signInManager.IsSignedIn(User);
+            var id = userManager.GetUserId(User);
+            var name = userManager.GetUserName(User);
+            
+            User creator = await userManager.GetUserAsync(User);
 
             var model = new Group()
             {
@@ -83,8 +85,9 @@ namespace Meeter.Controllers
             //var test = context.Set<User>().ToArray();
 
             // var test2 = await userManager.FindByIdAsync("1");
-           model.Creator = await normalDataContext.Set<User>().FirstOrDefaultAsync(x => x.Id == "1");
-           model.Creatorid = model.Creator.Id;
+
+           //model.Creator = await normalDataContext.Set<User>().FirstOrDefaultAsync(x => x.Id == "1");
+           //model.Creatorid = model.Creator.Id;
             return View(model);
         }
 
@@ -92,15 +95,19 @@ namespace Meeter.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> GroupCreate([FromForm]Group model)
         {
-            model.Creator = (User)await normalDataContext.Set<User>().FirstOrDefaultAsync(x => x.Id == model.Creatorid);
-            model.CreatorName = model.Creator.UserName;
+            var id = userManager.GetUserId(User);
+            User creator = await userManager.GetUserAsync(User);
+            //var creator = await normalDataContext.Set<User>().FirstOrDefaultAsync(x => x.Id == id);
+            model.Creator = creator;
+            //model.Creator = await normalDataContext.Set<User>().FirstOrDefaultAsync(x => x.Id == model.Creator.Id);
+            //model.CreatorName = model.Creator.UserName;
             model.Creator.isPesudoUser = false;
             normalDataContext.Add(model);
             await normalDataContext.GroupMembers.AddAsync(new GroupMember
             {
                 GroupId = model.Id,
-                User = model.Creator,
-               Userid = model.Creator.Id
+                User = model.Creator
+               //Userid = model.Creator.Id
             }); 
             await normalDataContext.SaveChangesAsync();
             return RedirectToAction("GetGroupInfo",new { groupid=model.Id });

@@ -134,7 +134,11 @@ namespace Meeter.Controllers
             };
 
             // var result = await userManager.CreateAsync(user, password);
-            var result=await userManager.CreateAsync(user, password);
+            var result = await userManager.CreateAsync(user, password);
+
+            //await normalDataContext.Users.AddAsync(user);
+            await normalDataContext.SaveChangesAsync();
+
             if (result.Succeeded)
             {
                 // sign in
