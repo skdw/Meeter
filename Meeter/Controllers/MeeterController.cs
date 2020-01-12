@@ -77,6 +77,11 @@ namespace Meeter.Controllers
             var id = userManager.GetUserId(User);
             var Us = await userManager.GetUserAsync(User);
             Us.CreatedGroups = await normalDataContext.Groups.Include(x => x.Creator).Where(x => x.Creatorid == Us.Id).ToArrayAsync();
+            foreach(var gr in Us.CreatedGroups)
+            {
+                gr.Events = await normalDataContext.Events.Include(x => x.Group).Where(x => x.GroupId == gr.Id).ToArrayAsync();
+
+            }
             // return "Secret page";
 
             //model.JavascriptToRun = "ShowErrorPopup()";
