@@ -78,7 +78,35 @@ namespace Meeter.Controllers
             var Us = await userManager.GetUserAsync(User);
             Us.CreatedGroups = await normalDataContext.Groups.Include(x => x.Creator).Where(x => x.Creatorid == Us.Id).ToArrayAsync();
             // return "Secret page";
+
+            //model.JavascriptToRun = "ShowErrorPopup()";
+
             return View("Secret",Us);
+        }
+
+        [HttpGet]
+        public ActionResult Location()
+        {
+            return Redirect("/location.html");
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<Task>> Location([FromHeader] float lat, [FromHeader] float lng)
+        {
+            var signed = signInManager.IsSignedIn(User);
+            if(signed)
+            {
+                var user = await userManager.GetUserAsync(User);
+                user.Location = new Location()
+                {
+                    Lat = lat,
+                    Lng = lng
+                };
+                await userManager.UpdateAsync(user);
+                await normalDataContext.SaveChangesAsync();
+                return View("Secret", user);
+            }
+            return Redirect("/splashscreen.html");
         }
 
         //[HttpGet("secretpolicy")]
