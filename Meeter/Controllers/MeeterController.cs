@@ -76,6 +76,7 @@ namespace Meeter.Controllers
         {
             var id = userManager.GetUserId(User);
             var Us = await userManager.GetUserAsync(User);
+            Us.CreatedGroups = await normalDataContext.Groups.Include(x => x.Creator).Where(x => x.Creatorid == Us.Id).ToArrayAsync();
             // return "Secret page";
             return View("Secret",Us);
         }
