@@ -30,16 +30,6 @@ namespace Meeter.Controllers
         }
 
         /*
-        private readonly IAuthorizationService authorizationService;
-        private readonly MeeterDbContext context;
-
-        public MeeterController(IAuthorizationService authService, MeeterDbContext ctx)
-        {
-            authorizationService = authService;
-            context = ctx;
-        } */
-
-        /*
        public async Task<ActionResult<string>> OnGetAsync(int documentId)
        {
            Event @event = context.Events.Find(documentId);
