@@ -5,6 +5,7 @@
 
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
     <meta charset="utf-8" />
+    <link rel="stylesheet" href="lib/bootstrap/dist/css/bootstrap.css" />
     <link rel="stylesheet" type="text/css" href="style.css" />
 
     <script src="style_silver.js" type="text/javascript"></script>
@@ -15,11 +16,20 @@
 <body>
     <div id="map"></div>
     <div id="grad1"></div>
-    <img src="meeter.svg" id="mainlogo"/>
+    <img src="meeter.svg" id="mainlogo" />
+
+    <div id="buttons">
+        <a href="login.html" class="btn btn-outline-primary">
+            <span class="button--inner">Login</span>
+        </a>
+
+        <a href="register.html" class="btn btn-outline-secondary">
+            <span class="button--inner">Register</span>
+        </a>
+    </div>
 
     <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCZLUAhRnE5e3D3Q4-c3_SXJO0HLXE3U2Q&callback=initMap">
-    </script>
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCZLUAhRnE5e3D3Q4-c3_SXJO0HLXE3U2Q&callback=initMap"></script>
 
 </body>
 </html>
