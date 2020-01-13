@@ -6,7 +6,7 @@ An app helping to choose the best place for you and your friends to meet.
 
 ### Introduction
 
-"Meeter" is a recommending system suggesting a group of friends which place to choose for their meeting. 
+*Meeter* is a recommending system suggesting a group of friends which place to choose for their meeting. 
 
 The proposed local will be chosen based on the preferences of each friend, according to types of their favourite food, drinks and the general type of desired place, like restaurant, bar or café. 
 
@@ -20,19 +20,19 @@ Routes of each friend (A) to the selected place (B).
 List of roles:
 * User - everyone who is logged-in 
 * Group member - user who has joined a specific group
-* Group member (virtual) - a person who participates in the meeting but does not have their Meeter account ()
+* Group member (virtual) - a person who participates in the meeting but does not have their Meeter account
 * Group leader - user who has created a specified group
 * Administrator - user with special permissions, sees all of the created groups and has the access to the users' data
 
 ![Use-case](http://pages.mini.pw.edu.pl/~gorzynskik/HTMLPostGIS/Meeter/use-case.svg)
 
 ### Database
-[TODO]
+![Use-case](http://pages.mini.pw.edu.pl/~gorzynskik/HTMLPostGIS/Meeter/diagram.svg)
 
 ## Prerequisites
 
 * Linux / Windows PC
-  * For Mac OS, app works only with in-memory database. To build, replace:
+  * For Mac OS, app works only with in-memory database. To build, replace in *Startup.cs*:
 
         services.AddDbContext<NormalDataContext>(options => options.UseSqlServer(connection));
         
@@ -45,7 +45,38 @@ List of roles:
 * SQL Server
 
 ## User guide
-[TODO]
+Before starting the program, you can create SQL database; otherwise you have to create InMemoryDatabase.
+Using SSMS (SQL Server Management Studio), connect to local database:
+            
+    (LocalDb)\MSSQLLocalDB
+
+![Connect to Server](http://pages.mini.pw.edu.pl/~gorzynskik/HTMLPostGIS/Meeter/connect-to-server.png)
+
+Write command in Package Menager Console:
+
+    Update-database
+
+Refresh *(LocalDb)\MSSQLLocalDB* by right click on it and choose *Refresh*.
+
+Check if in folder Databases exists: *MeeterAplicationDB* with tables:
+![Tables](http://pages.mini.pw.edu.pl/~gorzynskik/HTMLPostGIS/Meeter/tables.png)
+
+If operation succeeded, you can start the application. 
+
+### Checking Authorization
+If you would like to check the authorization mode, go to *Startup.cs* and set e-mail to yours in *CreateUserRoles* method.
+
+    private async Task CreateUserRoles(IServiceProvider serviceProvider)
+    {
+        ...
+        User user = await UserManager.FindByEmailAsync("[YOUR E-MAIL]");
+        ...
+    }
+
+Then start the application login using this e-mail, stop debugging. Check in database if in table *AspNetUserRoles* is your id (you can see your id in *AspNetUsers* table) and Role Admin id (you can check it in *AspNetRoles* table). At the end start the application one more time and login using admin email.
+Check Admin sites:
+http://localhost:5000/api/Group/Index
+http://localhost:5000/api/Event/Index
 
 ## Technologies used
 
@@ -74,4 +105,3 @@ List of roles:
 ---
 * Graphics <a href="http://www.freepik.com">designed by pikisuperstar / Freepik</a>
 * Font designed by <a href="https://fonts.adobe.com/designers/hayato-yamasaki">Hayato Yamasaki</a>, <a href="https://fonts.adobe.com/designers/kazunori-shiina">Kazunori Shiina</a>, and <a href="https://fonts.adobe.com/designers/robyn-makinson">Robyn Makinson</a>. From <a href="https://fonts.adobe.com/foundries/fontself">Fontself</a>.
-
