@@ -111,7 +111,7 @@
                 {
                     <tr>
 
-                        <td>@eve.Id</td>
+                        <td>@Html.ActionLink(eve.Id.ToString(), "GetEventInfo","Event", new { id = eve.Id })</td>
                         <td>@eve.EventName</td>
                         <td>@eve.DateTime</td>
                         <td>@eve.Place</td>
