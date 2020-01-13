@@ -21,7 +21,7 @@ List of roles:
 * User - everyone who is logged-in 
 * Group member - user who has joined a specific group
 * Group member (virtual) - a person who participates in the meeting but does not have their Meeter account ()
-* Group leader - user who has created 
+* Group leader - user who has created a specified group
 * Administrator - user with special permissions, sees all of the created groups and has the access to the users' data
 
 ![Use-case](http://pages.mini.pw.edu.pl/~gorzynskik/HTMLPostGIS/Meeter/use-case.svg)
@@ -63,8 +63,8 @@ List of roles:
 ## Conclusions
 
 * Due to the .NET's just-in-time compilation, some errors do not prevent launching the application. It causes the app to start faster, but also to be harder to debug. 
-* Passing data between the backend and frontend by sending HTTP requests manually and fetching them is tedious. When an app becomes larger, rewriting code to Razor and using Views makes it much cleaner and simpler. 
-* Models work just like a database tables, that's why they should be coded not like the traditional classes nested one in another, but like the related tables, binded by marking the members as virtual. Unfortunately, we are still facing problems trying to get all the data via the relations and avoiding searching it manually by the id. 
+* Passing data between the backend and frontend by sending HTTP requests manually and fetching them is tedious. When app becomes larger, rewriting code to Razor and using Views makes it much cleaner and simpler. 
+* Models work just like database tables, that's why they should be coded not like the traditional classes nested one in another, but like the related tables, binded by marking the members as virtual. Unfortunately, we are still facing problems trying to get all the data via the relations and avoiding searching it manually by the id. 
 * Authentication and authorization are a real tough nut to crack when doing it for the first time. Range of different methods makes it hard to look for advice in online tutorials. 
 * The salary of full-stack developer is definitely deserved! 🤑
 
