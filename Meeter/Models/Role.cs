@@ -8,5 +8,6 @@ namespace Meeter.Models
 {
     public class Role : IdentityRole
     {
+       // public Role(string roleName);
     }
 }

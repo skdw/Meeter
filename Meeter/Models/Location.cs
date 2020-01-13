@@ -1,8 +1,10 @@
 ﻿using System;
 namespace Meeter.Models
 {
-    public struct Location
+    public class Location
     {
+        public string Id { get; set; }
+
         public float Lat { get; set; }
 
         public float Lng { get; set; }

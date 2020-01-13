@@ -4,14 +4,16 @@ using Meeter.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace MeeterAplication.Migrations
+namespace Meeter.Migrations
 {
     [DbContext(typeof(NormalDataContext))]
-    partial class NormalDataContextModelSnapshot : ModelSnapshot
+    [Migration("20200112225417_roles")]
+    partial class roles
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -69,8 +71,6 @@ namespace MeeterAplication.Migrations
 
                     b.Property<int>("GroupId");
 
-                    b.Property<string>("LocationId");
-
                     b.Property<string>("Userid");
 
                     b.HasKey("Id");
@@ -80,20 +80,6 @@ namespace MeeterAplication.Migrations
                     b.HasIndex("Userid");
 
                     b.ToTable("GroupMembers");
-                });
-
-            modelBuilder.Entity("Meeter.Models.Location", b =>
-                {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<float>("Lat");
-
-                    b.Property<float>("Lng");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Locations");
                 });
 
             modelBuilder.Entity("Meeter.Models.Place", b =>
@@ -118,6 +104,30 @@ namespace MeeterAplication.Migrations
                     b.ToTable("Places");
                 });
 
+            modelBuilder.Entity("Meeter.Models.Role", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken();
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(256);
+
+                    b.Property<string>("NormalizedName")
+                        .HasMaxLength(256);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedName")
+                        .IsUnique()
+                        .HasName("RoleNameIndex")
+                        .HasFilter("[NormalizedName] IS NOT NULL");
+
+                    b.ToTable("AspNetRoles");
+                });
+
             modelBuilder.Entity("Meeter.Models.User", b =>
                 {
                     b.Property<string>("Id")
@@ -136,8 +146,6 @@ namespace MeeterAplication.Migrations
                     b.Property<string>("FirstName");
 
                     b.Property<string>("LastName");
-
-                    b.Property<string>("LocationId");
 
                     b.Property<bool>("LockoutEnabled");
 
@@ -167,8 +175,6 @@ namespace MeeterAplication.Migrations
                     b.Property<bool>("isPesudoUser");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("LocationId");
 
                     b.HasIndex("NormalizedEmail")
                         .HasName("EmailIndex");
@@ -200,30 +206,6 @@ namespace MeeterAplication.Migrations
                     b.HasIndex("Userid");
 
                     b.ToTable("UserPreferences");
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
-                {
-                    b.Property<string>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken();
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(256);
-
-                    b.Property<string>("NormalizedName")
-                        .HasMaxLength(256);
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NormalizedName")
-                        .IsUnique()
-                        .HasName("RoleNameIndex")
-                        .HasFilter("[NormalizedName] IS NOT NULL");
-
-                    b.ToTable("AspNetRoles");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -343,13 +325,6 @@ namespace MeeterAplication.Migrations
                         .HasForeignKey("Userid");
                 });
 
-            modelBuilder.Entity("Meeter.Models.User", b =>
-                {
-                    b.HasOne("Meeter.Models.Location", "Location")
-                        .WithMany()
-                        .HasForeignKey("LocationId");
-                });
-
             modelBuilder.Entity("Meeter.Models.UserPreference", b =>
                 {
                     b.HasOne("Meeter.Models.Event", "Event")
@@ -364,7 +339,7 @@ namespace MeeterAplication.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole")
+                    b.HasOne("Meeter.Models.Role")
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -388,7 +363,7 @@ namespace MeeterAplication.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole")
+                    b.HasOne("Meeter.Models.Role")
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade);

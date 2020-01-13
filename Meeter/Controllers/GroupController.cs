@@ -5,7 +5,10 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
+using Microsoft.AspNetCore.Authentication;
+//using Microsoft.AspNetCore.Identity;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Meeter.Controllers
 {
@@ -26,6 +29,7 @@ namespace Meeter.Controllers
 
             normalDataContext = normalD;
         }
+        [Authorize(Roles="Admin")]
         public async Task<IActionResult> Index()
         {
             List<Group> groups = await normalDataContext.Groups.ToListAsync();
@@ -42,6 +46,7 @@ namespace Meeter.Controllers
         //{
         //    return normalDataContext.Groups.AsEnumerable();
         //}
+        
         [HttpGet]
         public async Task<IActionResult> GetGroupInfo(int? groupid)// [FromForm(Name = "search")] string searchString)
         {

@@ -14,5 +14,7 @@ namespace Meeter.Models
         public virtual User User { get; set; }
 
         public string Userid { get; set; }
+
+        public string LocationId { get; set; }
     }
 }

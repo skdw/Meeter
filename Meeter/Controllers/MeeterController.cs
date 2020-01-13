@@ -30,16 +30,6 @@ namespace Meeter.Controllers
         }
 
         /*
-        private readonly IAuthorizationService authorizationService;
-        private readonly MeeterDbContext context;
-
-        public MeeterController(IAuthorizationService authService, MeeterDbContext ctx)
-        {
-            authorizationService = authService;
-            context = ctx;
-        } */
-
-        /*
        public async Task<ActionResult<string>> OnGetAsync(int documentId)
        {
            Event @event = context.Events.Find(documentId);
@@ -86,8 +76,59 @@ namespace Meeter.Controllers
         {
             var id = userManager.GetUserId(User);
             var Us = await userManager.GetUserAsync(User);
+            Us.CreatedGroups = await normalDataContext.Groups.Include(x => x.Creator).Where(x => x.Creatorid == Us.Id).ToArrayAsync();
+            foreach(var gr in Us.CreatedGroups)
+            {
+                gr.Events = await normalDataContext.Events.Include(x => x.Group).Where(x => x.GroupId == gr.Id).ToArrayAsync();
+
+            }
+            if(Us.LocationId!=null)
+            {
+                Us.Location =await normalDataContext.Locations.FirstOrDefaultAsync(x => x.Id == Us.LocationId);
+
+                ViewData["locationlat"] = Us.Location.Lat;
+                ViewData["locationlng"] = Us.Location.Lng;
+            }
             // return "Secret page";
+
+            //model.JavascriptToRun = "ShowErrorPopup()";
+
             return View("Secret",Us);
+        }
+
+        [HttpGet]
+        public ActionResult Location()
+        {
+            return Redirect("/location.html");
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<Task>> Location([FromHeader] float lat, [FromHeader] float lng)
+        {
+            var signed = signInManager.IsSignedIn(User);
+            if(signed)
+            {
+                var user = await userManager.GetUserAsync(User);
+
+                Location location = new Location()
+                {
+                    Lat = lat,
+                    Lng = lng
+                    
+                };
+                normalDataContext.Locations.Remove(normalDataContext.Locations.Find(user.LocationId));
+                await normalDataContext.Locations.AddAsync(location);
+                await normalDataContext.SaveChangesAsync();
+                user.LocationId = location.Id;
+
+                user.Location = location;
+              //  ViewData["locationlat"] = location.Lat;
+                //ViewData["locationlng"] = location.Lng;
+                await userManager.UpdateAsync(user);
+                await normalDataContext.SaveChangesAsync();
+                return View("Secret", user);
+            }
+            return Redirect("/splashscreen.html");
         }
 
         //[HttpGet("secretpolicy")]
