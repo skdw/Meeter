@@ -116,7 +116,8 @@ namespace Meeter.Controllers
                     Lng = lng
                     
                 };
-                normalDataContext.Locations.Remove(normalDataContext.Locations.Find(user.LocationId));
+                if(user.LocationId!=null)
+                    normalDataContext.Locations.Remove(normalDataContext.Locations.Find(user.LocationId));
                 await normalDataContext.Locations.AddAsync(location);
                 await normalDataContext.SaveChangesAsync();
                 user.LocationId = location.Id;
