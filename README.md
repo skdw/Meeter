@@ -24,7 +24,7 @@ List of roles:
 * Group leader - user who has created 
 * Administrator - user with special permissions, sees all of the created groups and has the access to the users' data
 
-![Use-case](http://pages.mini.pw.edu.pl/~gorzynskik/HTMLPostGIS/Meeter/usecase.svg)
+![Use-case](http://pages.mini.pw.edu.pl/~gorzynskik/HTMLPostGIS/Meeter/use-case.svg)
 
 ### Database
 [TODO]
