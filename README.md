@@ -18,7 +18,7 @@ Routes of each friend (A) to the selected place (B).
 ### Use-cases
 
 List of roles:
-* User - everyone who's loged-in 
+* User - everyone who is logged-in 
 * Group member - user who has joined a specific group
 * Group member (virtual) - a person who participates in the meeting but does not have their Meeter account ()
 * Group leader - user who has created 
@@ -29,7 +29,10 @@ List of roles:
 ### Database
 [TODO]
 
-## Authors
+## Authors and acknowledgment
 * Anna Buchman
 * Kamil Górzyński
+---
+* Graphics <a href="http://www.freepik.com">designed by pikisuperstar / Freepik</a>
+* Font designed by <a href="https://fonts.adobe.com/designers/hayato-yamasaki">Hayato Yamasaki</a>, <a href="https://fonts.adobe.com/designers/kazunori-shiina">Kazunori Shiina</a>, and <a href="https://fonts.adobe.com/designers/robyn-makinson">Robyn Makinson</a>. From <a href="https://fonts.adobe.com/foundries/fontself">Fontself</a>.
 
