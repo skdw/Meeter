@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+
+    <script src="style_silver.js" type="text/javascript"></script>
+
+    <title>Directions Service</title>
+    <style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        height: 100%;
+      }
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      #floating-panel {
+        position: absolute;
+        top: 10px;
+        left: 25%;
+        z-index: 5;
+        background-color: #fff;
+        padding: 5px;
+        border: 1px solid #999;
+        text-align: center;
+        font-family: 'Roboto','sans-serif';
+        line-height: 30px;
+        padding-left: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="floating-panel">
+    <b>Start: </b>
+    <select id="start">
+      <option value="52.232222, 21.008333">Warszawa</option>
+      <option value="50.061389, 19.938333">Kraków</option>
+      <option value="51.11, 17.022222">Wrocław</option>
+      <option value="52.408333, 16.934167">Poznań</option>
+      <option value="Wydział Matematyki i Nauk Informacyjnych Politechniki Warszawskiej">MiNI</option>
+      <option value="Ciołka 10A, 01-402 Warszawa">Wola</option>
+      <option value="Bartycka 18, 00-716 Warszawa">Siekierki</option>
+    </select>
+    <b>End: </b>
+    <select id="end">
+      <option value="52.232222, 21.008333">Warszawa</option>
+      <option value="50.061389, 19.938333">Kraków</option>
+      <option value="51.11, 17.022222">Wrocław</option>
+      <option value="52.408333, 16.934167">Poznań</option>
+      <option value="Wydział Matematyki i Nauk Informacyjnych Politechniki Warszawskiej">MiNI</option>
+      <option value="Ciołka 10A, 01-402 Warszawa">Wola</option>
+      <option value="Bartycka 18, 00-716 Warszawa">Siekierki</option>
+    </select>
+    </div>
+    <div id="map"></div>
+    <script>
+      function initMap() {
+        var directionsService = new google.maps.DirectionsService();
+        //var directionsRenderer = new google.maps.DirectionsRenderer();
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 12,
+          center: {lat: 52.232222, lng: 21.008333},
+          styles: style_silver
+        });
+        //directionsRenderer.setMap(map);
+
+        var onChangeHandler = function() {
+          let origin = document.getElementById('start').value;
+          let destination = document.getElementById('end').value;
+          calculateAndDisplayRoute(directionsService, origin, destination);
+        };
+        document.getElementById('start').addEventListener('change', onChangeHandler);
+        document.getElementById('end').addEventListener('change', onChangeHandler);
+      
+        function getRandomColor() {
+          return '#'+(Math.random()*0xFFFFFF<<0).toString(16);
+        }
+
+        function getMarker(latlng) {
+          var marker = new google.maps.Marker({
+            map: map,
+            position: {lat: latlng.lat, lng: latlng.lng},
+            icon: pinSymbol("#FFF")
+          });
+          return marker;
+
+          function pinSymbol(color) {
+            return {
+                path: 'M 0,0 C -2,-20 -10,-22 -10,-30 A 10,10 0 1,1 10,-30 C 10,-22 2,-20 0,0 z',
+                fillColor: color,
+                fillOpacity: 1,
+                strokeColor: '#000',
+                strokeWeight: 2,
+                scale: 1,
+            };
+          }
+        }
+ 
+
+        function renderDirections(result) { 
+          var directionsRenderer = new google.maps.DirectionsRenderer({
+            map: map,
+            polylineOptions: {
+              strokeColor: getRandomColor()
+            }
+          }); 
+          //directionsRenderer.setMap(map); 
+          //directionsRenderer.setOptions({ suppressMarkers: true });
+          directionsRenderer.setDirections(result); 
+        }     
+
+        function calculateAndDisplayRoute(directionsService, origin, destination) {
+          //var markerA = getMarker(origin);
+          directionsService.route(
+              {
+                origin: {query: origin},
+                destination: {query: destination},
+                travelMode: 'DRIVING'
+              },
+              function(response, status) {
+                if (status === 'OK') {
+                  renderDirections(response);
+                } else {
+                  window.alert('Directions request failed due to ' + status);
+                }
+              });
+        }
+    }
+    </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCZLUAhRnE5e3D3Q4-c3_SXJO0HLXE3U2Q&callback=initMap">
+    </script>
+  </body>
+</html>
