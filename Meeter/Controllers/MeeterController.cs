@@ -82,6 +82,13 @@ namespace Meeter.Controllers
                 gr.Events = await normalDataContext.Events.Include(x => x.Group).Where(x => x.GroupId == gr.Id).ToArrayAsync();
 
             }
+            if(Us.LocationId!=null)
+            {
+                Us.Location =await normalDataContext.Locations.FirstOrDefaultAsync(x => x.Id == Us.LocationId);
+
+                ViewData["locationlat"] = Us.Location.Lat;
+                ViewData["locationlng"] = Us.Location.Lng;
+            }
             // return "Secret page";
 
             //model.JavascriptToRun = "ShowErrorPopup()";
@@ -107,9 +114,16 @@ namespace Meeter.Controllers
                 {
                     Lat = lat,
                     Lng = lng
+                    
                 };
+                normalDataContext.Locations.Remove(normalDataContext.Locations.Find(user.LocationId));
+                await normalDataContext.Locations.AddAsync(location);
+                await normalDataContext.SaveChangesAsync();
+                user.LocationId = location.Id;
 
                 user.Location = location;
+              //  ViewData["locationlat"] = location.Lat;
+                //ViewData["locationlng"] = location.Lng;
                 await userManager.UpdateAsync(user);
                 await normalDataContext.SaveChangesAsync();
                 return View("Secret", user);

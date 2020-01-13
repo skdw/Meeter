@@ -25,7 +25,7 @@ namespace Meeter.Models
         public DbSet<UserPreference> UserPreferences { get; set; }
 
         public DbSet<Event> Events { get; set; }
-
+        public DbSet<Location> Locations { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
