@@ -29,12 +29,14 @@ namespace Meeter.Controllers
             signInManager = sim;
             normalDataContext = normalD;
         }
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<IActionResult> Index()
         {
             List<Event> searchResult = await normalDataContext.Events.ToListAsync(); //Include(x => x.Company).Where(o => o.JobTitle.Contains(searchString)).ToListAsync();
             return View(searchResult);
         }
+
         public async Task<IActionResult> GetEventInfo(int? id)
         {
             Event model = await normalDataContext.Events.FirstOrDefaultAsync(x => x.Id == id);
