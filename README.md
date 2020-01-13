@@ -29,6 +29,45 @@ List of roles:
 ### Database
 [TODO]
 
+## Prerequisites
+
+* Linux / Windows PC
+  * For Mac OS, app works only with in-memory database. To build, replace:
+
+        services.AddDbContext<NormalDataContext>(options => options.UseSqlServer(connection));
+        
+    with:
+
+        services.AddDbContext<NormalDataContext>(opts => opts.UseInMemoryDatabase("MeeterDatabase"));
+  
+
+* Visual Studio 2017/2019 with .NET Core 2.1
+* SQL Server
+
+## User guide
+[TODO]
+
+## Technologies used
+
+* Client-side
+  * HTML
+  * CSS
+  * JavaScript
+  * AJAX
+  * Google Maps API
+
+* Server-side
+  * ASP .NET Core 2.1
+  * Microsoft SQL Server
+
+## Conclusions
+
+* Due to the .NET's just-in-time compilation, some errors do not prevent launching the application. It causes the app to start faster, but also to be harder to debug. 
+* Passing data between the backend and frontend by sending HTTP requests manually and fetching them is tedious. When an app becomes larger, rewriting code to Razor and using Views makes it much cleaner and simpler. 
+* Models work just like a database tables, that's why they should be coded not like the traditional classes nested one in another, but like the related tables, binded by marking the members as virtual. Unfortunately, we are still facing problems trying to get all the data via the relations and avoiding searching it manually by the id. 
+* Authentication and authorization are a real tough nut to crack when doing it for the first time. Range of different methods makes it hard to look for advice in online tutorials. 
+* The salary of full-stack developer is definitely deserved! 🤑
+
 ## Authors and acknowledgment
 * Anna Buchman
 * Kamil Górzyński
