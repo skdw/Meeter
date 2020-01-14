@@ -35,14 +35,17 @@
                         </button>
                     </a>
 
-                    <button class="btn btn-rounded btn-danger mx-2"
-                            data-toggle="modal"
-                            data-target="#confirm-delete">
-                        <i class="fas fa-trash-alt pr-2"></i>
-                        Delete
-                    </button>
+                    
                 </div>
             </div>
         </div>
+    </div>
+    <div class="pt-2">
+        <a href="@Url.Action("Delete", new {id= Model.Id })">
+            <button class="btn btn-lg btn-danger mx-2">
+                <i class="fas fa-trash-alt pr-2"></i>
+                Delete this event
+            </button>
+        </a>
     </div>
 </div>
