@@ -35,9 +35,9 @@ namespace Meeter
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //services.AddDbContext<MeeterDbContext>(opts => opts.UseInMemoryDatabase("MeeterDatabase"));
+            //services.AddDbContext<NormalDataContext>(opts => opts.UseInMemoryDatabase("MeeterDatabase"));
             var connection = Configuration["DatabaseConnectionString"];
-            // services.AddDbContext<MeeterDbContext>(options => options.UseSqlServer(connection));
+            //services.AddDbContext<MeeterDbContext>(options => options.UseSqlServer(connection));
             services.AddDbContext<NormalDataContext>(options => options.UseSqlServer(connection));
             //services.AddDefaultIdentity<User>()
             services.AddIdentity<User, IdentityRole>(config =>
@@ -133,7 +133,7 @@ namespace Meeter
             }
             //Assign Admin role to the main User here we have given our newly registered 
             //login id for Admin management
-            User user = await UserManager.FindByEmailAsync("anna.m.buchman@gmail.com");
+            User user = await UserManager.FindByEmailAsync("kamil.gorzynski8@gmail.com");
             var User = new User();
             await UserManager.AddToRoleAsync(user, "Admin");
         }
