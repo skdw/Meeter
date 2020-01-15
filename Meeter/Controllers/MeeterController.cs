@@ -207,6 +207,10 @@ namespace Meeter.Controllers
 
             return RedirectToAction("Index");
         }
+        public  ActionResult AccesDenied()
+        {
+            return View();
+        }
 
         //[HttpGet("users")]
         //public IEnumerable<IdentityUser> GetUsers()

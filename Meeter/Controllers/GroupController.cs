@@ -125,5 +125,18 @@ namespace Meeter.Controllers
             await normalDataContext.SaveChangesAsync();
             return RedirectToAction("GetGroupInfo",new { groupid=model.Id });
         }
+        public async Task<IActionResult> Delete(int? id)
+        {
+            List<Event> events = await normalDataContext.Events.Include(x => x.Group).Where(x => x.GroupId == id).ToListAsync();
+            foreach(var e in events)
+            {
+
+                normalDataContext.Events.Remove(normalDataContext.Events.Find(e.Id));
+            }
+            normalDataContext.Groups.Remove(normalDataContext.Groups.Find(id));
+            await normalDataContext.SaveChangesAsync();
+            return RedirectToAction("Secret", "Meeter");
+        }
+        
     }
 }

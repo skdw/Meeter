@@ -5,9 +5,11 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Meeter.AuthorizationRequirements;
 using Meeter.Models;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -35,9 +37,9 @@ namespace Meeter
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //services.AddDbContext<MeeterDbContext>(opts => opts.UseInMemoryDatabase("MeeterDatabase"));
+            //services.AddDbContext<NormalDataContext>(opts => opts.UseInMemoryDatabase("MeeterDatabase"));
             var connection = Configuration["DatabaseConnectionString"];
-            // services.AddDbContext<MeeterDbContext>(options => options.UseSqlServer(connection));
+            //services.AddDbContext<MeeterDbContext>(options => options.UseSqlServer(connection));
             services.AddDbContext<NormalDataContext>(options => options.UseSqlServer(connection));
             //services.AddDefaultIdentity<User>()
             services.AddIdentity<User, IdentityRole>(config =>
@@ -54,6 +56,7 @@ namespace Meeter
             services.ConfigureApplicationCookie(config =>
             {
                 config.Cookie.Name = "Identity.cookie";
+                config.AccessDeniedPath = "/api/meeter/AccesDenied";
                 config.LoginPath = "/api/meeter/Login";
             });
 
@@ -133,7 +136,7 @@ namespace Meeter
             }
             //Assign Admin role to the main User here we have given our newly registered 
             //login id for Admin management
-            User user = await UserManager.FindByEmailAsync("anna.m.buchman@gmail.com");
+            User user = await UserManager.FindByEmailAsync("kamil.gorzynski8@gmail.com");
             var User = new User();
             await UserManager.AddToRoleAsync(user, "Admin");
         }
