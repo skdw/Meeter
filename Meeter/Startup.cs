@@ -5,9 +5,11 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Meeter.AuthorizationRequirements;
 using Meeter.Models;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -54,6 +56,7 @@ namespace Meeter
             services.ConfigureApplicationCookie(config =>
             {
                 config.Cookie.Name = "Identity.cookie";
+                config.AccessDeniedPath = "/api/meeter/AccesDenied";
                 config.LoginPath = "/api/meeter/Login";
             });
 
