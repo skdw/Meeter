@@ -1,0 +1,78 @@
+{
+  "version": "1.0",
+  "defaultProvider": "unpkg",
+  "libraries": [
+    {
+      "library": "bootstrap@3.3.7",
+      "destination": "wwwroot/lib/bootstrap/"
+    },
+    {
+      "library": "@fortawesome/fontawesome-free@5.12.0",
+      "destination": "wwwroot/lib/fortawesome/",
+      "files": [
+        "css/all.css",
+        "css/all.min.css",
+        "css/brands.css",
+        "css/brands.min.css",
+        "css/fontawesome.css",
+        "css/fontawesome.min.css",
+        "css/regular.css",
+        "css/regular.min.css",
+        "css/solid.css",
+        "css/solid.min.css",
+        "css/svg-with-js.css",
+        "css/svg-with-js.min.css",
+        "css/v4-shims.css",
+        "css/v4-shims.min.css",
+        "js/all.js",
+        "js/all.min.js",
+        "js/brands.js",
+        "js/brands.min.js",
+        "js/conflict-detection.js",
+        "js/conflict-detection.min.js",
+        "js/fontawesome.js",
+        "js/fontawesome.min.js",
+        "js/regular.js",
+        "js/regular.min.js",
+        "js/solid.js",
+        "js/solid.min.js",
+        "js/v4-shims.js",
+        "js/v4-shims.min.js",
+        "metadata/categories.yml",
+        "metadata/icons.yml",
+        "metadata/shims.yml",
+        "metadata/sponsors.yml",
+        "webfonts/fa-brands-400.eot",
+        "webfonts/fa-brands-400.svg",
+        "webfonts/fa-brands-400.ttf",
+        "webfonts/fa-brands-400.woff",
+        "webfonts/fa-brands-400.woff2",
+        "webfonts/fa-regular-400.eot",
+        "webfonts/fa-regular-400.svg",
+        "webfonts/fa-regular-400.ttf",
+        "webfonts/fa-regular-400.woff",
+        "webfonts/fa-regular-400.woff2",
+        "webfonts/fa-solid-900.eot",
+        "webfonts/fa-solid-900.svg",
+        "webfonts/fa-solid-900.ttf",
+        "webfonts/fa-solid-900.woff",
+        "webfonts/fa-solid-900.woff2",
+        "LICENSE.txt",
+        "package.json"
+      ]
+    },
+    {
+      "provider": "cdnjs",
+      "library": "jquery-validation-unobtrusive@3.2.11",
+      "destination": "wwwroot/lib/jquery-validation-unobtrusive/"
+    },
+    {
+      "library": "jquery-validation@1.19.1",
+      "destination": "wwwroot/lib/jquery-validation/"
+    },
+    {
+      "library": "jquery@3.3.1",
+      "destination": "wwwroot/lib/jquery/"
+    }
+  ]
+}
