@@ -8,7 +8,7 @@
     },
     {
       "library": "@fortawesome/fontawesome-free@5.12.0",
-      "destination": "wwwroot/lib/fortawesome/",
+      "destination": "wwwroot/lib/fontawesome/",
       "files": [
         "css/all.css",
         "css/all.min.css",
