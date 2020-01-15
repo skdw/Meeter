@@ -70,5 +70,14 @@ namespace Meeter.Controllers
 
 
         }
+        
+        public async Task<IActionResult> Delete(int? id)
+        {
+            Event model = await normalDataContext.Events.FirstOrDefaultAsync(x => x.Id == id);
+            int groupi = model.GroupId;
+            normalDataContext.Events.Remove(normalDataContext.Events.Find(id));
+            await normalDataContext.SaveChangesAsync();
+            return RedirectToAction("GetGroupInfo", "Group",new { groupid = groupi });
+        }
     }
 }

@@ -37,12 +37,12 @@
             </button>
         </a>*@
 
-                    <button class="btn btn-lg btn-danger mx-2"
-                            data-toggle="modal"
-                            data-target="#confirm-delete">
+                <a href="@Url.Action("Delete", new {id= Model.Id })">
+                    <button class="btn btn-lg btn-danger mx-2">
                         <i class="fas fa-trash-alt pr-2"></i>
-                        Delete
+                        Delete this group
                     </button>
+                </a>
                 </div>
             </div>
         </div>
