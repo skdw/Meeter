@@ -170,7 +170,7 @@ namespace Meeter.Controllers
         [HttpGet]
         public ActionResult<string> Register()
         {
-            return Redirect("/register.html");
+            return View();
         }
 
         [HttpPost]
