@@ -1,4 +1,6 @@
-﻿@model Meeter.Models.Location
+﻿@using Microsoft.Extensions.Configuration
+@inject IConfiguration Configuration
+@model Meeter.Models.Location
 
 @{
     ViewData["Title"] = "SetLocation";
@@ -38,7 +40,7 @@
     <a asp-action="Index">Back to List</a>
 </div>
 
-<script type="text/javascript" async defer src=@ViewData["GoogleUri"]&callback=initMap></script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=@Configuration["GoogleKey"]&callback=initMap"></script>
 <script type="text/javascript" src="@Url.Content("../../style_silver.js")"></script>
 <script type="text/javascript">
 

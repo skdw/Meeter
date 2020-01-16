@@ -22,8 +22,6 @@ namespace Meeter.Controllers
         private readonly SignInManager<User> signInManager;
         private readonly IConfiguration _config;
 
-        public string GoogleUri => "https://maps.googleapis.com/maps/api/js?key=" + _config.GetValue<string>("GoogleKey");
-
         public MeeterController(
             UserManager<User> usm,
             SignInManager<User> sim, NormalDataContext normalD, IConfiguration config)
@@ -69,10 +67,7 @@ namespace Meeter.Controllers
             if (signed)
                 return await Secret();
             else
-            {
-                ViewData["GoogleUri"] = GoogleUri;
                 return View();
-            }
         }
 
         [HttpGet]
@@ -93,7 +88,6 @@ namespace Meeter.Controllers
 
                 ViewData["locationlat"] = us.Location.Lat;
                 ViewData["locationlng"] = us.Location.Lng;
-                ViewData["GoogleUri"] = GoogleUri;
             }
             // return "Secret page";
 
@@ -107,7 +101,6 @@ namespace Meeter.Controllers
         {
             var id = userManager.GetUserId(User);
             var loc = await normalDataContext.Locations.FirstOrDefaultAsync(l => l.Id == id);
-            ViewData["GoogleUri"] = GoogleUri;
             return View(loc);
         }
 
