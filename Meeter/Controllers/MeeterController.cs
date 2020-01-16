@@ -145,7 +145,7 @@ namespace Meeter.Controllers
         [HttpGet]
         public ActionResult<string> Login()
         {
-            return Redirect("/login.html");
+            return View();
         }
 
         [HttpPost]
