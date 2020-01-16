@@ -9,6 +9,7 @@
 <h4>Location</h4>
 <hr />
 <div class="row">
+    <div id="map" style="width: 500px; height: 400px"></div>
     <div class="col-md-4">
         <form asp-action="SetLocation">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -33,6 +34,42 @@
 <div>
     <a asp-action="Index">Back to List</a>
 </div>
+
+<script type="text/javascript" async defer src=@ViewData["GoogleUri"]&callback=initMap></script>
+<script type="text/javascript" src="@Url.Content("../../style_silver.js")"></script>
+<script type="text/javascript">
+
+    function initMap() {
+        var map_center = { lat: 52.2322, lng: 21.0083 };
+        generateMap();
+
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(setPosition);
+            } else {
+                console.log("Geolocation is not supported by this browser.");
+                generateMap();
+            }
+        }
+
+        function setPosition(position) {
+            map_center = { lat: position.coords.latitude, lng: position.coords.longitude };
+            generateMap();
+        }
+
+        function generateMap() {
+            var map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 13,
+                center: map_center,
+                disableDefaultUI: true,
+                styles: style_silver // or style_retro
+            });
+        }
+
+        getLocation();
+    }
+
+</script>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

@@ -9,6 +9,8 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Configuration;
 
 namespace Meeter.Controllers
 {
@@ -19,14 +21,18 @@ namespace Meeter.Controllers
         private readonly NormalDataContext normalDataContext;
         private readonly UserManager<User> userManager;
         private readonly SignInManager<User> signInManager;
+        private readonly IConfiguration _config;
+
+        public string GoogleUri => "https://maps.googleapis.com/maps/api/js?key=" + _config.GetValue<string>("GoogleKey");
 
         public MeeterController(
             UserManager<User> usm,
-            SignInManager<User> sim, NormalDataContext normalD)
+            SignInManager<User> sim, NormalDataContext normalD, IConfiguration config)
         {
             userManager = usm;
             signInManager = sim;
             normalDataContext = normalD;
+            _config = config;
         }
 
         /*
@@ -100,6 +106,7 @@ namespace Meeter.Controllers
         {
             var id = userManager.GetUserId(User);
             var loc = await normalDataContext.Locations.FirstOrDefaultAsync(l => l.Id == id);
+            ViewData["GoogleUri"] = GoogleUri;
             return View(loc);
         }
 

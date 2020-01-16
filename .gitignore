@@ -1,4 +1,5 @@
 Meeter/wwwroot/lib
+Meeter/appsettings.Secret.json
 
 # globs
 Makefile.in
