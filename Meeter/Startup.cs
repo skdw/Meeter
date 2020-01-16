@@ -22,9 +22,6 @@ using Microsoft.Extensions.Options;
 
 namespace Meeter
 {
-  
-
-
     public class Startup
     {
         public Startup(IConfiguration configuration)
@@ -100,7 +97,7 @@ namespace Meeter
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env,IServiceProvider serviceProvider)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IServiceProvider serviceProvider)
         {
             if (env.IsDevelopment())
             {
@@ -119,7 +116,7 @@ namespace Meeter
                     template: "{controller=Meeter}/{action=Index}/{id?}");
             });
             CreateUserRoles(serviceProvider).Wait();
-            
+
         }
         private async Task CreateUserRoles(IServiceProvider serviceProvider)
         {
@@ -136,8 +133,8 @@ namespace Meeter
             }
             //Assign Admin role to the main User here we have given our newly registered 
             //login id for Admin management
-            User user = await UserManager.FindByEmailAsync("kamil.gorzynski8@gmail.com");
-            var User = new User();
+            var adminEmail = Configuration.GetValue<string>("AdminEmail");
+            User user = await UserManager.FindByEmailAsync(adminEmail);
             await UserManager.AddToRoleAsync(user, "Admin");
         }
     }
