@@ -1,0 +1,38 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="~/style.css" />
+
+    <script src="~/style_silver.js" type="text/javascript"></script>
+    <script src="~/style_retro.js" type="text/javascript"></script>
+    <script src="~/src.js" type="text/javascript"></script>
+    <title>Meeter</title>
+</head>
+<body>
+    <div id="map"></div>
+    <div id="grad1"></div>
+    <img src="~/meeter.svg" id="mainlogo" />
+
+    <div id="buttons">
+        <a asp-action="Login" class="btn btn-outline-primary">
+            <span class="button--inner">Login</span>
+        </a>
+
+        <a asp-action="Register" class="btn btn-outline-secondary">
+            <span class="button--inner">Register</span>
+        </a>
+    </div>
+
+    <script async defer src=@ViewData["GoogleUri"]&callback=initMap></script>
+
+</body>
+</html>
