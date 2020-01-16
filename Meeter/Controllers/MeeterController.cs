@@ -61,13 +61,12 @@ namespace Meeter.Controllers
         public async Task<ActionResult<string>> Index()
         {
             var signed = signInManager.IsSignedIn(User);
-            var id = userManager.GetUserId(User);
-            var name = userManager.GetUserName(User);
+            //var id = userManager.GetUserId(User);
+            //var name = userManager.GetUserName(User);
             if (signed)
                 return await Secret();
             else
                 return Redirect("/splashscreen.html");
-            //return "Home page - username: " + name + "  id: " + id + "  signed " + signed;
         }
 
         [HttpGet]
@@ -75,25 +74,57 @@ namespace Meeter.Controllers
         public async Task<ActionResult> Secret()
         {
             var id = userManager.GetUserId(User);
-            var Us = await userManager.GetUserAsync(User);
-            Us.CreatedGroups = await normalDataContext.Groups.Include(x => x.Creator).Where(x => x.Creatorid == Us.Id).ToArrayAsync();
-            foreach(var gr in Us.CreatedGroups)
+            var us = await userManager.GetUserAsync(User);
+            us.CreatedGroups = await normalDataContext.Groups.Include(x => x.Creator).Where(x => x.Creatorid == us.Id).ToArrayAsync();
+            foreach(var gr in us.CreatedGroups)
             {
                 gr.Events = await normalDataContext.Events.Include(x => x.Group).Where(x => x.GroupId == gr.Id).ToArrayAsync();
 
             }
-            if(Us.LocationId!=null)
+            if(us.LocationId!=null)
             {
-                Us.Location =await normalDataContext.Locations.FirstOrDefaultAsync(x => x.Id == Us.LocationId);
+                us.Location = await normalDataContext.Locations.FirstOrDefaultAsync(l => l.Id == us.LocationId);
 
-                ViewData["locationlat"] = Us.Location.Lat;
-                ViewData["locationlng"] = Us.Location.Lng;
+                ViewData["locationlat"] = us.Location.Lat;
+                ViewData["locationlng"] = us.Location.Lng;
             }
             // return "Secret page";
 
             //model.JavascriptToRun = "ShowErrorPopup()";
 
-            return View("Secret",Us);
+            return View("Secret",us);
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> SetLocation()
+        {
+            var id = userManager.GetUserId(User);
+            var loc = await normalDataContext.Locations.FirstOrDefaultAsync(l => l.Id == id);
+            return View(loc);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> SetLocation([FromForm]Location location)
+        {
+            var us = await userManager.GetUserAsync(User);
+            var loc = await normalDataContext.Locations.FirstOrDefaultAsync(l => l.Id == location.Id);
+
+            if(loc is null)
+            {
+                location.Id = us.Id;
+                var res = await normalDataContext.Locations.AddAsync(location);
+            }
+            else
+            {
+                loc.Lat = location.Lat;
+                loc.Lng = location.Lng;
+            }
+
+            us.LocationId = location.Id;
+
+            await normalDataContext.SaveChangesAsync();
+            return RedirectToAction("Secret");
         }
 
         [HttpGet]
