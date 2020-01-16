@@ -87,12 +87,13 @@ namespace Meeter.Controllers
                 gr.Events = await normalDataContext.Events.Include(x => x.Group).Where(x => x.GroupId == gr.Id).ToArrayAsync();
 
             }
-            if(us.LocationId!=null)
+            if(us.LocationId != null)
             {
                 us.Location = await normalDataContext.Locations.FirstOrDefaultAsync(l => l.Id == us.LocationId);
 
                 ViewData["locationlat"] = us.Location.Lat;
                 ViewData["locationlng"] = us.Location.Lng;
+                ViewData["GoogleUri"] = GoogleUri;
             }
             // return "Secret page";
 
@@ -132,42 +133,6 @@ namespace Meeter.Controllers
 
             await normalDataContext.SaveChangesAsync();
             return RedirectToAction("Secret");
-        }
-
-        [HttpGet]
-        public ActionResult Location()
-        {
-            return Redirect("/location.html");
-        }
-
-        [HttpPost]
-        public async Task<ActionResult<Task>> Location([FromHeader] float lat, [FromHeader] float lng)
-        {
-            var signed = signInManager.IsSignedIn(User);
-            if(signed)
-            {
-                var user = await userManager.GetUserAsync(User);
-
-                Location location = new Location()
-                {
-                    Lat = lat,
-                    Lng = lng
-                    
-                };
-                if(user.LocationId!=null)
-                    normalDataContext.Locations.Remove(normalDataContext.Locations.Find(user.LocationId));
-                await normalDataContext.Locations.AddAsync(location);
-                await normalDataContext.SaveChangesAsync();
-                user.LocationId = location.Id;
-
-                user.Location = location;
-              //  ViewData["locationlat"] = location.Lat;
-                //ViewData["locationlng"] = location.Lng;
-                await userManager.UpdateAsync(user);
-                await normalDataContext.SaveChangesAsync();
-                return View("Secret", user);
-            }
-            return Redirect("/splashscreen.html");
         }
 
         //[HttpGet("secretpolicy")]

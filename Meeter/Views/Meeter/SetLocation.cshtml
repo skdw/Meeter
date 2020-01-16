@@ -9,8 +9,9 @@
 <h4>Location</h4>
 <hr />
 <div class="row">
-    <div id="map" style="width: 500px; height: 400px"></div>
+
     <div class="col-md-4">
+        <button class="btn btn-default" id="get-current-location" onclick="getLocation()">Get current location</button>
         <form asp-action="SetLocation">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
@@ -29,6 +30,8 @@
             </div>
         </form>
     </div>
+
+    <div id="map" style="width: 500px; height: 400px"></div>
 </div>
 
 <div>
@@ -40,33 +43,38 @@
 <script type="text/javascript">
 
     function initMap() {
-        var map_center = { lat: 52.2322, lng: 21.0083 };
-        generateMap();
+        var map_center = { lat: @Model.Lat, lng: @Model.Lng };
+        generateMap(map_center);
+    }
 
-        function getLocation() {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(setPosition);
-            } else {
-                console.log("Geolocation is not supported by this browser.");
-                generateMap();
-            }
+    function getLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(setPosition);
+        } else {
+            console.log("Geolocation is not supported by this browser.");
+            initMap();
         }
+    }
 
-        function setPosition(position) {
-            map_center = { lat: position.coords.latitude, lng: position.coords.longitude };
-            generateMap();
-        }
+    function setPosition(position) {
+        document.getElementById('Lat').value = position.coords.latitude;
+        document.getElementById('Lng').value = position.coords.longitude;
+        var map_center = { lat: position.coords.latitude, lng: position.coords.longitude };
+        generateMap(map_center);
+    }
 
-        function generateMap() {
-            var map = new google.maps.Map(document.getElementById('map'), {
-                zoom: 13,
-                center: map_center,
-                disableDefaultUI: true,
-                styles: style_silver // or style_retro
-            });
-        }
+    function generateMap(map_center) {
+        var map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 13,
+            center: map_center,
+            disableDefaultUI: true,
+            styles: style_silver // or style_retro
+        });
 
-        getLocation();
+        var marker = new google.maps.Marker({
+            position: map_center,
+            map: map
+        });
     }
 
 </script>
