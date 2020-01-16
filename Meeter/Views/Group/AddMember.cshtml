@@ -11,6 +11,7 @@
         @using (Html.BeginForm("AddMember"))
         {
             @Html.AntiForgeryToken()
+            @Html.HiddenFor(m => m.User.Id)
             <div class="form-group">
                 @Html.LabelFor(m => m.User.UserName)
                 @Html.EditorFor(m => m.User.UserName, new { htmlAttributes = new { @class = "form-control" } })
@@ -57,6 +58,7 @@
             source: '@Url.Action("CurrentMemberAutocomplete")',
             select: function (event, ui) {
                 //set tagids to save
+                $("#User_Id").val(ui.item.id);
                 $("#User_FirstName").val(ui.item.firstname);
                 $("#User_LastName").val(ui.item.lastname);
                 $("#User_PhoneNumber").val(ui.item.phonenumber);

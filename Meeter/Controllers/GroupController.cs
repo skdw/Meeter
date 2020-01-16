@@ -69,6 +69,7 @@ namespace Meeter.Controllers
             };
             return View(groupMember);
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> AddMember([FromForm]GroupMember member) 
@@ -79,9 +80,14 @@ namespace Meeter.Controllers
                 member.User.isPesudoUser = true; // tylko jeśli niezarejestrowany kolega
                 var entry = await normalDataContext.Users.AddAsync(member.User);
             }
-            else
+            else // kolega zarejestrowany
             {
-                member.Userid = member.User.Id;
+                if(normalDataContext.GroupMembers.Any(m => m.User.Id == member.User.Id && m.GroupId == member.GroupId)) // jest już w tej grupie
+                    return RedirectToAction("GetGroupInfo", new { groupid = member.GroupId });
+
+                member.User = existingUser;
+                member.Userid = existingUser.Id;
+                member.LocationId = existingUser.LocationId;
             }
 
             await normalDataContext.GroupMembers.AddAsync(member);
@@ -95,7 +101,7 @@ namespace Meeter.Controllers
             var objMemberlist = normalDataContext.Users
                             .Where(u => u.UserName.ToUpper()
                             .Contains(term.ToUpper()))
-                            .Select(u => new { label = u.UserName, firstname = u.FirstName, lastname = u.LastName, phonenumber = u.PhoneNumber, email = u.Email })
+                            .Select(u => new { id = u.Id, label = u.UserName, firstname = u.FirstName, lastname = u.LastName, phonenumber = u.PhoneNumber, email = u.Email })
                             .Distinct().ToList();
             return Json(objMemberlist);
         }
