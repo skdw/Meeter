@@ -9,24 +9,27 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Configuration;
 
 namespace Meeter.Controllers
 {
     [Route("api/[controller]/[action]")]
-    // [ApiController]
     public class MeeterController : Controller
     {
         private readonly NormalDataContext normalDataContext;
         private readonly UserManager<User> userManager;
         private readonly SignInManager<User> signInManager;
+        private readonly IConfiguration _config;
 
         public MeeterController(
             UserManager<User> usm,
-            SignInManager<User> sim, NormalDataContext normalD)
+            SignInManager<User> sim, NormalDataContext normalD, IConfiguration config)
         {
             userManager = usm;
             signInManager = sim;
             normalDataContext = normalD;
+            _config = config;
         }
 
         /*
@@ -61,13 +64,10 @@ namespace Meeter.Controllers
         public async Task<ActionResult<string>> Index()
         {
             var signed = signInManager.IsSignedIn(User);
-            var id = userManager.GetUserId(User);
-            var name = userManager.GetUserName(User);
             if (signed)
                 return await Secret();
             else
-                return Redirect("/splashscreen.html");
-            //return "Home page - username: " + name + "  id: " + id + "  signed " + signed;
+                return View();
         }
 
         [HttpGet]
@@ -75,61 +75,57 @@ namespace Meeter.Controllers
         public async Task<ActionResult> Secret()
         {
             var id = userManager.GetUserId(User);
-            var Us = await userManager.GetUserAsync(User);
-            Us.CreatedGroups = await normalDataContext.Groups.Include(x => x.Creator).Where(x => x.Creatorid == Us.Id).ToArrayAsync();
-            foreach(var gr in Us.CreatedGroups)
+            var us = await userManager.GetUserAsync(User);
+            us.CreatedGroups = await normalDataContext.Groups.Include(x => x.Creator).Where(x => x.Creatorid == us.Id).ToArrayAsync();
+            foreach(var gr in us.CreatedGroups)
             {
                 gr.Events = await normalDataContext.Events.Include(x => x.Group).Where(x => x.GroupId == gr.Id).ToArrayAsync();
 
             }
-            if(Us.LocationId!=null)
+            if(us.LocationId != null)
             {
-                Us.Location =await normalDataContext.Locations.FirstOrDefaultAsync(x => x.Id == Us.LocationId);
+                us.Location = await normalDataContext.Locations.FirstOrDefaultAsync(l => l.Id == us.LocationId);
 
-                ViewData["locationlat"] = Us.Location.Lat;
-                ViewData["locationlng"] = Us.Location.Lng;
+                ViewData["locationlat"] = us.Location.Lat;
+                ViewData["locationlng"] = us.Location.Lng;
             }
             // return "Secret page";
 
             //model.JavascriptToRun = "ShowErrorPopup()";
 
-            return View("Secret",Us);
+            return View("Secret",us);
         }
 
         [HttpGet]
-        public ActionResult Location()
+        public async Task<ActionResult> SetLocation()
         {
-            return Redirect("/location.html");
+            var id = userManager.GetUserId(User);
+            var loc = await normalDataContext.Locations.FirstOrDefaultAsync(l => l.Id == id);
+            return View(loc);
         }
 
         [HttpPost]
-        public async Task<ActionResult<Task>> Location([FromHeader] float lat, [FromHeader] float lng)
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> SetLocation([FromForm]Location location)
         {
-            var signed = signInManager.IsSignedIn(User);
-            if(signed)
+            var us = await userManager.GetUserAsync(User);
+            var loc = await normalDataContext.Locations.FirstOrDefaultAsync(l => l.Id == location.Id);
+
+            if(loc is null)
             {
-                var user = await userManager.GetUserAsync(User);
-
-                Location location = new Location()
-                {
-                    Lat = lat,
-                    Lng = lng
-                    
-                };
-                if(user.LocationId!=null)
-                    normalDataContext.Locations.Remove(normalDataContext.Locations.Find(user.LocationId));
-                await normalDataContext.Locations.AddAsync(location);
-                await normalDataContext.SaveChangesAsync();
-                user.LocationId = location.Id;
-
-                user.Location = location;
-              //  ViewData["locationlat"] = location.Lat;
-                //ViewData["locationlng"] = location.Lng;
-                await userManager.UpdateAsync(user);
-                await normalDataContext.SaveChangesAsync();
-                return View("Secret", user);
+                location.Id = us.Id;
+                var res = await normalDataContext.Locations.AddAsync(location);
             }
-            return Redirect("/splashscreen.html");
+            else
+            {
+                loc.Lat = location.Lat;
+                loc.Lng = location.Lng;
+            }
+
+            us.LocationId = location.Id;
+
+            await normalDataContext.SaveChangesAsync();
+            return RedirectToAction("Secret");
         }
 
         //[HttpGet("secretpolicy")]
@@ -140,35 +136,25 @@ namespace Meeter.Controllers
         //}
 
         [HttpGet]
-        public ActionResult<string> Login()
-        {
-            return Redirect("/login.html");
-        }
+        public ActionResult<string> Login() => View();
 
         [HttpPost]
         public async Task<ActionResult<string>> Login([FromForm] string username, [FromForm] string password)
         {
             // login functionality
             var user = await userManager.FindByNameAsync(username);
-
             if (user != null)
             {
                 // sign in
                 var signInResult = await signInManager.PasswordSignInAsync(user, password, false, false);
                 if (signInResult.Succeeded)
-                {
                     return RedirectToAction("Index");
-                }
             }
-
             return Unauthorized();
         }
 
         [HttpGet]
-        public ActionResult<string> Register()
-        {
-            return Redirect("/register.html");
-        }
+        public ActionResult<string> Register() => View();
 
         [HttpPost]
         public async Task<ActionResult<string>> Register([FromForm] string username, [FromForm] string password, [FromForm] string email, [FromForm] string fname, [FromForm] string lname)
@@ -181,10 +167,7 @@ namespace Meeter.Controllers
                 LastName = lname
             };
 
-            // var result = await userManager.CreateAsync(user, password);
             var result = await userManager.CreateAsync(user, password);
-
-            //await normalDataContext.Users.AddAsync(user);
             await normalDataContext.SaveChangesAsync();
 
             if (result.Succeeded)
@@ -192,9 +175,7 @@ namespace Meeter.Controllers
                 // sign in
                 var signInResult = await signInManager.PasswordSignInAsync(user, password, false, false);
                 if (signInResult.Succeeded)
-                {
                     return RedirectToAction("Index");
-                }
             }
 
             return RedirectToAction("Index");
@@ -204,10 +185,9 @@ namespace Meeter.Controllers
         public async Task<ActionResult<string>> Logout()
         {
             await signInManager.SignOutAsync();
-
             return RedirectToAction("Index");
         }
-        public  ActionResult AccesDenied()
+        public ActionResult AccesDenied()
         {
             return View();
         }
@@ -217,42 +197,6 @@ namespace Meeter.Controllers
         //{
         //    return context.Users.AsEnumerable();
         //}
-
-        //[HttpGet("groups")]
-        //public IEnumerable<Group> GetGroups()
-        //{
-        //    return normalDataContext.Groups.AsEnumerable();
-        //}
-
-        //[HttpPost("groups")]
-        //public async Task<IActionResult> PostGroup([FromForm] string groupName, [FromForm] string[] user)
-        //{
-        //    if (!ModelState.IsValid)
-        //        return BadRequest(ModelState);
-
-        //    var selectedUsersTasks = user.Select(async user_id => await context.Users.FindAsync(user_id) as User);
-        //    var selectedUsers = await Task.WhenAll(selectedUsersTasks);
-
-        //    var groupMembers = selectedUsers.Select(u => new GroupMember { User = u }).ToArray();
-
-        //    var creator = await userManager.GetUserAsync(User) as User;
-
-        //    Group group = new Group()
-        //    {
-        //        Name = groupName,
-        //      //  Creator = creator
-        //    };
-
-        //    //foreach (var member in group.Memberships)
-        //    //    member.Group = group;
-
-        //    normalDataContext.Groups.Add(group);
-
-        //    await context.SaveChangesAsync();
-
-        //    return CreatedAtAction("GetGroups", new { id = group.Id }, group);
-        //}
-
 
         // GET api/meeter/events
         [HttpGet("events")]
@@ -276,40 +220,6 @@ namespace Meeter.Controllers
             await normalDataContext.SaveChangesAsync();
 
             return CreatedAtAction("GetEvents", new { id = @event.Id }, @event);
-        }
-
-
-
-        // GET api/meeter
-        [HttpGet]
-        public ActionResult<IEnumerable<string>> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
-
-        // GET api/meeter/5
-        [HttpGet("{id}")]
-        public ActionResult<string> Get(int id)
-        {
-            return "value";
-        }
-
-        // POST api/meeter
-        [HttpPost]
-        public void Post([FromBody] string value)
-        {
-        }
-
-        // PUT api/meeter/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/meeter/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
         }
     }
 }

@@ -1,0 +1,86 @@
+﻿@using Microsoft.Extensions.Configuration
+@inject IConfiguration Configuration
+@model Meeter.Models.Location
+
+@{
+    ViewData["Title"] = "SetLocation";
+}
+
+<h2>SetLocation</h2>
+
+<h4>Location</h4>
+<hr />
+<div class="row">
+
+    <div class="col-md-4">
+        <button class="btn btn-default" id="get-current-location" onclick="getLocation()">Get current location</button>
+        <form asp-action="SetLocation">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="Lat" class="control-label"></label>
+                <input asp-for="Lat" class="form-control" />
+                <span asp-validation-for="Lat" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Lng" class="control-label"></label>
+                <input asp-for="Lng" class="form-control" />
+                <span asp-validation-for="Lng" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </form>
+    </div>
+
+    <div id="map" style="width: 500px; height: 400px"></div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=@Configuration["GoogleKey"]&callback=initMap"></script>
+<script type="text/javascript" src="@Url.Content("../../style_silver.js")"></script>
+<script type="text/javascript">
+
+    function initMap() {
+        var map_center = { lat: @Model.Lat, lng: @Model.Lng };
+        generateMap(map_center);
+    }
+
+    function getLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(setPosition);
+        } else {
+            console.log("Geolocation is not supported by this browser.");
+            initMap();
+        }
+    }
+
+    function setPosition(position) {
+        document.getElementById('Lat').value = position.coords.latitude;
+        document.getElementById('Lng').value = position.coords.longitude;
+        var map_center = { lat: position.coords.latitude, lng: position.coords.longitude };
+        generateMap(map_center);
+    }
+
+    function generateMap(map_center) {
+        var map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 13,
+            center: map_center,
+            disableDefaultUI: true,
+            styles: style_silver // or style_retro
+        });
+
+        var marker = new google.maps.Marker({
+            position: map_center,
+            map: map
+        });
+    }
+
+</script>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

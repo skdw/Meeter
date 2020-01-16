@@ -18,7 +18,7 @@
 </head>
 <body style="padding:0px">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Meeter</a>
+        <a class="navbar-brand" asp-area="" asp-controller="Meeter" asp-action="Index">Meeter</a>
         <button class="navbar-toggler"
                 type="button"
                 data-toggle="collapse"
@@ -56,11 +56,11 @@
     </div>
 
     <environment include="Development">
-        <script src="~/lib/jquery/dist/jquery.js"></script>
+        @*<script src="~/lib/jquery/dist/jquery.js"></script>*@
         <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
     </environment>
     <environment exclude="Development">
-        <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        @*<script src="~/lib/jquery/dist/jquery.min.js"></script>*@
         <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
     </environment>
     <script src="~/js/site.js" asp-append-version="true"></script>

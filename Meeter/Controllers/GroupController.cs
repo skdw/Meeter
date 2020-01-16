@@ -56,29 +56,54 @@ namespace Meeter.Controllers
             //if (!string.IsNullOrEmpty(searchString))
                // model.Events = await normalDataContext.Events.Include(x => x.Group).Where(x => x.GroupId == groupid && x.EventName.Contains(searchString)).ToListAsync();
             //else
-                model.Events = await normalDataContext.Events.Include(x => x.Group).Where(x => x.GroupId == groupid).ToListAsync();
+            model.Events = await normalDataContext.Events.Include(x => x.Group).Where(x => x.GroupId == groupid).ToListAsync();
             model.Memberships = await normalDataContext.GroupMembers.Include(x => x.User).Where(x => x.GroupId == groupid).ToListAsync();
             ViewData["CreatorName"] = creator.FirstName;
             return View(model);
 
         }
-        public async Task<IActionResult> AddMember(int? id)
+        public IActionResult AddMember(int? id)
         {
-            GroupMember groupMember = new GroupMember() { GroupId = (int)id }; // tutaj nie powinno iść inne id dla grupy? 
-            groupMember.User = new User() ;
-            
+            GroupMember groupMember = new GroupMember() { 
+                GroupId = (int)id 
+            };
             return View(groupMember);
-
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> AddMember([FromForm]GroupMember model,[FromQuery(Name ="username")] int id)
+        public async Task<ActionResult> AddMember([FromForm]GroupMember member) 
         {
-            await normalDataContext.Users.AddAsync(model.User);
-            
-            await normalDataContext.GroupMembers.AddAsync(model);
+            User existingUser = await normalDataContext.Users.FirstOrDefaultAsync(x => x.Id == member.User.Id); // czy zarejestrowany?
+            if(existingUser is null)
+            {
+                member.User.isPesudoUser = true; // tylko jeśli niezarejestrowany kolega
+                var entry = await normalDataContext.Users.AddAsync(member.User);
+            }
+            else // kolega zarejestrowany
+            {
+                if(normalDataContext.GroupMembers.Any(m => m.User.Id == member.User.Id && m.GroupId == member.GroupId)) // jest już w tej grupie
+                    return RedirectToAction("GetGroupInfo", new { groupid = member.GroupId });
+
+                member.User = existingUser;
+                member.Userid = existingUser.Id;
+                member.LocationId = existingUser.LocationId;
+            }
+
+            await normalDataContext.GroupMembers.AddAsync(member);
             await normalDataContext.SaveChangesAsync();
-            return RedirectToAction("GetGroupInfo", new { groupid = model.GroupId });
+            return RedirectToAction("GetGroupInfo", new { groupid = member.GroupId });
+        }
+
+        [HttpGet]
+        public JsonResult CurrentMemberAutocomplete([FromQuery]string term = "") // v - inserted text
+        {
+            var objMemberlist = normalDataContext.Users
+                            .Where(u => u.UserName.ToUpper()
+                            .Contains(term.ToUpper()))
+                            .Select(u => new { id = u.Id, label = u.UserName, firstname = u.FirstName, lastname = u.LastName, phonenumber = u.PhoneNumber, email = u.Email })
+                            .Distinct().ToList();
+            return Json(objMemberlist);
         }
 
         public async Task<IActionResult> GroupCreate()

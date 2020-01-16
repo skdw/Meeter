@@ -22,7 +22,7 @@
       "launchBrowser": true,
       "launchUrl": "api/meeter/index",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Secret"
       },
       "applicationUrl": "http://localhost:5000"
     }
