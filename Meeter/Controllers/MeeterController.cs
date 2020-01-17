@@ -101,6 +101,8 @@ namespace Meeter.Controllers
         {
             var id = userManager.GetUserId(User);
             var loc = await normalDataContext.Locations.FirstOrDefaultAsync(l => l.Id == id);
+            if (loc is null)
+                loc = new Location();
             return View(loc);
         }
 

@@ -77,6 +77,16 @@
             position: map_center,
             map: map
         });
+
+        google.maps.event.addListener(map, 'click', function(event) {
+            moveMarker(event.latLng);
+        });
+
+        function moveMarker(location) {
+            marker.setPosition(location);
+            document.getElementById('Lat').value = location.lat();
+            document.getElementById('Lng').value = location.lng();
+        }
     }
 
 </script>
