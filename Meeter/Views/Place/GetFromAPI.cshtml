@@ -1,0 +1,62 @@
+﻿@using Microsoft.Extensions.Configuration
+@inject IConfiguration Configuration
+
+<button onclick="getFromAPI()">Get from API!</button>
+
+<link href="https://ajax.aspnetcdn.com/ajax/jquery.ui/1.12.1/themes/black-tie/jquery-ui.css" rel="Stylesheet">
+<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.4.1.js"></script>
+<script src="https://ajax.aspnetcdn.com/ajax/jquery.ui/1.12.1/jquery-ui.js"></script>
+<script>
+    async function getFromAPI() {
+        let add = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=@ViewData["lat"],@ViewData["lng"]&radius=@ViewData["radius"]&type=@ViewData["type"]&key=@Configuration["GoogleKey"]';
+
+        fetch(add, {
+            method: 'GET', // *GET, POST, PUT, DELETE, etc.
+            //mode: 'cors', // no-cors, *cors, same-origin
+            cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+            credentials: 'include', // include, *same-origin, omit
+            headers: {
+                //'Content-Type': 'application/json'
+                // 'Content-Type': 'application/x-www-form-urlencoded',
+            }
+        })
+            .then(function (response) {
+                return response.json();
+            })
+            .then(function (json) {
+                let res = json.results[0];
+                sendPlace(res);
+                //console.log(json);
+
+                function sendPlace(place) {
+                    let lat = place.geometry.location.lat;
+                    let lng = place.geometry.location.lng;
+                    let open_now = place.opening_hours.open_now;
+                    let user_ratings_total = place.user_ratings_total;
+                    let types = place.types;
+
+                    place.lat = lat;
+                    place.lng = lng;
+                    place.open_now = open_now;
+                    place.user_ratings_total = user_ratings_total;
+
+                    var ret = null;
+                    request = $.ajax({
+                        async: false,
+                        url: "Create",
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        data: place,
+                        headers: {
+                            'types': types,
+                        },
+                        //data: JSON.stringify(place),
+                        //data: { place: place, lat: lat, lng: lng },
+                       success: function (data) {ret = data;}
+                          });
+                    return ret;
+                };
+
+            });
+    };
+</script>

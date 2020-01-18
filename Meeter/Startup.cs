@@ -57,6 +57,8 @@ namespace Meeter
                 config.LoginPath = "/api/meeter/Login";
             });
 
+            services.AddCors(); // Make sure you call this previous to AddMvc
+
             //services.AddAuthorization(options =>
             //{
             //    //var defaultAuthBuilder = new AuthorizationPolicyBuilder();
@@ -108,7 +110,14 @@ namespace Meeter
             // app.UseAuthorization();
             app.UseDefaultFiles();
             app.UseStaticFiles();
-            //app.UseMvc();
+
+            // Make sure you call this before calling app.UseMvc()
+            app.UseCors(builder => builder
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .AllowCredentials());
+
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
