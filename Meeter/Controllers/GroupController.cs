@@ -59,7 +59,7 @@ namespace Meeter.Controllers
             model.Events = await normalDataContext.Events.Include(x => x.Group).Where(x => x.GroupId == groupid).ToListAsync();
             model.Memberships = await normalDataContext.GroupMembers.Include(x => x.User).Include(x => x.User.Location).Where(x => x.GroupId == groupid).ToListAsync();
 
-            ViewData["CreatorName"] = creator.FirstName;
+            ViewData["CreatorName"] = creator.FullName;
             return View(model);
         }
         public IActionResult AddMember(int? id)

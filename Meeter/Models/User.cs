@@ -28,5 +28,9 @@ namespace Meeter.Models
 
         public virtual ICollection<GroupMember> Memberships { get; set; }
         public virtual ICollection<Group> CreatedGroups { get; set; }
+
+        public string FullName { get => FirstName + " " + LastName; }
+
+        public override string ToString() => FullName;
     }
 }

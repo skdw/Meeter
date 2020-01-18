@@ -56,6 +56,9 @@ namespace Meeter.Controllers
                     membership.User.Location = await normalDataContext.Locations.FindAsync(membership.User.LocationId);
             }
 
+            ViewData["locationlat"] = 52.2;
+            ViewData["locationlng"] = 21.0;
+
             return View(model);
         }
         
@@ -81,8 +84,6 @@ namespace Meeter.Controllers
             await normalDataContext.SaveChangesAsync();
 
             return RedirectToAction("GetGroupInfo", "Group", new { groupid = model.GroupId });
-
-
         }
         
         public async Task<IActionResult> Delete(int? id)
