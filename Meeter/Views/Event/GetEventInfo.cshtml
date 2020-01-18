@@ -57,9 +57,11 @@
 
         @foreach(var member in Model.Group.Memberships)
         {
-            <text>
-                placeMarker({ lat: @member.User.Location.Lat, lng: @member.User.Location.Lng }, "@member.User.Location.Address");
-            </text>
+            @if (member.User.Location != null)
+                    { <text>
+                        placeMarker({ lat: @member.User.Location.Lat, lng: @member.User.Location.Lng }, "@member.User.Location.Address");
+                     </text>
+                }
         }
 
         function placeMarker(location, title) {

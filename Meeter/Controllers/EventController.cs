@@ -82,7 +82,29 @@ namespace Meeter.Controllers
 
             return View(model);
         }
-        
+        public async Task<ActionResult> AddPreferences(int? id)
+        {
+            List<UserPreference> model = new List<UserPreference>();
+            Event e = await normalDataContext.Events.FirstOrDefaultAsync(x => x.Id == id);
+            List<GroupMember> groupMembers = normalDataContext.GroupMembers.Include(x => x.Group).Where(x => x.GroupId == e.GroupId).ToList();
+            foreach(var user in groupMembers)
+            {
+                UserPreference up = new UserPreference
+                {
+                    User = user.User,
+                    Event = e,
+                    EventId = e.Id,
+                    UserId = user.UserId
+                                      
+
+                };
+                model.Add(up);
+                await   normalDataContext.UserPreferences.AddAsync(up);
+
+            }
+             normalDataContext.SaveChanges();
+            return View(model);
+        }
         public async Task<ActionResult> Create(int? id)
         {
             var model = new Event
@@ -115,5 +137,16 @@ namespace Meeter.Controllers
             await normalDataContext.SaveChangesAsync();
             return RedirectToAction("GetGroupInfo", "Group",new { groupid = groupi });
         }
+        [HttpGet]
+        public JsonResult CurrentPreferenceAutocomplete([FromQuery]string term = "") // v - inserted text
+        {
+            var objMemberlist = normalDataContext.UserPreferences
+                            .Where(u => u.PlaceType.Type.ToUpper()
+                            .Contains(term.ToUpper()))
+                            .Select(u => new { id = u.Id,type=u.PlaceType })
+                            .Distinct().ToList();
+            return Json(objMemberlist);
+        }
     }
+
 }
