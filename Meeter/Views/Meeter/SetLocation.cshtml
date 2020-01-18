@@ -13,7 +13,7 @@
 <div class="row">
 
     <div class="col-md-4">
-        <button class="btn btn-default" id="get-current-location" onclick="getLocation()">Get current location</button>
+        <button class="btn btn-secondary" id="get-current-location" onclick="getLocation()">Get current location</button>
         <form asp-action="SetLocation">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
@@ -26,6 +26,11 @@
                 <label asp-for="Lng" class="control-label"></label>
                 <input asp-for="Lng" class="form-control" />
                 <span asp-validation-for="Lng" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Address" class="control-label"></label>
+                <input asp-for="Address" class="form-control" />
+                <span asp-validation-for="Address" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-default" />
@@ -77,6 +82,8 @@
             position: map_center,
             map: map
         });
+        var geocoder = new google.maps.Geocoder;
+        var infowindow = new google.maps.InfoWindow;
 
         google.maps.event.addListener(map, 'click', function(event) {
             moveMarker(event.latLng);
@@ -84,9 +91,30 @@
 
         function moveMarker(location) {
             marker.setPosition(location);
+            obtainAddress(location);
+
             document.getElementById('Lat').value = location.lat();
             document.getElementById('Lng').value = location.lng();
-        }
+        };
+
+        function obtainAddress(location) {
+            geocoder.geocode({'location': location}, function(results, status) {
+            if (status === 'OK') {
+                if (results[0]) {
+                    let address_str = results[0].formatted_address;
+                    document.getElementById('Address').value = address_str;
+                    infowindow.setContent(address_str);
+                    infowindow.open(map, marker);
+                } else {
+                  window.alert('No results found');
+                }
+              } else {
+                window.alert('Geocoder failed due to: ' + status);
+              }
+            });
+        };
+
+        obtainAddress(map_center);
     }
 
 </script>

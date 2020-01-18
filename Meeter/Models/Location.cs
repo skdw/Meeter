@@ -12,6 +12,10 @@ namespace Meeter.Models
 
         [Range(-90, 90)]
         public float Lng { get; set; }
+
+        public string Address { get; set; }
+
+        public override string ToString() => Address;
     }
 
     public struct Viewport

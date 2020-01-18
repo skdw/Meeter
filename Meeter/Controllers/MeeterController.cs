@@ -86,6 +86,7 @@ namespace Meeter.Controllers
             {
                 us.Location = await normalDataContext.Locations.FirstOrDefaultAsync(l => l.Id == us.LocationId);
 
+                ViewData["locationaddress"] = us.Location.Address;
                 ViewData["locationlat"] = us.Location.Lat;
                 ViewData["locationlng"] = us.Location.Lng;
             }
@@ -111,20 +112,22 @@ namespace Meeter.Controllers
         public async Task<ActionResult> SetLocation([FromForm]Location location)
         {
             var us = await userManager.GetUserAsync(User);
-            var loc = await normalDataContext.Locations.FirstOrDefaultAsync(l => l.Id == location.Id);
+            var loc = await normalDataContext.Locations.FirstOrDefaultAsync(l => l.Id == location.Id); // moja lokalizacja
 
-            if(loc is null)
+            if(loc is null) // lokalizacja była nieustawiona
             {
-                location.Id = us.Id;
                 var res = await normalDataContext.Locations.AddAsync(location);
+                loc = await normalDataContext.Locations.FirstOrDefaultAsync(l => l.Id == location.Id);
             }
             else
             {
                 loc.Lat = location.Lat;
                 loc.Lng = location.Lng;
+                loc.Address = location.Address;
             }
 
-            us.LocationId = location.Id;
+            us.LocationId = loc.Id;
+            us.Location = loc;
 
             await normalDataContext.SaveChangesAsync();
             return RedirectToAction("Secret");
@@ -159,12 +162,13 @@ namespace Meeter.Controllers
         public ActionResult<string> Register() => View();
 
         [HttpPost]
-        public async Task<ActionResult<string>> Register([FromForm] string username, [FromForm] string password, [FromForm] string email, [FromForm] string fname, [FromForm] string lname)
+        public async Task<ActionResult<string>> Register([FromForm] string username, [FromForm] string password, [FromForm] string email, [FromForm] string phonenumber, [FromForm] string fname, [FromForm] string lname)
         {
             var user = new User
             {
                 UserName = username,
                 Email = email,
+                PhoneNumber = phonenumber,
                 FirstName = fname,
                 LastName = lname
             };
