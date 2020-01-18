@@ -10,13 +10,11 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
-
 namespace Meeter.Controllers
 {
     [Route("api/[controller]/[action]")]
     public class EventController : Controller
     {
-
         private readonly NormalDataContext normalDataContext;
         private readonly UserManager<User> userManager;
         private readonly SignInManager<User> signInManager;
@@ -29,12 +27,35 @@ namespace Meeter.Controllers
             signInManager = sim;
             normalDataContext = normalD;
         }
-        [Authorize(Roles = "Admin")]
-        [HttpGet]
+
         public async Task<IActionResult> Index()
         {
-            List<Event> searchResult = await normalDataContext.Events.ToListAsync(); 
-            return View(searchResult);
+            if (User.IsInRole("Admin"))
+                return await IndexAdmin();
+            else
+                return await IndexUser();
+        }
+
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> IndexAdmin()
+        {
+            List<Event> events = await normalDataContext.Events
+                .Include(x => x.Group)
+                .ThenInclude(x => x.Memberships)
+                .ToListAsync();
+            return View("Index", events);
+        }
+
+        [Authorize(Roles = "User")]
+        public async Task<IActionResult> IndexUser()
+        {
+            var id = userManager.GetUserId(User);
+            List<Event> events = await normalDataContext.Events
+                .Include(x => x.Group)
+                .ThenInclude(x => x.Memberships)
+                .Where(x => x.Group.Memberships.Where(m => m.UserId == id).Any())
+                .ToListAsync();
+            return View("Index", events);
         }
 
         public async Task<IActionResult> GetEventInfo(int? id)

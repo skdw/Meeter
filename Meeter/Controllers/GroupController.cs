@@ -99,7 +99,7 @@ namespace Meeter.Controllers
             else // kolega zarejestrowany
             {
                 if (normalDataContext.GroupMembers.Any(m => m.User.Id == member.User.Id && m.GroupId == member.GroupId)) // jest już w tej grupie
-                    return RedirectToAction("GetGroupInfo", new { groupid = member.GroupId });
+                    return RedirectToAction("GetGroupInfo", new { id = member.GroupId });
 
                 member.User = existingUser;
                 member.UserId = existingUser.Id;
@@ -107,7 +107,7 @@ namespace Meeter.Controllers
 
             await normalDataContext.GroupMembers.AddAsync(member);
             await normalDataContext.SaveChangesAsync();
-            return RedirectToAction("GetGroupInfo", new { groupid = member.GroupId });
+            return RedirectToAction("GetGroupInfo", new { id = member.GroupId });
         }
 
         [HttpGet]

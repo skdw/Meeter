@@ -19,7 +19,7 @@
                         @foreach (var @event in group.Events)
                         {
                             <tr>
-                                <td>@Html.ActionLink(@event.EventName, "GetEventInfo", "Event", new { id = @event.Id })</td>
+                                <td>@Html.ActionLink(@event.EventName, "GetEventInfo", "Event", new { id = @event.Id }, new { @class = "btn btn-secondary" })</td>
                                 <td>@Html.DisplayFor(modelItem => @event.DateTime)</td>
                             </tr>
                         }

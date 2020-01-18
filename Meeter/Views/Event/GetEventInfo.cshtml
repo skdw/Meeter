@@ -23,14 +23,13 @@
         <p class="content">@Model.DateTime</p>
 
         <div class="pt-4">
-            <a asp-action="AddPreferences" asp-route-id="@Model.Id" class="btn btn-rounded btn-primary mx-2">
+            <a asp-action="AddPreferences" asp-route-id="@Model.Id" class="btn btn-lg btn-primary">
                 <i class="fas fa-edit pr-2"></i>Add Member Preferences
             </a>
         </div>
     </div>
 
     <table class="table table-striped table-hover" style="margin-top: 30px">
-        <caption>Meeting attendees</caption>
         <thead>
             <tr>
                 <th scope="col">First Name</th>

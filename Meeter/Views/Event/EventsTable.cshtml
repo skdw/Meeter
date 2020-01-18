@@ -1,0 +1,29 @@
+﻿@model IEnumerable<Event>
+
+<table class="table table-striped table-hover">
+    <thead>
+        <tr>
+            @if ((bool)ViewData["showGroup"])
+            {
+                <th scope="col">Group</th>
+            }
+            <th scope="col">Event</th>
+            <th scope="col">Date Time</th>
+            <th scope="col">Place</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var eve in Model)
+        {
+            <tr>
+                @if ((bool)ViewData["showGroup"])
+                {
+                    <td>@Html.ActionLink(eve.Group.Name, "GetGroupInfo", "Group", new { id = eve.Group.Id }, new { @class = "btn btn-dark" })</td>
+                }
+                <td>@Html.ActionLink(eve.EventName, "GetEventInfo", "Event", new { id = eve.Id }, new { @class = "btn btn-secondary" })</td>
+                <td>@eve.DateTime</td>
+                <td>@eve.Place</td>
+            </tr>
+        }
+    </tbody>
+</table>
