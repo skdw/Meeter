@@ -42,8 +42,8 @@ namespace Meeter.Controllers
         [EnableCors]
         public async Task<IActionResult> GetFromAPI()
         {
-            ViewData["lat"] = 51.2f;
-            ViewData["lng"] = 21.0f;
+            ViewData["lat"] = -33.8708902f;
+            ViewData["lng"] = 151.2074116f;
             ViewData["radius"] = 1500;
             ViewData["type"] = "restaurant";
             return View();
