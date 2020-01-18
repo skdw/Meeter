@@ -1,392 +1,390 @@
-{
-  "PlaceType":[
-    {
-      "Id": 1,
-      "Type": "accounting"
-    },
-    {
-      "Id": 2,
-      "Type": "airport"
-    },
-    {
-      "Id": 3,
-      "Type": "amusement_park"
-    },
-    {
-      "Id": 4,
-      "Type": "aquarium"
-    },
-    {
-      "Id": 5,
-      "Type": "art_gallery"
-    },
-    {
-      "Id": 6,
-      "Type": "atm"
-    },
-    {
-      "Id": 7,
-      "Type": "bakery"
-    },
-    {
-      "Id": 8,
-      "Type": "bank"
-    },
-    {
-      "Id": 9,
-      "Type": "bar"
-    },
-    {
-      "Id": 10,
-      "Type": "beauty_salon"
-    },
-    {
-      "Id": 11,
-      "Type": "bicycle_store"
-    },
-    {
-      "Id": 12,
-      "Type": "book_store"
-    },
-    {
-      "Id": 13,
-      "Type": "bowling_alley"
-    },
-    {
-      "Id": 14,
-      "Type": "bus_station"
-    },
-    {
-      "Id": 15,
-      "Type": "cafe"
-    },
-    {
-      "Id": 16,
-      "Type": "campground"
-    },
-    {
-      "Id": 17,
-      "Type": "car_dealer"
-    },
-    {
-      "Id": 18,
-      "Type": "car_rental"
-    },
-    {
-      "Id": 19,
-      "Type": "car_repair"
-    },
-    {
-      "Id": 20,
-      "Type": "car_wash"
-    },
-    {
-      "Id": 21,
-      "Type": "casino"
-    },
-    {
-      "Id": 22,
-      "Type": "cemetery"
-    },
-    {
-      "Id": 23,
-      "Type": "church"
-    },
-    {
-      "Id": 24,
-      "Type": "city_hall"
-    },
-    {
-      "Id": 25,
-      "Type": "clothing_store"
-    },
-    {
-      "Id": 26,
-      "Type": "convenience_store"
-    },
-    {
-      "Id": 27,
-      "Type": "courthouse"
-    },
-    {
-      "Id": 28,
-      "Type": "dentist"
-    },
-    {
-      "Id": 29,
-      "Type": "department_store"
-    },
-    {
-      "Id": 30,
-      "Type": "doctor"
-    },
-    {
-      "Id": 31,
-      "Type": "drugstore"
-    },
-    {
-      "Id": 32,
-      "Type": "electrician"
-    },
-    {
-      "Id": 33,
-      "Type": "electronics_store"
-    },
-    {
-      "Id": 34,
-      "Type": "embassy"
-    },
-    {
-      "Id": 35,
-      "Type": "fire_station"
-    },
-    {
-      "Id": 36,
-      "Type": "florist"
-    },
-    {
-      "Id": 37,
-      "Type": "funeral_home"
-    },
-    {
-      "Id": 38,
-      "Type": "furniture_store"
-    },
-    {
-      "Id": 39,
-      "Type": "gas_station"
-    },
-    {
-      "Id": 40,
-      "Type": "grocery_or_supermarket"
-    },
-    {
-      "Id": 41,
-      "Type": "gym"
-    },
-    {
-      "Id": 42,
-      "Type": "hair_care"
-    },
-    {
-      "Id": 43,
-      "Type": "hardware_store"
-    },
-    {
-      "Id": 44,
-      "Type": "hindu_temple"
-    },
-    {
-      "Id": 45,
-      "Type": "home_goods_store"
-    },
-    {
-      "Id": 46,
-      "Type": "hospital"
-    },
-    {
-      "Id": 47,
-      "Type": "insurance_agency"
-    },
-    {
-      "Id": 48,
-      "Type": "jewelry_store"
-    },
-    {
-      "Id": 49,
-      "Type": "laundry"
-    },
-    {
-      "Id": 50,
-      "Type": "lawyer"
-    },
-    {
-      "Id": 51,
-      "Type": "library"
-    },
-    {
-      "Id": 52,
-      "Type": "light_rail_station"
-    },
-    {
-      "Id": 53,
-      "Type": "liquor_store"
-    },
-    {
-      "Id": 54,
-      "Type": "local_government_office"
-    },
-    {
-      "Id": 55,
-      "Type": "locksmith"
-    },
-    {
-      "Id": 56,
-      "Type": "lodging"
-    },
-    {
-      "Id": 57,
-      "Type": "meal_delivery"
-    },
-    {
-      "Id": 58,
-      "Type": "meal_takeaway"
-    },
-    {
-      "Id": 59,
-      "Type": "mosque"
-    },
-    {
-      "Id": 60,
-      "Type": "movie_rental"
-    },
-    {
-      "Id": 70,
-      "Type": "movie_theater"
-    },
-    {
-      "Id": 71,
-      "Type": "moving_company"
-    },
-    {
-      "Id": 72,
-      "Type": "museum"
-    },
-    {
-      "Id": 73,
-      "Type": "night_club"
-    },
-    {
-      "Id": 74,
-      "Type": "painter"
-    },
-    {
-      "Id": 75,
-      "Type": "park"
-    },
-    {
-      "Id": 76,
-      "Type": "parking"
-    },
-    {
-      "Id": 77,
-      "Type": "pet_store"
-    },
-    {
-      "Id": 78,
-      "Type": "pharmacy"
-    },
-    {
-      "Id": 79,
-      "Type": "physiotherapist"
-    },
-    {
-      "Id": 80,
-      "Type": "plumber"
-    },
-    {
-      "Id": 81,
-      "Type": "police"
-    },
-    {
-      "Id": 82,
-      "Type": "post_office"
-    },
-    {
-      "Id": 83,
-      "Type": "primary_school"
-    },
-    {
-      "Id": 84,
-      "Type": "real_estate_agency"
-    },
-    {
-      "Id": 85,
-      "Type": "restaurant"
-    },
-    {
-      "Id": 86,
-      "Type": "roofing_contractor"
-    },
-    {
-      "Id": 87,
-      "Type": "rv_park"
-    },
-    {
-      "Id": 88,
-      "Type": "school"
-    },
-    {
-      "Id": 89,
-      "Type": "secondary_school"
-    },
-    {
-      "Id": 90,
-      "Type": "shoe_store"
-    },
-    {
-      "Id": 91,
-      "Type": "shopping_mall"
-    },
-    {
-      "Id": 92,
-      "Type": "spa"
-    },
-    {
-      "Id": 93,
-      "Type": "stadium"
-    },
-    {
-      "Id": 94,
-      "Type": "storage"
-    },
-    {
-      "Id": 95,
-      "Type": "store"
-    },
-    {
-      "Id": 96,
-      "Type": "subway_station"
-    },
-    {
-      "Id": 97,
-      "Type": "supermarket"
-    },
-    {
-      "Id": 98,
-      "Type": "synagogue"
-    },
-    {
-      "Id": 99,
-      "Type": "taxi_stand"
-    },
-    {
-      "Id": 100,
-      "Type": "tourist_attraction"
-    },
-    {
-      "Id": 101,
-      "Type": "train_station"
-    },
-    {
-      "Id": 102,
-      "Type": "transit_station"
-    },
-    {
-      "Id": 103,
-      "Type": "travel_agency"
-    },
-    {
-      "Id": 104,
-      "Type": "university"
-    },
-    {
-      "Id": 105,
-      "Type": "veterinary_care"
-    },
-    {
-      "Id": 106,
-      "Type": "zoo"
-    }
+[
+  {
+    "Id": 1,
+    "Type": "accounting"
+  },
+  {
+    "Id": 2,
+    "Type": "airport"
+  },
+  {
+    "Id": 3,
+    "Type": "amusement_park"
+  },
+  {
+    "Id": 4,
+    "Type": "aquarium"
+  },
+  {
+    "Id": 5,
+    "Type": "art_gallery"
+  },
+  {
+    "Id": 6,
+    "Type": "atm"
+  },
+  {
+    "Id": 7,
+    "Type": "bakery"
+  },
+  {
+    "Id": 8,
+    "Type": "bank"
+  },
+  {
+    "Id": 9,
+    "Type": "bar"
+  },
+  {
+    "Id": 10,
+    "Type": "beauty_salon"
+  },
+  {
+    "Id": 11,
+    "Type": "bicycle_store"
+  },
+  {
+    "Id": 12,
+    "Type": "book_store"
+  },
+  {
+    "Id": 13,
+    "Type": "bowling_alley"
+  },
+  {
+    "Id": 14,
+    "Type": "bus_station"
+  },
+  {
+    "Id": 15,
+    "Type": "cafe"
+  },
+  {
+    "Id": 16,
+    "Type": "campground"
+  },
+  {
+    "Id": 17,
+    "Type": "car_dealer"
+  },
+  {
+    "Id": 18,
+    "Type": "car_rental"
+  },
+  {
+    "Id": 19,
+    "Type": "car_repair"
+  },
+  {
+    "Id": 20,
+    "Type": "car_wash"
+  },
+  {
+    "Id": 21,
+    "Type": "casino"
+  },
+  {
+    "Id": 22,
+    "Type": "cemetery"
+  },
+  {
+    "Id": 23,
+    "Type": "church"
+  },
+  {
+    "Id": 24,
+    "Type": "city_hall"
+  },
+  {
+    "Id": 25,
+    "Type": "clothing_store"
+  },
+  {
+    "Id": 26,
+    "Type": "convenience_store"
+  },
+  {
+    "Id": 27,
+    "Type": "courthouse"
+  },
+  {
+    "Id": 28,
+    "Type": "dentist"
+  },
+  {
+    "Id": 29,
+    "Type": "department_store"
+  },
+  {
+    "Id": 30,
+    "Type": "doctor"
+  },
+  {
+    "Id": 31,
+    "Type": "drugstore"
+  },
+  {
+    "Id": 32,
+    "Type": "electrician"
+  },
+  {
+    "Id": 33,
+    "Type": "electronics_store"
+  },
+  {
+    "Id": 34,
+    "Type": "embassy"
+  },
+  {
+    "Id": 35,
+    "Type": "fire_station"
+  },
+  {
+    "Id": 36,
+    "Type": "florist"
+  },
+  {
+    "Id": 37,
+    "Type": "funeral_home"
+  },
+  {
+    "Id": 38,
+    "Type": "furniture_store"
+  },
+  {
+    "Id": 39,
+    "Type": "gas_station"
+  },
+  {
+    "Id": 40,
+    "Type": "grocery_or_supermarket"
+  },
+  {
+    "Id": 41,
+    "Type": "gym"
+  },
+  {
+    "Id": 42,
+    "Type": "hair_care"
+  },
+  {
+    "Id": 43,
+    "Type": "hardware_store"
+  },
+  {
+    "Id": 44,
+    "Type": "hindu_temple"
+  },
+  {
+    "Id": 45,
+    "Type": "home_goods_store"
+  },
+  {
+    "Id": 46,
+    "Type": "hospital"
+  },
+  {
+    "Id": 47,
+    "Type": "insurance_agency"
+  },
+  {
+    "Id": 48,
+    "Type": "jewelry_store"
+  },
+  {
+    "Id": 49,
+    "Type": "laundry"
+  },
+  {
+    "Id": 50,
+    "Type": "lawyer"
+  },
+  {
+    "Id": 51,
+    "Type": "library"
+  },
+  {
+    "Id": 52,
+    "Type": "light_rail_station"
+  },
+  {
+    "Id": 53,
+    "Type": "liquor_store"
+  },
+  {
+    "Id": 54,
+    "Type": "local_government_office"
+  },
+  {
+    "Id": 55,
+    "Type": "locksmith"
+  },
+  {
+    "Id": 56,
+    "Type": "lodging"
+  },
+  {
+    "Id": 57,
+    "Type": "meal_delivery"
+  },
+  {
+    "Id": 58,
+    "Type": "meal_takeaway"
+  },
+  {
+    "Id": 59,
+    "Type": "mosque"
+  },
+  {
+    "Id": 60,
+    "Type": "movie_rental"
+  },
+  {
+    "Id": 70,
+    "Type": "movie_theater"
+  },
+  {
+    "Id": 71,
+    "Type": "moving_company"
+  },
+  {
+    "Id": 72,
+    "Type": "museum"
+  },
+  {
+    "Id": 73,
+    "Type": "night_club"
+  },
+  {
+    "Id": 74,
+    "Type": "painter"
+  },
+  {
+    "Id": 75,
+    "Type": "park"
+  },
+  {
+    "Id": 76,
+    "Type": "parking"
+  },
+  {
+    "Id": 77,
+    "Type": "pet_store"
+  },
+  {
+    "Id": 78,
+    "Type": "pharmacy"
+  },
+  {
+    "Id": 79,
+    "Type": "physiotherapist"
+  },
+  {
+    "Id": 80,
+    "Type": "plumber"
+  },
+  {
+    "Id": 81,
+    "Type": "police"
+  },
+  {
+    "Id": 82,
+    "Type": "post_office"
+  },
+  {
+    "Id": 83,
+    "Type": "primary_school"
+  },
+  {
+    "Id": 84,
+    "Type": "real_estate_agency"
+  },
+  {
+    "Id": 85,
+    "Type": "restaurant"
+  },
+  {
+    "Id": 86,
+    "Type": "roofing_contractor"
+  },
+  {
+    "Id": 87,
+    "Type": "rv_park"
+  },
+  {
+    "Id": 88,
+    "Type": "school"
+  },
+  {
+    "Id": 89,
+    "Type": "secondary_school"
+  },
+  {
+    "Id": 90,
+    "Type": "shoe_store"
+  },
+  {
+    "Id": 91,
+    "Type": "shopping_mall"
+  },
+  {
+    "Id": 92,
+    "Type": "spa"
+  },
+  {
+    "Id": 93,
+    "Type": "stadium"
+  },
+  {
+    "Id": 94,
+    "Type": "storage"
+  },
+  {
+    "Id": 95,
+    "Type": "store"
+  },
+  {
+    "Id": 96,
+    "Type": "subway_station"
+  },
+  {
+    "Id": 97,
+    "Type": "supermarket"
+  },
+  {
+    "Id": 98,
+    "Type": "synagogue"
+  },
+  {
+    "Id": 99,
+    "Type": "taxi_stand"
+  },
+  {
+    "Id": 100,
+    "Type": "tourist_attraction"
+  },
+  {
+    "Id": 101,
+    "Type": "train_station"
+  },
+  {
+    "Id": 102,
+    "Type": "transit_station"
+  },
+  {
+    "Id": 103,
+    "Type": "travel_agency"
+  },
+  {
+    "Id": 104,
+    "Type": "university"
+  },
+  {
+    "Id": 105,
+    "Type": "veterinary_care"
+  },
+  {
+    "Id": 106,
+    "Type": "zoo"
+  }
 ]
-}
