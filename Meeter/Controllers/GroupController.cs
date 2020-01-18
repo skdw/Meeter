@@ -57,15 +57,16 @@ namespace Meeter.Controllers
                // model.Events = await normalDataContext.Events.Include(x => x.Group).Where(x => x.GroupId == groupid && x.EventName.Contains(searchString)).ToListAsync();
             //else
             model.Events = await normalDataContext.Events.Include(x => x.Group).Where(x => x.GroupId == groupid).ToListAsync();
-            model.Memberships = await normalDataContext.GroupMembers.Include(x => x.User).Where(x => x.GroupId == groupid).ToListAsync();
+            model.Memberships = await normalDataContext.GroupMembers.Include(x => x.User).Include(x => x.User.Location).Where(x => x.GroupId == groupid).ToListAsync();
+
             ViewData["CreatorName"] = creator.FirstName;
             return View(model);
-
         }
         public IActionResult AddMember(int? id)
         {
             GroupMember groupMember = new GroupMember() { 
-                GroupId = (int)id 
+                GroupId = (int)id,
+                Group = normalDataContext.Groups.Find(id)
             };
             return View(groupMember);
         }
@@ -86,8 +87,7 @@ namespace Meeter.Controllers
                     return RedirectToAction("GetGroupInfo", new { groupid = member.GroupId });
 
                 member.User = existingUser;
-                member.Userid = existingUser.Id;
-                member.LocationId = existingUser.LocationId;
+                member.UserId = existingUser.Id;
             }
 
             await normalDataContext.GroupMembers.AddAsync(member);

@@ -33,26 +33,40 @@ namespace Meeter.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            List<Event> searchResult = await normalDataContext.Events.ToListAsync(); //Include(x => x.Company).Where(o => o.JobTitle.Contains(searchString)).ToListAsync();
+            List<Event> searchResult = await normalDataContext.Events.ToListAsync(); 
             return View(searchResult);
         }
 
         public async Task<IActionResult> GetEventInfo(int? id)
         {
-            Event model = await normalDataContext.Events.FirstOrDefaultAsync(x => x.Id == id);
-            return View(model);
+            Event model = await normalDataContext.Events
+                .Include(x => x.Group)
+                .Include(x => x.Group.Memberships)
+                .Include(x => x.Group.Creator)
+                .Include(x => x.Place)
+                .Include(x => x.Preferences)
+                .FirstOrDefaultAsync(x => x.Id == id);
 
+            foreach (var membership in model.Group.Memberships)
+            {
+                if (membership.User is null)
+                    membership.User = await normalDataContext.Users.FindAsync(membership.UserId);
+
+                if (!(membership.User is null) && membership.User.Location is null)
+                    membership.User.Location = await normalDataContext.Locations.FindAsync(membership.User.LocationId);
+            }
+
+            return View(model);
         }
         
         public async Task<ActionResult> Create(int? id)
         {
             var model = new Event
             {
-                Group = await normalDataContext.Groups.FirstOrDefaultAsync(x => x.Id == id)
-
+                Group = await normalDataContext.Groups.FirstOrDefaultAsync(x => x.Id == id),
+                DateTime = DateTime.Now
             };
             model.GroupId = model.Group.Id;
-
 
             return View(model);
         }

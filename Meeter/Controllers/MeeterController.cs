@@ -77,12 +77,12 @@ namespace Meeter.Controllers
             var id = userManager.GetUserId(User);
             var us = await userManager.GetUserAsync(User);
             us.CreatedGroups = await normalDataContext.Groups.Include(x => x.Creator).Where(x => x.Creatorid == us.Id).ToArrayAsync();
+
             foreach(var gr in us.CreatedGroups)
             {
                 gr.Events = await normalDataContext.Events.Include(x => x.Group).Where(x => x.GroupId == gr.Id).ToArrayAsync();
-
             }
-            if(us.LocationId != null)
+            if(us.LocationId != null && us.Location is null)
             {
                 us.Location = await normalDataContext.Locations.FirstOrDefaultAsync(l => l.Id == us.LocationId);
 
@@ -90,18 +90,16 @@ namespace Meeter.Controllers
                 ViewData["locationlat"] = us.Location.Lat;
                 ViewData["locationlng"] = us.Location.Lng;
             }
-            // return "Secret page";
-
-            //model.JavascriptToRun = "ShowErrorPopup()";
-
             return View("Secret",us);
         }
 
         [HttpGet]
         public async Task<ActionResult> SetLocation()
         {
-            var id = userManager.GetUserId(User);
-            var loc = await normalDataContext.Locations.FirstOrDefaultAsync(l => l.Id == id);
+            var us = await userManager.GetUserAsync(User);
+            var loc = us.Location;
+            if(loc is null)
+                loc = await normalDataContext.Locations.FirstOrDefaultAsync(l => l.Id == us.Id);
             if (loc is null)
                 loc = new Location();
             return View(loc);
@@ -112,9 +110,10 @@ namespace Meeter.Controllers
         public async Task<ActionResult> SetLocation([FromForm]Location location)
         {
             var us = await userManager.GetUserAsync(User);
-            var loc = await normalDataContext.Locations.FirstOrDefaultAsync(l => l.Id == location.Id); // moja lokalizacja
-
-            if(loc is null) // lokalizacja była nieustawiona
+            var loc = us.Location;
+            if (loc is null)
+                loc = await normalDataContext.Locations.FirstOrDefaultAsync(l => l.Id == us.Id);
+            if (loc is null) // lokalizacja była nieustawiona
             {
                 var res = await normalDataContext.Locations.AddAsync(location);
                 loc = await normalDataContext.Locations.FirstOrDefaultAsync(l => l.Id == location.Id);
@@ -129,6 +128,7 @@ namespace Meeter.Controllers
             us.LocationId = loc.Id;
             us.Location = loc;
 
+            await userManager.UpdateAsync(us);
             await normalDataContext.SaveChangesAsync();
             return RedirectToAction("Secret");
         }
