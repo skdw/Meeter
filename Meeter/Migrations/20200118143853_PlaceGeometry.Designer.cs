@@ -4,14 +4,16 @@ using Meeter.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace MeeterAplication.Migrations
+namespace Meeter.Migrations
 {
     [DbContext(typeof(NormalDataContext))]
-    partial class NormalDataContextModelSnapshot : ModelSnapshot
+    [Migration("20200118143853_PlaceGeometry")]
+    partial class PlaceGeometry
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -248,15 +250,19 @@ namespace MeeterAplication.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("NorthEastId");
+                    b.Property<int>("NorthEastId");
 
-                    b.Property<string>("SouthWestId");
+                    b.Property<string>("NorthEastId1");
+
+                    b.Property<int>("SouthWestId");
+
+                    b.Property<string>("SouthWestId1");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("NorthEastId");
+                    b.HasIndex("NorthEastId1");
 
-                    b.HasIndex("SouthWestId");
+                    b.HasIndex("SouthWestId1");
 
                     b.ToTable("Viewport");
                 });
@@ -450,11 +456,11 @@ namespace MeeterAplication.Migrations
                 {
                     b.HasOne("Meeter.Models.Location", "NorthEast")
                         .WithMany()
-                        .HasForeignKey("NorthEastId");
+                        .HasForeignKey("NorthEastId1");
 
                     b.HasOne("Meeter.Models.Location", "SouthWest")
                         .WithMany()
-                        .HasForeignKey("SouthWestId");
+                        .HasForeignKey("SouthWestId1");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

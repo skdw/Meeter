@@ -5,16 +5,17 @@ namespace Meeter.Models
 {
     public class Place
     {
-        [System.ComponentModel.DataAnnotations.Schema.NotMapped]
-        public PlaceGeometry Geometry { get; set; }
+        public int GeometryId { get; set; }
+        public virtual PlaceGeometry Geometry { get; set; }
 
         public string Icon { get; set; }
 
         public string Id { get; set; }
 
         public string Name { get; set; }
-        [System.ComponentModel.DataAnnotations.Schema.NotMapped]
-        public PlaceOpeningHours OpeningHours { get; set; }
+
+        public int OpeningHoursId { get; set; }
+        public virtual PlaceOpeningHours OpeningHours { get; set; }
 
         public string PlaceId { get; set; }
 
@@ -27,8 +28,9 @@ namespace Meeter.Models
         public string Vicinity { get; set; }
     }
 
-    public struct PlaceOpeningHours
+    public class PlaceOpeningHours
     {
+        public int Id { get; set; }
         public bool OpenNow { get; set; }
     }
 }
