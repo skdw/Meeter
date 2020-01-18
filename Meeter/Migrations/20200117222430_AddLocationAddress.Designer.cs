@@ -4,14 +4,16 @@ using Meeter.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace MeeterAplication.Migrations
+namespace Meeter.Migrations
 {
     [DbContext(typeof(NormalDataContext))]
-    partial class NormalDataContextModelSnapshot : ModelSnapshot
+    [Migration("20200117222430_AddLocationAddress")]
+    partial class AddLocationAddress
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -69,13 +71,15 @@ namespace MeeterAplication.Migrations
 
                     b.Property<int>("GroupId");
 
-                    b.Property<string>("UserId");
+                    b.Property<string>("LocationId");
+
+                    b.Property<string>("Userid");
 
                     b.HasKey("Id");
 
                     b.HasIndex("GroupId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("Userid");
 
                     b.ToTable("GroupMembers");
                 });
@@ -101,13 +105,9 @@ namespace MeeterAplication.Migrations
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int>("GeometryId");
-
                     b.Property<string>("Icon");
 
                     b.Property<string>("Name");
-
-                    b.Property<int>("OpeningHoursId");
 
                     b.Property<string>("PlaceId");
 
@@ -119,43 +119,7 @@ namespace MeeterAplication.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("GeometryId");
-
-                    b.HasIndex("OpeningHoursId");
-
                     b.ToTable("Places");
-                });
-
-            modelBuilder.Entity("Meeter.Models.PlaceGeometry", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("LocationId");
-
-                    b.Property<int>("ViewportId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("LocationId");
-
-                    b.HasIndex("ViewportId");
-
-                    b.ToTable("PlaceGeometry");
-                });
-
-            modelBuilder.Entity("Meeter.Models.PlaceOpeningHours", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<bool>("OpenNow");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("PlaceOpeningHours");
                 });
 
             modelBuilder.Entity("Meeter.Models.User", b =>
@@ -240,25 +204,6 @@ namespace MeeterAplication.Migrations
                     b.HasIndex("Userid");
 
                     b.ToTable("UserPreferences");
-                });
-
-            modelBuilder.Entity("Meeter.Models.Viewport", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("NorthEastId");
-
-                    b.Property<string>("SouthWestId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NorthEastId");
-
-                    b.HasIndex("SouthWestId");
-
-                    b.ToTable("Viewport");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -392,39 +337,14 @@ namespace MeeterAplication.Migrations
 
             modelBuilder.Entity("Meeter.Models.GroupMember", b =>
                 {
-                    b.HasOne("Meeter.Models.Group", "Group")
+                    b.HasOne("Meeter.Models.Group")
                         .WithMany("Memberships")
                         .HasForeignKey("GroupId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Meeter.Models.User", "User")
                         .WithMany("Memberships")
-                        .HasForeignKey("UserId");
-                });
-
-            modelBuilder.Entity("Meeter.Models.Place", b =>
-                {
-                    b.HasOne("Meeter.Models.PlaceGeometry", "Geometry")
-                        .WithMany()
-                        .HasForeignKey("GeometryId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("Meeter.Models.PlaceOpeningHours", "OpeningHours")
-                        .WithMany()
-                        .HasForeignKey("OpeningHoursId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("Meeter.Models.PlaceGeometry", b =>
-                {
-                    b.HasOne("Meeter.Models.Location", "Location")
-                        .WithMany()
-                        .HasForeignKey("LocationId");
-
-                    b.HasOne("Meeter.Models.Viewport", "Viewport")
-                        .WithMany()
-                        .HasForeignKey("ViewportId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("Userid");
                 });
 
             modelBuilder.Entity("Meeter.Models.User", b =>
@@ -444,17 +364,6 @@ namespace MeeterAplication.Migrations
                     b.HasOne("Meeter.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("Userid");
-                });
-
-            modelBuilder.Entity("Meeter.Models.Viewport", b =>
-                {
-                    b.HasOne("Meeter.Models.Location", "NorthEast")
-                        .WithMany()
-                        .HasForeignKey("NorthEastId");
-
-                    b.HasOne("Meeter.Models.Location", "SouthWest")
-                        .WithMany()
-                        .HasForeignKey("SouthWestId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

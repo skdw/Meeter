@@ -7,14 +7,10 @@ namespace Meeter.Models
 
         public int GroupId { get; set; }
 
-        // public int UserId { get; set; }
+        public string UserId { get; set; }
 
-        // public virtual Group Group { get; set; }
+        public virtual Group Group { get; set; }
 
         public virtual User User { get; set; }
-
-        public string Userid { get; set; }
-
-        public string LocationId { get; set; }
     }
 }

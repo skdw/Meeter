@@ -29,70 +29,85 @@ namespace Meeter.Controllers
 
             normalDataContext = normalD;
         }
-        [Authorize(Roles="Admin")]
+
         public async Task<IActionResult> Index()
         {
-            List<Group> groups = await normalDataContext.Groups.ToListAsync();
-            //foreach (var gr in groups)
-            //{
-            //    gr.Creator = await normalDataContext.Users.FirstOrDefaultAsync(x=>x.Id==groups.
-
-            //}
-            return View(groups);
+            if (User.IsInRole("Admin"))
+                return await IndexAdmin();
+            else
+                return await IndexUser();
         }
 
-        //[HttpGet("groups")]
-        //public IEnumerable<Group> GetGroups()
-        //{
-        //    return normalDataContext.Groups.AsEnumerable();
-        //}
-        
-        [HttpGet]
-        public async Task<IActionResult> GetGroupInfo(int? groupid)// [FromForm(Name = "search")] string searchString)
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> IndexAdmin()
         {
-            Group model = await normalDataContext.Groups.FirstOrDefaultAsync(x => x.Id == groupid);
-            
+            List<Group> groups = await normalDataContext.Groups
+                .Include(x => x.Creator)
+                .Include(x => x.Events)
+                .ToListAsync();
+            return View("Index", groups);
+        }
+
+        [Authorize(Roles = "User")]
+        public async Task<IActionResult> IndexUser()
+        {
+            var id = userManager.GetUserId(User);
+            List<Group> groups = await normalDataContext.Groups
+                .Include(x => x.Creator)
+                .Include(x => x.Events)
+                .Include(x => x.Memberships)
+                .Where(x => x.Memberships.Where(m => m.UserId == id).Any())
+                .ToListAsync();
+            return View("Index", groups);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetGroupInfo(int? id)
+        {
+            Group model = await normalDataContext.Groups.FirstOrDefaultAsync(x => x.Id == id);
+
             User creator = (User)await normalDataContext.Users.FirstOrDefaultAsync(x => x.Id == model.Creatorid);
             //if (!string.IsNullOrEmpty(searchString))
-               // model.Events = await normalDataContext.Events.Include(x => x.Group).Where(x => x.GroupId == groupid && x.EventName.Contains(searchString)).ToListAsync();
+            // model.Events = await normalDataContext.Events.Include(x => x.Group).Where(x => x.GroupId == groupid && x.EventName.Contains(searchString)).ToListAsync();
             //else
-            model.Events = await normalDataContext.Events.Include(x => x.Group).Where(x => x.GroupId == groupid).ToListAsync();
-            model.Memberships = await normalDataContext.GroupMembers.Include(x => x.User).Where(x => x.GroupId == groupid).ToListAsync();
-            ViewData["CreatorName"] = creator.FirstName;
-            return View(model);
+            model.Events = await normalDataContext.Events.Include(x => x.Group).Where(x => x.GroupId == id).ToListAsync();
+            model.Memberships = await normalDataContext.GroupMembers.Include(x => x.User).Include(x => x.User.Location).Where(x => x.GroupId == id).ToListAsync();
 
+            ViewData["CreatorName"] = creator.FullName;
+            return View(model);
         }
         public IActionResult AddMember(int? id)
         {
-            GroupMember groupMember = new GroupMember() { 
-                GroupId = (int)id 
+            GroupMember groupMember = new GroupMember()
+            {
+                GroupId = (int)id,
+                Group = normalDataContext.Groups.Find(id)
             };
             return View(groupMember);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> AddMember([FromForm]GroupMember member) 
+        public async Task<ActionResult> AddMember([FromForm]GroupMember member)
         {
             User existingUser = await normalDataContext.Users.FirstOrDefaultAsync(x => x.Id == member.User.Id); // czy zarejestrowany?
-            if(existingUser is null)
+            if (existingUser is null)
             {
                 member.User.isPesudoUser = true; // tylko jeśli niezarejestrowany kolega
                 var entry = await normalDataContext.Users.AddAsync(member.User);
             }
             else // kolega zarejestrowany
             {
-                if(normalDataContext.GroupMembers.Any(m => m.User.Id == member.User.Id && m.GroupId == member.GroupId)) // jest już w tej grupie
-                    return RedirectToAction("GetGroupInfo", new { groupid = member.GroupId });
+                if (normalDataContext.GroupMembers.Any(m => m.User.Id == member.User.Id && m.GroupId == member.GroupId)) // jest już w tej grupie
+                    return RedirectToAction("GetGroupInfo", new { id = member.GroupId });
 
                 member.User = existingUser;
-                member.Userid = existingUser.Id;
-                member.LocationId = existingUser.LocationId;
+                member.UserId = existingUser.Id;
             }
 
             await normalDataContext.GroupMembers.AddAsync(member);
             await normalDataContext.SaveChangesAsync();
-            return RedirectToAction("GetGroupInfo", new { groupid = member.GroupId });
+            return RedirectToAction("GetGroupInfo", new { id = member.GroupId });
         }
 
         [HttpGet]
@@ -111,7 +126,7 @@ namespace Meeter.Controllers
             var signed = signInManager.IsSignedIn(User);
             var id = userManager.GetUserId(User);
             var name = userManager.GetUserName(User);
-            
+
             User creator = await userManager.GetUserAsync(User);
 
             var model = new Group()
@@ -123,8 +138,8 @@ namespace Meeter.Controllers
 
             // var test2 = await userManager.FindByIdAsync("1");
 
-           //model.Creator = await normalDataContext.Set<User>().FirstOrDefaultAsync(x => x.Id == "1");
-           //model.Creatorid = model.Creator.Id;
+            //model.Creator = await normalDataContext.Set<User>().FirstOrDefaultAsync(x => x.Id == "1");
+            //model.Creatorid = model.Creator.Id;
             return View(model);
         }
 
@@ -145,15 +160,15 @@ namespace Meeter.Controllers
             {
                 GroupId = model.Id,
                 User = model.Creator
-               //Userid = model.Creator.Id
-            }); 
+                //Userid = model.Creator.Id
+            });
             await normalDataContext.SaveChangesAsync();
-            return RedirectToAction("GetGroupInfo",new { groupid=model.Id });
+            return RedirectToAction("GetGroupInfo", new { groupid = model.Id });
         }
         public async Task<IActionResult> Delete(int? id)
         {
             List<Event> events = await normalDataContext.Events.Include(x => x.Group).Where(x => x.GroupId == id).ToListAsync();
-            foreach(var e in events)
+            foreach (var e in events)
             {
 
                 normalDataContext.Events.Remove(normalDataContext.Events.Find(e.Id));
@@ -162,6 +177,6 @@ namespace Meeter.Controllers
             await normalDataContext.SaveChangesAsync();
             return RedirectToAction("Secret", "Meeter");
         }
-        
+
     }
 }

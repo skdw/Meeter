@@ -8,9 +8,6 @@ namespace Meeter.Models
     public class User : IdentityUser
     {
         public bool isPesudoUser { get; set; }
-        // public string  Id { get; set; }
-
-        //public int IdentityUserId { get; set; } <- one to one relation
 
         [Display(Name = "First Name")]
         public string FirstName { get; set; }
@@ -24,9 +21,11 @@ namespace Meeter.Models
 
         public string Photo { get; set; }
 
-        //public virtual IdentityUser IdentityUser { get; set; }
-
         public virtual ICollection<GroupMember> Memberships { get; set; }
         public virtual ICollection<Group> CreatedGroups { get; set; }
+
+        public string FullName { get => FirstName + " " + LastName; }
+
+        public override string ToString() => FullName;
     }
 }

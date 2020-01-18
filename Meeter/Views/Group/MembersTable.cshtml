@@ -1,0 +1,26 @@
+﻿@model IEnumerable<GroupMember>
+
+<table class="table table-striped table-hover">
+    <thead>
+        <tr>
+            <th scope="col">First Name</th>
+            <th scope="col">Last Name</th>
+            <th scope="col">E-mail</th>
+            <th scope="col">Phone</th>
+            <th scope="col">Location</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var member in Model)
+        {
+            <tr>
+
+                <td>@member.User.FirstName</td>
+                <td>@member.User.LastName</td>
+                <td>@member.User.Email</td>
+                <td>@member.User.PhoneNumber</td>
+                <td>@member.User.Location</td>
+            </tr>
+        }
+    </tbody>
+</table>
