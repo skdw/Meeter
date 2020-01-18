@@ -16,7 +16,10 @@ namespace Meeter.Models
     public class NormalDataContext : IdentityDbContext<User, IdentityRole, string>
     {
         public NormalDataContext(DbContextOptions<NormalDataContext> options) : base(options) { }
+
         public DbSet<Place> Places { get; set; }
+
+        public DbSet<PlaceType> PlaceTypes { get; set; }
 
         public DbSet<Group> Groups { get; set; }
 
@@ -25,7 +28,9 @@ namespace Meeter.Models
         public DbSet<UserPreference> UserPreferences { get; set; }
 
         public DbSet<Event> Events { get; set; }
+
         public DbSet<Location> Locations { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

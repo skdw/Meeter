@@ -17,25 +17,4 @@ namespace Meeter.Models
 
         public override string ToString() => Address;
     }
-
-    //public class Viewport
-    //{
-    //    public int Id { get; set; }
-
-    //    public string NorthEastId { get; set; }
-    //    public virtual Location NorthEast { get; set; }
-
-    //    public string SouthWestId { get; set; }
-    //    public virtual Location SouthWest { get; set; }
-    //}
-
-    //public class PlaceGeometry
-    //{
-    //    public int Id { get; set; }
-    //    public string LocationId { get; set; }
-    //    public virtual Location Location { get; set; }
-
-    //    public int ViewportId { get; set; }
-    //    public virtual Viewport Viewport { get; set; }
-    //}
 }
