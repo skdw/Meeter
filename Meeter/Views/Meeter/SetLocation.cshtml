@@ -45,7 +45,6 @@
     <a asp-action="Index">Back to List</a>
 </div>
 
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=@Configuration["GoogleKey"]&callback=initMap"></script>
 <script type="text/javascript" src="@Url.Content("../../style_silver.js")"></script>
 <script type="text/javascript">
 
@@ -118,6 +117,7 @@
     }
 
 </script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=@Configuration["GoogleKey"]&callback=initMap"></script>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

@@ -99,9 +99,9 @@ namespace Meeter.Controllers
             var us = await userManager.GetUserAsync(User);
             var loc = us.Location;
             if(loc is null)
-                loc = await normalDataContext.Locations.FirstOrDefaultAsync(l => l.Id == us.Id);
+                loc = await normalDataContext.Locations.FirstOrDefaultAsync(l => l.Id == us.LocationId);
             if (loc is null)
-                loc = new Location();
+                loc = new Location() { Lat=52.232222f, Lng=21.008333f };
             return View(loc);
         }
 
@@ -112,11 +112,11 @@ namespace Meeter.Controllers
             var us = await userManager.GetUserAsync(User);
             var loc = us.Location;
             if (loc is null)
-                loc = await normalDataContext.Locations.FirstOrDefaultAsync(l => l.Id == us.Id);
+                loc = await normalDataContext.Locations.FirstOrDefaultAsync(l => l.Id == us.LocationId);
             if (loc is null) // lokalizacja była nieustawiona
             {
                 var res = await normalDataContext.Locations.AddAsync(location);
-                loc = await normalDataContext.Locations.FirstOrDefaultAsync(l => l.Id == location.Id);
+                loc = location;
             }
             else
             {

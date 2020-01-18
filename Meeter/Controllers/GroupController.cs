@@ -29,24 +29,33 @@ namespace Meeter.Controllers
 
             normalDataContext = normalD;
         }
-        [Authorize(Roles="Admin")]
+
         public async Task<IActionResult> Index()
         {
-            List<Group> groups = await normalDataContext.Groups.ToListAsync();
-            //foreach (var gr in groups)
-            //{
-            //    gr.Creator = await normalDataContext.Users.FirstOrDefaultAsync(x=>x.Id==groups.
-
-            //}
-            return View(groups);
+            if (User.IsInRole("Admin"))
+                return await IndexAdmin();
+            else
+                return await IndexUser();
         }
 
-        //[HttpGet("groups")]
-        //public IEnumerable<Group> GetGroups()
-        //{
-        //    return normalDataContext.Groups.AsEnumerable();
-        //}
-        
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> IndexAdmin()
+        {
+            List<Group> groups = await normalDataContext.Groups.ToListAsync();
+            return View("Index", groups);
+        }
+
+        [Authorize(Roles="User")]
+        public async Task<IActionResult> IndexUser()
+        {
+            var id = userManager.GetUserId(User);
+            List<Group> groups = await normalDataContext.Groups
+                .Include(x => x.Memberships)
+                .Where(x => x.Memberships.Where(m => m.UserId == id).Any())
+                .ToListAsync();
+            return View("Index", groups);
+        }
+
         [HttpGet]
         public async Task<IActionResult> GetGroupInfo(int? groupid)// [FromForm(Name = "search")] string searchString)
         {
