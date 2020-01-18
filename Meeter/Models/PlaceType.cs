@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 namespace Meeter.Models
 {
-    public class Preference
+    public class PlaceType
     {
         public int Id { get; set; }
-        public string preference { get; set; }
+        public string Type { get; set; }
     }
 }
