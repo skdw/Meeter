@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using Newtonsoft.Json;
+using Meeter;
+using System.IO;
 
 namespace Meeter.Models
 {
@@ -34,6 +37,9 @@ namespace Meeter.Models
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+            var myJsonString = File.ReadAllText("preferences.json");
+            IEnumerable<PlaceType> ptypes = JsonConvert.DeserializeObject<IEnumerable<PlaceType>>(myJsonString);
+            int i = 0;
             // Customize the ASP.NET Core Identity model and override the defaults if needed. 
 
             //builder.Entity<IdentityUserRole<Guid>>().HasKey(p => new { p.UserId, p.RoleId });
