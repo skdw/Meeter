@@ -36,7 +36,31 @@ namespace Meeter.Controllers
             [FromQuery] bool open_now, [FromQuery] int user_ratings_total, [FromHeader] IEnumerable<string> types)
         {
             var model = place;
-            return View(model);
+
+            var location = await normalDataContext.Locations.Where(x => x.Lat == lat && x.Lng == lng).FirstOrDefaultAsync();
+            if(location is null)
+            {
+                location = new Location() { Lat = lat, Lng = lng };
+                normalDataContext.Locations.Add(location);
+                await normalDataContext.SaveChangesAsync();
+            }
+
+            model.Location = location;
+            model.LocationId = location.Id;
+
+            model.OpenNow = open_now;
+            model.UserRatingsTotal = user_ratings_total;
+
+            foreach(string type in types)
+            {
+                var typeObj = await normalDataContext.PlaceTypes.Where(x => x.Type == type).FirstAsync();
+                if(typeObj != null)
+                    model.Types.Add(typeObj);
+            }
+
+            normalDataContext.Places.Add(model);
+            await normalDataContext.SaveChangesAsync();
+            return RedirectToAction("GetPlaceInfo", new { id = model.Id });
         }
 
         [EnableCors]
