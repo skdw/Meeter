@@ -9,7 +9,8 @@ namespace Meeter.Models
 
         //public int EventId { get; set; }
 
-        public string Preference { get; set; }
+        public int PreferenceID { get; set; }
+        public virtual Preference Preference { get; set; }
 
         public virtual User User { get; set; }
         public string Userid { get; set; }
