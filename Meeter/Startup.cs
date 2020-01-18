@@ -133,9 +133,9 @@ namespace Meeter
             }
             //Assign Admin role to the main User here we have given our newly registered 
             //login id for Admin management
-           // var adminEmail = Configuration.GetValue<string>("AdminEmail");
-           // User user = await UserManager.FindByEmailAsync(adminEmail);
-           // await UserManager.AddToRoleAsync(user, "Admin");
+            var adminEmail = Configuration.GetValue<string>("AdminEmail");
+            User user = await UserManager.FindByEmailAsync(adminEmail);
+            await UserManager.AddToRoleAsync(user, "Admin");
         }
     }
 }
