@@ -9,7 +9,7 @@
 <div class="panel panel-default">
     <div class="d-flex align-items-center">
         <div class="pr-3" style="font-size: 25px">
-            <a href="@Url.Action("GetGroupInfo", "Group", new { Model.GroupId })">
+            <a href="@Url.Action("GetGroupInfo", "Group", new { id = Model.GroupId })">
                 <i class="fas fa-chevron-circle-left"></i>
             </a>
         </div>
@@ -64,7 +64,6 @@
     </div>
 </div>
 
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=@Configuration["GoogleKey"]&callback=initMap"></script>
 <script type="text/javascript" src="@Url.Content("../../style_silver.js")"></script>
 <script type="text/javascript">
 
@@ -106,3 +105,4 @@
     }
 
 </script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=@Configuration["GoogleKey"]&callback=initMap"></script>
