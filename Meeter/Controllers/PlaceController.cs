@@ -28,7 +28,7 @@ namespace Meeter.Controllers
         }
         public async Task<IActionResult> Index()
         {
-            var places = await normalDataContext.Places.ToListAsync();
+            var places = await normalDataContext.Places.Include(x => x.Location).Include(x => x.Types).ToListAsync();
             return View(places);
         }
 
