@@ -160,6 +160,64 @@ Hiding the secret information in *appsettings.Secret.json* file (ignored by git)
       "GoogleKey": "YOUR_GOOGLE_KEY"
     }
 
+
+Adding to database 
+
+    await normalDataContext.Groups.AddAsync(model);
+                await normalDataContext.GroupMembers.AddAsync(
+                    new GroupMember
+                {
+                    GroupId = model.Id,
+                    User = model.Creator
+                    //Userid = model.Creator.Id
+                });
+                await normalDataContext.SaveChangesAsync();
+
+
+Removing from database  
+
+    normalDataContext.Groups.Remove(normalDataContext.Groups.Find(id));
+                await normalDataContext.SaveChangesAsync();
+
+
+
+### Razor-Controller communication
+
+Way of communication between .NET server and Razor form.
+
+    @using (Html.BeginForm("Create"))
+            {
+                @Html.AntiForgeryToken()
+                ...
+
+                <div class="form-group">
+                  <button type="submit" class="btn btn-primary">Create<button>
+                </div>
+            }
+or:
+
+    @Html.ActionLink(eve.Group.Name, "GetGroupInfo", "Group", new { id = eve.Group.Id }, new { @class = "btn btn-dark" })</td>
+
+### Controller communication
+
+    [Route("api/[controller]/[action]")]
+    public class GroupController : Controller
+    {
+        private readonly NormalDataContext normalDataContext;
+        private readonly UserManager<User> userManager;
+        private readonly SignInManager<User> signInManager;
+
+        public GroupController(
+            UserManager<User> usm,
+            SignInManager<User> sim,
+            NormalDataContext normalD)
+        {
+            userManager = usm;
+            signInManager = sim;
+
+            normalDataContext = normalD;
+        }
+
 ## Authors and acknowledgment
 * Anna Buchman
 * Kamil Górzyński
