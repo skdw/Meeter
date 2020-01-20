@@ -98,7 +98,7 @@ http://localhost:5000/api/Event/Index
 
 ![Events](http://pages.mini.pw.edu.pl/~gorzynskik/HTMLPostGIS/Meeter/events.png)
 
-![Created groups](http://pages.mini.pw.edu.pl/~gorzynskik/HTMLPostGIS/Meeter/createdgroups.png)
+![Created groups](http://pages.mini.pw.edu.pl/~gorzynskik/HTMLPostGIS/Meeter/createdgroups2.png)
 
 ![Places API](http://pages.mini.pw.edu.pl/~gorzynskik/HTMLPostGIS/Meeter/placesapi.png)
 
@@ -122,6 +122,43 @@ http://localhost:5000/api/Event/Index
 * Models work just like database tables, that's why they should be coded not like the traditional classes nested one in another, but like the related tables, binded by marking the members as virtual. Unfortunately, we are still facing problems trying to get all the data via the relations and avoiding searching it manually by the id. 
 * Authentication and authorization are a real tough nut to crack when doing it for the first time. Range of different methods makes it hard to look for advice in online tutorials. 
 * The salary of full-stack developer is definitely deserved! 🤑
+
+## Developer guide
+
+### Database
+
+Creating the database with users inheriting from IdentityUser. 
+
+
+    public class NormalDataContext : IdentityDbContext<User, IdentityRole, string>
+    
+
+Loading static data from json file automatically on database update.
+
+    protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+            var myJsonString = File.ReadAllText("preferences.json");
+            List<Type> ptypes = JsonConvert.DeserializeObject<List<Type>>(myJsonString);
+            builder.Entity<Type>().HasData(ptypes.ToArray());
+            // Customize the ASP.NET Core Identity model and override the defaults if needed. 
+
+            //builder.Entity<IdentityUserRole<Guid>>().HasKey(p => new { p.UserId, p.RoleId });
+        }
+
+Hiding the secret information in *appsettings.Secret.json* file (ignored by git). 
+
+    {
+      "Logging": {
+        "LogLevel": {
+          "Default": "Debug",
+          "System": "Information",
+          "Microsoft": "Information"
+        }
+      }, 
+      "AdminEmail": "YOUR_EMAIL",
+      "GoogleKey": "YOUR_GOOGLE_KEY"
+    }
 
 ## Authors and acknowledgment
 * Anna Buchman
