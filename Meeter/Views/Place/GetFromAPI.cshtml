@@ -1,6 +1,18 @@
 ﻿@using Microsoft.Extensions.Configuration
 @inject IConfiguration Configuration
 
+<form onsubmit="getFromAPI()">
+    Lat:<br>
+    <input type="number" name="lat" value=-33.8708902>
+    <br>
+    Lng:<br>
+    <input type="number" name="lng" value=151.2074116>
+    Radius:<br>
+    <input type="number" name="radius" value=1500>
+    <br><br>
+    <input type="submit" value="Submit">
+</form>
+
 <button onclick="getFromAPI()">Get from API!</button>
 
 <link href="https://ajax.aspnetcdn.com/ajax/jquery.ui/1.12.1/themes/black-tie/jquery-ui.css" rel="Stylesheet">
