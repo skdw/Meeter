@@ -76,7 +76,7 @@ namespace Meeter.Controllers
         {
             var id = userManager.GetUserId(User);
             var us = await userManager.GetUserAsync(User);
-            us.CreatedGroups = await normalDataContext.Groups.Include(x => x.Creator).Where(x => x.Creatorid == us.Id).ToArrayAsync();
+             us.CreatedGroups = await normalDataContext.Groups.Include(x => x.Creator).Where(x => x.Creatorid == us.Id).ToArrayAsync();
 
             foreach(var gr in us.CreatedGroups)
                 gr.Events = await normalDataContext.Events.Include(x => x.Group).Where(x => x.GroupId == gr.Id).ToArrayAsync();

@@ -9,6 +9,7 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Meeter.Controllers
 {
@@ -87,25 +88,52 @@ namespace Meeter.Controllers
             List<UserPreference> model = new List<UserPreference>();
             Event e = await normalDataContext.Events.FirstOrDefaultAsync(x => x.Id == id);
             List<GroupMember> groupMembers = normalDataContext.GroupMembers.Include(x => x.Group).Where(x => x.GroupId == e.GroupId).ToList();
-            foreach(var user in groupMembers)
+
+            ViewData["list_pref"] = normalDataContext.PlaceTypes.ToList();
+            foreach (var user in groupMembers)
             {
+                user.User = await normalDataContext.Users.FirstOrDefaultAsync(x => x.Id == user.UserId);
                 UserPreference up = new UserPreference
                 {
                     User = user.User,
                     Event = e,
                     EventId = e.Id,
                     UserId = user.UserId
-                                      
+
 
                 };
                 model.Add(up);
-                await   normalDataContext.UserPreferences.AddAsync(up);
+               // await normalDataContext.UserPreferences.AddAsync(up);
 
             }
-             normalDataContext.SaveChanges();
+            ViewBag.Preferences = new SelectList(normalDataContext.Types, "Id", "Name");
+            //normalDataContext.SaveChanges();
             return View(model);
         }
-        public async Task<ActionResult> Create(int? id)
+        [HttpPost]
+        public async Task<ActionResult> AddPreferences(List<UserPreference> preferences)
+        {
+            foreach (var item in preferences)
+            {
+                item.TypeId = item.Type.Id;
+                List<UserPreference> upref = normalDataContext.UserPreferences.Include(x => x.User).Where(x => x.UserId == item.UserId).ToList();
+                if (upref.Count == 0)
+                {
+
+                    normalDataContext.UserPreferences.Add(item);
+                }
+                else
+                {
+                    upref[0].Type = item.Type;
+                    upref[0].TypeId = item.TypeId;
+                        }
+            }
+            normalDataContext.SaveChanges();
+
+            return RedirectToAction("GetEventInfo", "Event", new { id= preferences[0].EventId });
+        }
+        
+            public async Task<ActionResult> Create(int? id)
         {
             var model = new Event
             {

@@ -1,75 +1,61 @@
 ﻿@model IEnumerable<UserPreference>
-
-<table class="table table-striped table-hover">
-    <thead>
-        <tr>
-            <th scope="col">First Name</th>
-            <th scope="col">Last Name</th>
-            <th scope="col">Preference</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var euser in Model)
-        {
+@{
+    ViewData["Title"] = "Add Preferences";
+}
+@using (Html.BeginForm("AddPreferences","Event",new {preferences= Model }))
+{
+    <table class="table table-striped table-hover">
+        <thead>
             <tr>
-
-                <td>@euser.User.FirstName</td>
-                <td>@euser.User.LastName</td>
-
-                @using (Html.BeginForm("AddPreference"))
-                {
-
-                    <div class="form-group">
-                        @Html.EditorFor(esuer => euser.Type.Name, new { htmlAttributes = new { @class = "form-control" } })
-
-                    </div>
-                }
+                <th scope="col">First Name</th>
+                <th scope="col">Last Name</th>
+                <th scope="col">Preference</th>
             </tr>
-        }
-    </tbody>
-</table>
-<link href="https://ajax.aspnetcdn.com/ajax/jquery.ui/1.12.1/themes/black-tie/jquery-ui.css" rel="Stylesheet">
-<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.4.1.js"></script>
-<script src="https://ajax.aspnetcdn.com/ajax/jquery.ui/1.12.1/jquery-ui.js"></script>
-<script>
+        </thead>
+        <tbody>
+            @foreach (var euser in Model)
+            {
+                <tr>
 
-    $(document).ready(function () {
-        $('#esuer_Preferences').autocomplete({
-            source: '@Url.Action("CurrentPreferenceAutocomplete")',
-            select: function (event, ui) {
-                //set tagids to save
-                $("#Preference_Id").val(ui.item.id);
-                $("#Preference_Type").val(ui.item.type);
+                    <td>@euser.User.UserName</td>
+                    <td>@euser.User.LastName</td>
 
-                //Tags for display
-                this.value = ui.item.value;
-                return false;
+                    @*<td> @Html.DropDownList(ViewData["list_pref"], new { @class = "form-control" })</td>*@
+                    <td>
+
+
+                        @*@Html.EditorFor(esuer => euser.Type.Name, new { htmlAttributes = new { @class = "form-control" } })*@
+                        @*@Html.DropDownList("ObjList", (IEnumerable<SelectListItem>)ViewBag.Preferences, new { id = "ddlLocations", @class = "form-control" })*@
+                        @(Html.DropDownListFor(x => euser.Type, ViewBag.Preferences as SelectList, new { htmlAttributes = new { @class = "form-control" } }))
+
+                        @Html.ValidationMessageFor(x => euser.Type, "", new { @class = "text-danger" })
+                    </td>
+                </tr>
             }
-        });
-    })
+        </tbody>
+    </table>
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Save Preferences</button>
+    </div>
+}
+@*<link href="https://ajax.aspnetcdn.com/ajax/jquery.ui/1.12.1/themes/black-tie/jquery-ui.css" rel="Stylesheet">
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.4.1.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery.ui/1.12.1/jquery-ui.js"></script>
+    <script>
 
-</script>
-<link href="https://ajax.aspnetcdn.com/ajax/jquery.ui/1.12.1/themes/black-tie/jquery-ui.css" rel="Stylesheet">
-<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.4.1.js"></script>
-<script src="https://ajax.aspnetcdn.com/ajax/jquery.ui/1.12.1/jquery-ui.js"></script>
-<script>
+        $(document).ready(function () {
+            $('#esuer_Preferences').autocomplete({
+                source: '@Url.Action("CurrentPreferenceAutocomplete")',
+                select: function (event, ui) {
+                    //set tagids to save
+                    $("#Preference_Id").val(ui.item.id);
+                    $("#Preference_Type").val(ui.item.type);
 
-    $(document).ready(function () {
-        $('#User_UserName').autocomplete({
-            source: '@Url.Action("CurrentMemberAutocomplete")',
-            select: function (event, ui) {
-                //set tagids to save
-                $("#User_Id").val(ui.item.id);
-                $("#User_FirstName").val(ui.item.firstname);
-                $("#User_LastName").val(ui.item.lastname);
-                $("#User_PhoneNumber").val(ui.item.phonenumber);
-                $("#User_Email").val(ui.item.email);
+                    //Tags for display
+                    this.value = ui.item.value;
+                    return false;
+                }
+            });
+        })
 
-                //Tags for display
-                this.value = ui.item.value;
-                return false;
-            }
-        });
-    })
-
-</script>
+    </script>*@
