@@ -80,8 +80,10 @@ http://localhost:5000/api/Event/Index
 
 ### Usage demonstration
 
+Application starts from login/registration site. If the application is visited for the first time, user registration is obligatory to see next views. The browser can remember user data in a cookie and log him in automatically. 
 ![Register](http://pages.mini.pw.edu.pl/~gorzynskik/HTMLPostGIS/Meeter/register.png)
 
+To update the user location in database, we can go to *SetLocation* endpoint and choose our location on the map. After that, the address is determined by Google Maps API. It is also possible to obtain the location from the client browser, it proceeds after clicking *Get current location*. After the correct location is set, we can save it to update the database record. 
 ![Set Location](http://pages.mini.pw.edu.pl/~gorzynskik/HTMLPostGIS/Meeter/setlocation.png)
 
 ![Create group](http://pages.mini.pw.edu.pl/~gorzynskik/HTMLPostGIS/Meeter/groupcreate.png)
