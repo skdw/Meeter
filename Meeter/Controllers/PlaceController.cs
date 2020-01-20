@@ -40,7 +40,7 @@ namespace Meeter.Controllers
             if(place is null)
                 return RedirectToAction("Index");
 
-            var model = await normalDataContext.Places.Where(x => x.Id == place.Id).FirstOrDefaultAsync();
+            var model = await normalDataContext.Places.Where(x => x.Id == place.Id).Include(x => x.Types).FirstOrDefaultAsync();
             if(model is null)
             {
                 model = place;
@@ -74,7 +74,11 @@ namespace Meeter.Controllers
             {
                 var typeObj = await normalDataContext.Types.Where(x => x.Name == type).FirstOrDefaultAsync();
                 if(typeObj != null)
-                    model.Types.Add(typeObj);
+                {
+                    var typePlace = await normalDataContext.PlaceTypes.Include(x => x.Place).Include(x => x.Type).Where(x => x.Place.PlaceId == model.PlaceId && x.Type.Name == type).FirstOrDefaultAsync();
+                    if(typePlace is null)
+                        model.Types.Add(typeObj);
+                }
             }
 
             await normalDataContext.SaveChangesAsync();

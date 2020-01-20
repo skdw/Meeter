@@ -9,7 +9,7 @@ namespace Meeter.Models
     {
         public int Id { get; set; }
 
-        public int PlaceId { get; set; }
+        public string PlaceId { get; set; }
 
         public virtual Place Place { get; set; }
 
