@@ -93,8 +93,8 @@ Users have the ability to create groups. Once a new group is created, its creato
 
 ![Group info](http://pages.mini.pw.edu.pl/~gorzynskik/HTMLPostGIS/Meeter/groupinfo.png)
 
-After creating a group, other users can be added. 
-![New member](http://pages.mini.pw.edu.pl/~gorzynskik/HTMLPostGIS/Meeter/newmember.png)
+After creating a group, other users can be added. Their data gets filled by itself using <a href=https://jqueryui.com/autocomplete/>jQuery Autocomplete</a>. 
+![New member](http://pages.mini.pw.edu.pl/~gorzynskik/HTMLPostGIS/Meeter/newmember2.png)
 
 ![Event info](http://pages.mini.pw.edu.pl/~gorzynskik/HTMLPostGIS/Meeter/eventinfo.png)
 
