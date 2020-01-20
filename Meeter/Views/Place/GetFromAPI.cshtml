@@ -1,6 +1,18 @@
 ﻿@using Microsoft.Extensions.Configuration
 @inject IConfiguration Configuration
 
+<form onsubmit="getFromAPI()">
+    Lat:<br>
+    <input type="number" name="lat" value=-33.8708902>
+    <br>
+    Lng:<br>
+    <input type="number" name="lng" value=151.2074116>
+    Radius:<br>
+    <input type="number" name="radius" value=1500>
+    <br><br>
+    <input type="submit" value="Submit">
+</form>
+
 <button onclick="getFromAPI()">Get from API!</button>
 
 <link href="https://ajax.aspnetcdn.com/ajax/jquery.ui/1.12.1/themes/black-tie/jquery-ui.css" rel="Stylesheet">
@@ -24,25 +36,27 @@
                 return response.json();
             })
             .then(function (json) {
-                let res = json.results[0];
-                sendPlace(res);
+
+                json.results.forEach(sendPlace);
                 //console.log(json);
 
                 function sendPlace(place) {
                     let lat = place.geometry.location.lat;
                     let lng = place.geometry.location.lng;
-                    let open_now = place.opening_hours.open_now;
                     let user_ratings_total = place.user_ratings_total;
                     let types = place.types;
 
                     place.lat = lat;
                     place.lng = lng;
-                    place.open_now = open_now;
+                    if(place.opening_hours != null)
+                        place.open_now = place.opening_hours.open_now;
                     place.user_ratings_total = user_ratings_total;
 
                     var ret = null;
                     request = $.ajax({
                         async: false,
+                        //method: "POST",
+                        //mode: 'cors',
                         url: "Create",
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",

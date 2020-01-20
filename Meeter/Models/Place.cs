@@ -11,8 +11,6 @@ namespace Meeter.Models
 
         public string Name { get; set; }
 
-        public string PlaceId { get; set; }
-
         public int PriceLevel { get; set; }
 
         public float Rating { get; set; }
@@ -27,6 +25,6 @@ namespace Meeter.Models
 
         public int UserRatingsTotal { get; set; }
 
-        public virtual ICollection<PlaceType> Types { get; set; }
+        public virtual ICollection<Type> Types { get; set; }
     }
 }

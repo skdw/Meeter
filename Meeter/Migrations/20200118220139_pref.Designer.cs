@@ -4,18 +4,20 @@ using Meeter.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace MeeterAplication.Migrations
+namespace Meeter.Migrations
 {
     [DbContext(typeof(NormalDataContext))]
-    partial class NormalDataContextModelSnapshot : ModelSnapshot
+    [Migration("20200118220139_pref")]
+    partial class pref
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.1.11-servicing-32099")
+                .HasAnnotation("ProductVersion", "2.1.14-servicing-32113")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -109,6 +111,8 @@ namespace MeeterAplication.Migrations
 
                     b.Property<bool>("OpenNow");
 
+                    b.Property<string>("PlaceId");
+
                     b.Property<int>("PriceLevel");
 
                     b.Property<float>("Rating");
@@ -132,131 +136,112 @@ namespace MeeterAplication.Migrations
 
                     b.Property<string>("PlaceId");
 
-                    b.Property<int>("TypeId");
+                    b.Property<string>("Type");
 
                     b.HasKey("Id");
 
                     b.HasIndex("PlaceId");
-
-                    b.HasIndex("TypeId");
 
                     b.ToTable("PlaceTypes");
-                });
-
-            modelBuilder.Entity("Meeter.Models.Type", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Name");
-
-                    b.Property<string>("PlaceId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PlaceId");
-
-                    b.ToTable("Types");
 
                     b.HasData(
-                        new { Id = 1, Name = "accounting" },
-                        new { Id = 2, Name = "airport" },
-                        new { Id = 3, Name = "amusement_park" },
-                        new { Id = 4, Name = "aquarium" },
-                        new { Id = 5, Name = "art_gallery" },
-                        new { Id = 6, Name = "atm" },
-                        new { Id = 7, Name = "bakery" },
-                        new { Id = 8, Name = "bank" },
-                        new { Id = 9, Name = "bar" },
-                        new { Id = 10, Name = "beauty_salon" },
-                        new { Id = 11, Name = "bicycle_store" },
-                        new { Id = 12, Name = "book_store" },
-                        new { Id = 13, Name = "bowling_alley" },
-                        new { Id = 14, Name = "bus_station" },
-                        new { Id = 15, Name = "cafe" },
-                        new { Id = 16, Name = "campground" },
-                        new { Id = 17, Name = "car_dealer" },
-                        new { Id = 18, Name = "car_rental" },
-                        new { Id = 19, Name = "car_repair" },
-                        new { Id = 20, Name = "car_wash" },
-                        new { Id = 21, Name = "casino" },
-                        new { Id = 22, Name = "cemetery" },
-                        new { Id = 23, Name = "church" },
-                        new { Id = 24, Name = "city_hall" },
-                        new { Id = 25, Name = "clothing_store" },
-                        new { Id = 26, Name = "convenience_store" },
-                        new { Id = 27, Name = "courthouse" },
-                        new { Id = 28, Name = "dentist" },
-                        new { Id = 29, Name = "department_store" },
-                        new { Id = 30, Name = "doctor" },
-                        new { Id = 31, Name = "drugstore" },
-                        new { Id = 32, Name = "electrician" },
-                        new { Id = 33, Name = "electronics_store" },
-                        new { Id = 34, Name = "embassy" },
-                        new { Id = 35, Name = "fire_station" },
-                        new { Id = 36, Name = "florist" },
-                        new { Id = 37, Name = "funeral_home" },
-                        new { Id = 38, Name = "furniture_store" },
-                        new { Id = 39, Name = "gas_station" },
-                        new { Id = 40, Name = "grocery_or_supermarket" },
-                        new { Id = 41, Name = "gym" },
-                        new { Id = 42, Name = "hair_care" },
-                        new { Id = 43, Name = "hardware_store" },
-                        new { Id = 44, Name = "hindu_temple" },
-                        new { Id = 45, Name = "home_goods_store" },
-                        new { Id = 46, Name = "hospital" },
-                        new { Id = 47, Name = "insurance_agency" },
-                        new { Id = 48, Name = "jewelry_store" },
-                        new { Id = 49, Name = "laundry" },
-                        new { Id = 50, Name = "lawyer" },
-                        new { Id = 51, Name = "library" },
-                        new { Id = 52, Name = "light_rail_station" },
-                        new { Id = 53, Name = "liquor_store" },
-                        new { Id = 54, Name = "local_government_office" },
-                        new { Id = 55, Name = "locksmith" },
-                        new { Id = 56, Name = "lodging" },
-                        new { Id = 57, Name = "meal_delivery" },
-                        new { Id = 58, Name = "meal_takeaway" },
-                        new { Id = 59, Name = "mosque" },
-                        new { Id = 60, Name = "movie_rental" },
-                        new { Id = 70, Name = "movie_theater" },
-                        new { Id = 71, Name = "moving_company" },
-                        new { Id = 72, Name = "museum" },
-                        new { Id = 73, Name = "night_club" },
-                        new { Id = 74, Name = "painter" },
-                        new { Id = 75, Name = "park" },
-                        new { Id = 76, Name = "parking" },
-                        new { Id = 77, Name = "pet_store" },
-                        new { Id = 78, Name = "pharmacy" },
-                        new { Id = 79, Name = "physiotherapist" },
-                        new { Id = 80, Name = "plumber" },
-                        new { Id = 81, Name = "police" },
-                        new { Id = 82, Name = "post_office" },
-                        new { Id = 83, Name = "primary_school" },
-                        new { Id = 84, Name = "real_estate_agency" },
-                        new { Id = 85, Name = "restaurant" },
-                        new { Id = 86, Name = "roofing_contractor" },
-                        new { Id = 87, Name = "rv_park" },
-                        new { Id = 88, Name = "school" },
-                        new { Id = 89, Name = "secondary_school" },
-                        new { Id = 90, Name = "shoe_store" },
-                        new { Id = 91, Name = "shopping_mall" },
-                        new { Id = 92, Name = "spa" },
-                        new { Id = 93, Name = "stadium" },
-                        new { Id = 94, Name = "storage" },
-                        new { Id = 95, Name = "store" },
-                        new { Id = 96, Name = "subway_station" },
-                        new { Id = 97, Name = "supermarket" },
-                        new { Id = 98, Name = "synagogue" },
-                        new { Id = 99, Name = "taxi_stand" },
-                        new { Id = 100, Name = "tourist_attraction" },
-                        new { Id = 101, Name = "train_station" },
-                        new { Id = 102, Name = "transit_station" },
-                        new { Id = 103, Name = "travel_agency" },
-                        new { Id = 104, Name = "university" },
-                        new { Id = 105, Name = "veterinary_care" },
-                        new { Id = 106, Name = "zoo" }
+                        new { Id = 1, Type = "accounting" },
+                        new { Id = 2, Type = "airport" },
+                        new { Id = 3, Type = "amusement_park" },
+                        new { Id = 4, Type = "aquarium" },
+                        new { Id = 5, Type = "art_gallery" },
+                        new { Id = 6, Type = "atm" },
+                        new { Id = 7, Type = "bakery" },
+                        new { Id = 8, Type = "bank" },
+                        new { Id = 9, Type = "bar" },
+                        new { Id = 10, Type = "beauty_salon" },
+                        new { Id = 11, Type = "bicycle_store" },
+                        new { Id = 12, Type = "book_store" },
+                        new { Id = 13, Type = "bowling_alley" },
+                        new { Id = 14, Type = "bus_station" },
+                        new { Id = 15, Type = "cafe" },
+                        new { Id = 16, Type = "campground" },
+                        new { Id = 17, Type = "car_dealer" },
+                        new { Id = 18, Type = "car_rental" },
+                        new { Id = 19, Type = "car_repair" },
+                        new { Id = 20, Type = "car_wash" },
+                        new { Id = 21, Type = "casino" },
+                        new { Id = 22, Type = "cemetery" },
+                        new { Id = 23, Type = "church" },
+                        new { Id = 24, Type = "city_hall" },
+                        new { Id = 25, Type = "clothing_store" },
+                        new { Id = 26, Type = "convenience_store" },
+                        new { Id = 27, Type = "courthouse" },
+                        new { Id = 28, Type = "dentist" },
+                        new { Id = 29, Type = "department_store" },
+                        new { Id = 30, Type = "doctor" },
+                        new { Id = 31, Type = "drugstore" },
+                        new { Id = 32, Type = "electrician" },
+                        new { Id = 33, Type = "electronics_store" },
+                        new { Id = 34, Type = "embassy" },
+                        new { Id = 35, Type = "fire_station" },
+                        new { Id = 36, Type = "florist" },
+                        new { Id = 37, Type = "funeral_home" },
+                        new { Id = 38, Type = "furniture_store" },
+                        new { Id = 39, Type = "gas_station" },
+                        new { Id = 40, Type = "grocery_or_supermarket" },
+                        new { Id = 41, Type = "gym" },
+                        new { Id = 42, Type = "hair_care" },
+                        new { Id = 43, Type = "hardware_store" },
+                        new { Id = 44, Type = "hindu_temple" },
+                        new { Id = 45, Type = "home_goods_store" },
+                        new { Id = 46, Type = "hospital" },
+                        new { Id = 47, Type = "insurance_agency" },
+                        new { Id = 48, Type = "jewelry_store" },
+                        new { Id = 49, Type = "laundry" },
+                        new { Id = 50, Type = "lawyer" },
+                        new { Id = 51, Type = "library" },
+                        new { Id = 52, Type = "light_rail_station" },
+                        new { Id = 53, Type = "liquor_store" },
+                        new { Id = 54, Type = "local_government_office" },
+                        new { Id = 55, Type = "locksmith" },
+                        new { Id = 56, Type = "lodging" },
+                        new { Id = 57, Type = "meal_delivery" },
+                        new { Id = 58, Type = "meal_takeaway" },
+                        new { Id = 59, Type = "mosque" },
+                        new { Id = 60, Type = "movie_rental" },
+                        new { Id = 70, Type = "movie_theater" },
+                        new { Id = 71, Type = "moving_company" },
+                        new { Id = 72, Type = "museum" },
+                        new { Id = 73, Type = "night_club" },
+                        new { Id = 74, Type = "painter" },
+                        new { Id = 75, Type = "park" },
+                        new { Id = 76, Type = "parking" },
+                        new { Id = 77, Type = "pet_store" },
+                        new { Id = 78, Type = "pharmacy" },
+                        new { Id = 79, Type = "physiotherapist" },
+                        new { Id = 80, Type = "plumber" },
+                        new { Id = 81, Type = "police" },
+                        new { Id = 82, Type = "post_office" },
+                        new { Id = 83, Type = "primary_school" },
+                        new { Id = 84, Type = "real_estate_agency" },
+                        new { Id = 85, Type = "restaurant" },
+                        new { Id = 86, Type = "roofing_contractor" },
+                        new { Id = 87, Type = "rv_park" },
+                        new { Id = 88, Type = "school" },
+                        new { Id = 89, Type = "secondary_school" },
+                        new { Id = 90, Type = "shoe_store" },
+                        new { Id = 91, Type = "shopping_mall" },
+                        new { Id = 92, Type = "spa" },
+                        new { Id = 93, Type = "stadium" },
+                        new { Id = 94, Type = "storage" },
+                        new { Id = 95, Type = "store" },
+                        new { Id = 96, Type = "subway_station" },
+                        new { Id = 97, Type = "supermarket" },
+                        new { Id = 98, Type = "synagogue" },
+                        new { Id = 99, Type = "taxi_stand" },
+                        new { Id = 100, Type = "tourist_attraction" },
+                        new { Id = 101, Type = "train_station" },
+                        new { Id = 102, Type = "transit_station" },
+                        new { Id = 103, Type = "travel_agency" },
+                        new { Id = 104, Type = "university" },
+                        new { Id = 105, Type = "veterinary_care" },
+                        new { Id = 106, Type = "zoo" }
                     );
                 });
 
@@ -331,7 +316,7 @@ namespace MeeterAplication.Migrations
 
                     b.Property<int>("EventId");
 
-                    b.Property<int>("TypeId");
+                    b.Property<int>("PlaceTypeId");
 
                     b.Property<string>("UserId");
 
@@ -339,7 +324,7 @@ namespace MeeterAplication.Migrations
 
                     b.HasIndex("EventId");
 
-                    b.HasIndex("TypeId");
+                    b.HasIndex("PlaceTypeId");
 
                     b.HasIndex("UserId");
 
@@ -496,18 +481,6 @@ namespace MeeterAplication.Migrations
 
             modelBuilder.Entity("Meeter.Models.PlaceType", b =>
                 {
-                    b.HasOne("Meeter.Models.Place", "Place")
-                        .WithMany()
-                        .HasForeignKey("PlaceId");
-
-                    b.HasOne("Meeter.Models.Type", "Type")
-                        .WithMany()
-                        .HasForeignKey("TypeId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("Meeter.Models.Type", b =>
-                {
                     b.HasOne("Meeter.Models.Place")
                         .WithMany("Types")
                         .HasForeignKey("PlaceId");
@@ -527,9 +500,9 @@ namespace MeeterAplication.Migrations
                         .HasForeignKey("EventId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("Meeter.Models.Type", "Type")
+                    b.HasOne("Meeter.Models.PlaceType", "PlaceType")
                         .WithMany()
-                        .HasForeignKey("TypeId")
+                        .HasForeignKey("PlaceTypeId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Meeter.Models.User", "User")

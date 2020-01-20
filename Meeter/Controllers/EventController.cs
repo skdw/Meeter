@@ -9,6 +9,7 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Meeter.Controllers
 {
@@ -82,7 +83,107 @@ namespace Meeter.Controllers
 
             return View(model);
         }
-        
+
+        public async Task<ActionResult> AddPreferences(int? id)
+        {
+            List<UserPreference> model = new List<UserPreference>();
+            Event e = await normalDataContext.Events.FirstOrDefaultAsync(x => x.Id == id);
+            List<GroupMember> groupMembers = normalDataContext.GroupMembers.Include(x => x.Group).Where(x => x.GroupId == e.GroupId).ToList();
+
+            ViewData["list_pref"] = normalDataContext.PlaceTypes.ToList();
+            foreach (var user in groupMembers)
+            {
+                user.User = await normalDataContext.Users.FirstOrDefaultAsync(x => x.Id == user.UserId);
+                UserPreference up = new UserPreference
+                {
+                    User = user.User,
+                    Event = e,
+                    EventId = e.Id,
+                    UserId = user.UserId
+
+
+                };
+                model.Add(up);
+                // await normalDataContext.UserPreferences.AddAsync(up);
+
+            }
+            ViewBag.Preferences = new SelectList(normalDataContext.Types, "Id", "Name");
+            //normalDataContext.SaveChanges();
+            return View(model);
+        }
+        [HttpPost]
+        public async Task<ActionResult> AddPreferences([FromForm] IEnumerable<UserPreference> preferences)
+        {
+            foreach (var item in preferences)
+            {
+                item.TypeId = item.Type.Id;
+                List<UserPreference> upref = normalDataContext.UserPreferences.Include(x => x.User).Where(x => x.UserId == item.UserId).ToList();
+                if (upref.Count == 0)
+                {
+                    normalDataContext.UserPreferences.Add(item);
+                }
+                else
+                {
+                    upref[0].Type = item.Type;
+                    upref[0].TypeId = item.TypeId;
+                }
+            }
+            normalDataContext.SaveChanges();
+
+            return RedirectToAction("GetEventInfo", "Event", new { id = preferences.First().EventId });
+        }
+
+
+        public async Task<IActionResult> AddPreference([FromQuery] int memberId, [FromQuery] int eventId)
+        {
+            var member = await normalDataContext.GroupMembers.Where(x => x.Id == memberId).Include(x => x.User).FirstOrDefaultAsync();
+            var @event = await normalDataContext.Events.Where(x => x.Id == eventId).FirstOrDefaultAsync();
+
+            var model = await normalDataContext.UserPreferences.Where(x => x.UserId == member.UserId && x.EventId == @event.Id).FirstOrDefaultAsync();
+            if (model is null)
+                model = new UserPreference()
+                {
+                    UserId = member.UserId,
+                    User = member.User,
+                    EventId = @event.Id,
+                    Event = @event
+                };
+
+            ViewBag.TypeId = new SelectList(normalDataContext.Types, "Id", "Name");
+            ViewBag.UserId = new SelectList(normalDataContext.Users, "Id", "FullName");
+            ViewBag.EventId = new SelectList(normalDataContext.Events, "Id", "EventName");
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddPreference([FromForm] UserPreference userPreference)
+        {
+            var uspref = await normalDataContext.UserPreferences.Where(x => x.EventId == userPreference.EventId && x.UserId == userPreference.UserId).FirstOrDefaultAsync();
+            var type = await normalDataContext.Types.Where(x => x.Id == userPreference.TypeId).FirstOrDefaultAsync();
+            if (uspref is null)
+            {
+                var @event = await normalDataContext.Events.Where(x => x.Id == userPreference.EventId).FirstOrDefaultAsync();
+                var user = await normalDataContext.Users.Where(x => x.Id == userPreference.UserId).FirstOrDefaultAsync();
+
+                uspref = new UserPreference()
+                {
+                    EventId = userPreference.EventId,
+                    Event = userPreference.Event,
+                    UserId = userPreference.UserId,
+                    User = userPreference.User
+                };
+
+                normalDataContext.UserPreferences.Add(uspref);
+            }
+            uspref.TypeId = userPreference.TypeId;
+            uspref.Type = type;
+
+            normalDataContext.SaveChanges();
+
+            return RedirectToAction("GetEventInfo", "Event", new { id = userPreference.EventId });
+        }
+
         public async Task<ActionResult> Create(int? id)
         {
             var model = new Event
@@ -104,16 +205,27 @@ namespace Meeter.Controllers
             await normalDataContext.Events.AddAsync(model);
             await normalDataContext.SaveChangesAsync();
 
-            return RedirectToAction("GetGroupInfo", "Group", new { groupid = model.GroupId });
+            return RedirectToAction("GetGroupInfo", "Group", new { id = model.GroupId });
         }
-        
+
         public async Task<IActionResult> Delete(int? id)
         {
             Event model = await normalDataContext.Events.FirstOrDefaultAsync(x => x.Id == id);
             int groupi = model.GroupId;
             normalDataContext.Events.Remove(normalDataContext.Events.Find(id));
             await normalDataContext.SaveChangesAsync();
-            return RedirectToAction("GetGroupInfo", "Group",new { groupid = groupi });
+            return RedirectToAction("GetGroupInfo", "Group", new { id = groupi });
+        }
+        [HttpGet]
+        public JsonResult CurrentPreferenceAutocomplete([FromQuery]string term = "") // v - inserted text
+        {
+            var objMemberlist = normalDataContext.UserPreferences
+                            .Where(u => u.Type.Name.ToUpper()
+                            .Contains(term.ToUpper()))
+                            .Select(u => new { id = u.Id, type = u.Type })
+                            .Distinct().ToList();
+            return Json(objMemberlist);
         }
     }
+
 }

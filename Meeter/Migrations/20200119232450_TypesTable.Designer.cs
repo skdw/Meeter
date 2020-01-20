@@ -4,14 +4,16 @@ using Meeter.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace MeeterAplication.Migrations
+namespace Meeter.Migrations
 {
     [DbContext(typeof(NormalDataContext))]
-    partial class NormalDataContextModelSnapshot : ModelSnapshot
+    [Migration("20200119232450_TypesTable")]
+    partial class TypesTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -109,6 +111,8 @@ namespace MeeterAplication.Migrations
 
                     b.Property<bool>("OpenNow");
 
+                    b.Property<string>("PlaceId");
+
                     b.Property<int>("PriceLevel");
 
                     b.Property<float>("Rating");
@@ -130,13 +134,15 @@ namespace MeeterAplication.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("PlaceId");
+                    b.Property<int>("PlaceId");
+
+                    b.Property<string>("PlaceId1");
 
                     b.Property<int>("TypeId");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PlaceId");
+                    b.HasIndex("PlaceId1");
 
                     b.HasIndex("TypeId");
 
@@ -498,7 +504,7 @@ namespace MeeterAplication.Migrations
                 {
                     b.HasOne("Meeter.Models.Place", "Place")
                         .WithMany()
-                        .HasForeignKey("PlaceId");
+                        .HasForeignKey("PlaceId1");
 
                     b.HasOne("Meeter.Models.Type", "Type")
                         .WithMany()

@@ -76,13 +76,24 @@ namespace Meeter.Controllers
         {
             var id = userManager.GetUserId(User);
             var us = await userManager.GetUserAsync(User);
-            us.CreatedGroups = await normalDataContext.Groups.Include(x => x.Creator).Where(x => x.Creatorid == us.Id).ToArrayAsync();
+             us.CreatedGroups = await normalDataContext.Groups.Include(x => x.Creator).Where(x => x.Creatorid == us.Id).ToArrayAsync();
 
             foreach(var gr in us.CreatedGroups)
                 gr.Events = await normalDataContext.Events.Include(x => x.Group).Where(x => x.GroupId == gr.Id).ToArrayAsync();
 
             if(us.LocationId != null && us.Location is null)
                 us.Location = await normalDataContext.Locations.FirstOrDefaultAsync(l => l.Id == us.LocationId);
+
+            if (us.Location is null)
+                ViewData["location"] = 0;
+            else
+                ViewData["location"] = 1;
+
+            if(us.Location != null)
+            {
+                ViewData["lat"] = us.Location.Lat;
+                ViewData["lng"] = us.Location.Lng;
+            }
 
             return View("Secret",us);
         }

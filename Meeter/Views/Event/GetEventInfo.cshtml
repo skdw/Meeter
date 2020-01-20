@@ -28,7 +28,10 @@
         </div>
     </div>
 
-    @await Html.PartialAsync("~/Views/Group/MembersTable.cshtml", Model.Group.Memberships)
+    @await Html.PartialAsync("~/Views/Group/MembersTable.cshtml", Model.Group.Memberships, new ViewDataDictionary(ViewData)
+                                {
+                                    { "eventId", Model.Id }, { "showPreference", true }
+                                })
 
     <div id="map" style="height: 400px"></div>
 
@@ -57,9 +60,11 @@
 
         @foreach(var member in Model.Group.Memberships)
         {
-            <text>
-                placeMarker({ lat: @member.User.Location.Lat, lng: @member.User.Location.Lng }, "@member.User.Location.Address");
-            </text>
+            @if (member.User.Location != null)
+                    { <text>
+                        placeMarker({ lat: @member.User.Location.Lat, lng: @member.User.Location.Lng }, "@member.User.Location.Address");
+                     </text>
+                }
         }
 
         function placeMarker(location, title) {

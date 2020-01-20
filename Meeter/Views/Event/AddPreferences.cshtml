@@ -1,0 +1,61 @@
+﻿@model IEnumerable<UserPreference>
+@{
+    ViewData["Title"] = "Add Preferences";
+}
+@using (Html.BeginForm("AddPreferences","Event",new { enctype = "multipart/form-data" }))
+{
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th scope="col">First Name</th>
+                <th scope="col">Last Name</th>
+                <th scope="col">Preference</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var euser in Model)
+            {
+                <tr>
+
+                    <td>@euser.User.UserName</td>
+                    <td>@euser.User.LastName</td>
+
+                    @*<td> @Html.DropDownList(ViewData["list_pref"], new { @class = "form-control" })</td>*@
+                    <td>
+
+
+                        @*@Html.EditorFor(esuer => euser.Type.Name, new { htmlAttributes = new { @class = "form-control" } })*@
+                        @*@Html.DropDownList("ObjList", (IEnumerable<SelectListItem>)ViewBag.Preferences, new { id = "ddlLocations", @class = "form-control" })*@
+                        @(Html.DropDownListFor(x => euser.Type, ViewBag.Preferences as SelectList, new { htmlAttributes = new { @class = "form-control" } }))
+
+                        @Html.ValidationMessageFor(x => euser.Type, "", new { @class = "text-danger" })
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Save Preferences</button>
+    </div>
+}
+@*<link href="https://ajax.aspnetcdn.com/ajax/jquery.ui/1.12.1/themes/black-tie/jquery-ui.css" rel="Stylesheet">
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.4.1.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery.ui/1.12.1/jquery-ui.js"></script>
+    <script>
+
+        $(document).ready(function () {
+            $('#esuer_Preferences').autocomplete({
+                source: '@Url.Action("CurrentPreferenceAutocomplete")',
+                select: function (event, ui) {
+                    //set tagids to save
+                    $("#Preference_Id").val(ui.item.id);
+                    $("#Preference_Type").val(ui.item.type);
+
+                    //Tags for display
+                    this.value = ui.item.value;
+                    return false;
+                }
+            });
+        })
+
+    </script>*@

@@ -8,19 +8,31 @@
             <th scope="col">E-mail</th>
             <th scope="col">Phone</th>
             <th scope="col">Location</th>
+
+            @if ((bool)ViewData["showPreference"] == true)
+            {
+                <th scope="col">Preference</th>
+                <th scope="col">Add Preference</th>
+            }
         </tr>
     </thead>
     <tbody>
         @foreach (var member in Model)
         {
-            <tr>
+        <tr>
 
-                <td>@member.User.FirstName</td>
-                <td>@member.User.LastName</td>
-                <td>@member.User.Email</td>
-                <td>@member.User.PhoneNumber</td>
-                <td>@member.User.Location</td>
-            </tr>
+            <td>@member.User.FirstName</td>
+            <td>@member.User.LastName</td>
+            <td>@member.User.Email</td>
+            <td>@member.User.PhoneNumber</td>
+            <td>@member.User.Location</td>
+
+            @if ((bool)ViewData["showPreference"] == true)
+            {
+                <td></td>
+                <td>@Html.ActionLink("Add preference", "AddPreference", "Event", new { memberId = member.Id, eventId = ViewData["eventId"] }, new { @class = "btn btn-primary" })</td>
+            }
+        </tr>
         }
     </tbody>
 </table>

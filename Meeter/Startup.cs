@@ -34,7 +34,6 @@ namespace Meeter
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //services.AddDbContext<NormalDataContext>(opts => opts.UseInMemoryDatabase("MeeterDatabase"));
             var connection = Configuration["DatabaseConnectionString"];
             //services.AddDbContext<MeeterDbContext>(options => options.UseSqlServer(connection));
             services.AddDbContext<NormalDataContext>(options => options.UseSqlServer(connection));
@@ -57,28 +56,25 @@ namespace Meeter
                 config.LoginPath = "/api/meeter/Login";
             });
 
-            services.AddCors(); // Make sure you call this previous to AddMvc
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(
+                    builder =>
+                    {
+                        builder.WithOrigins("http://example.com");
+                    });
 
-            //services.AddAuthorization(options =>
-            //{
-            //    //var defaultAuthBuilder = new AuthorizationPolicyBuilder();
-            //    //var defaultAuthPolicy = defaultAuthBuilder
-            //    //    .RequireAuthenticatedUser()
-            //    //    .Build();
+                options.AddPolicy("GooglePolicy",
+                    builder =>
+                    {
+                        builder.WithOrigins("*")
+                                            .AllowAnyHeader()
+                                            .AllowAnyMethod();
+                    });
 
-            //    //options.DefaultPolicy = defaultAuthPolicy;
+            });
 
-            //    //options.AddPolicy("Claim.DoB", policyBuilder =>
-            //    //{
-            //    //    policyBuilder.RequireClaim(ClaimTypes.DateOfBirth);
-            //    //});
-
-            //    options.AddPolicy("Claim.DoB", policyBuilder =>
-            //    {
-            //        //policyBuilder.AddRequirements(new CustomRequireClaim(ClaimTypes.DateOfBirth));
-            //        policyBuilder.RequireCustomClaim(ClaimTypes.DateOfBirth);
-            //    });
-            //});
+           
 
             services.AddScoped<IAuthorizationHandler, CustomRequireClaimHandler>();
 
