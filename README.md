@@ -160,9 +160,6 @@ Loading static data from json file automatically on database update.
             var myJsonString = File.ReadAllText("preferences.json");
             List<Type> ptypes = JsonConvert.DeserializeObject<List<Type>>(myJsonString);
             builder.Entity<Type>().HasData(ptypes.ToArray());
-            // Customize the ASP.NET Core Identity model and override the defaults if needed. 
-
-            //builder.Entity<IdentityUserRole<Guid>>().HasKey(p => new { p.UserId, p.RoleId });
         }
 
 Hiding the secret information in *appsettings.Secret.json* file (ignored by git). 
@@ -188,7 +185,6 @@ Hiding the secret information in *appsettings.Secret.json* file (ignored by git)
                 {
                     GroupId = model.Id,
                     User = model.Creator
-                    //Userid = model.Creator.Id
                 });
                 await normalDataContext.SaveChangesAsync();
 
