@@ -109,6 +109,7 @@ Once the users are added to the database and they participate in events, they ca
 
 ![Created groups](http://pages.mini.pw.edu.pl/~gorzynskik/HTMLPostGIS/Meeter/createdgroups2.png)
 
+Furthermore, Places API provides the information about the points related to the users' preferences and specifically the closest to the selected point. 
 ![Places API](http://pages.mini.pw.edu.pl/~gorzynskik/HTMLPostGIS/Meeter/placesapi.png)
 
 ## Technologies used
