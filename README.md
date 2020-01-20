@@ -78,6 +78,30 @@ Check Admin sites:
 http://localhost:5000/api/Group/Index
 http://localhost:5000/api/Event/Index
 
+### Usage demonstration
+
+![Register](http://pages.mini.pw.edu.pl/~gorzynskik/HTMLPostGIS/Meeter/register.png)
+
+![Set Location](http://pages.mini.pw.edu.pl/~gorzynskik/HTMLPostGIS/Meeter/setlocation.png)
+
+![Create group](http://pages.mini.pw.edu.pl/~gorzynskik/HTMLPostGIS/Meeter/groupcreate.png)
+
+![Group info](http://pages.mini.pw.edu.pl/~gorzynskik/HTMLPostGIS/Meeter/groupinfo.png)
+
+![New member](http://pages.mini.pw.edu.pl/~gorzynskik/HTMLPostGIS/Meeter/newmember.png)
+
+![Event info](http://pages.mini.pw.edu.pl/~gorzynskik/HTMLPostGIS/Meeter/eventinfo.png)
+
+![User preference](http://pages.mini.pw.edu.pl/~gorzynskik/HTMLPostGIS/Meeter/userpreference.png)
+
+![Groups](http://pages.mini.pw.edu.pl/~gorzynskik/HTMLPostGIS/Meeter/groups.png)
+
+![Events](http://pages.mini.pw.edu.pl/~gorzynskik/HTMLPostGIS/Meeter/events.png)
+
+![Created groups](http://pages.mini.pw.edu.pl/~gorzynskik/HTMLPostGIS/Meeter/createdgroups.png)
+
+![Places API](http://pages.mini.pw.edu.pl/~gorzynskik/HTMLPostGIS/Meeter/placesapi.png)
+
 ## Technologies used
 
 * Client-side
