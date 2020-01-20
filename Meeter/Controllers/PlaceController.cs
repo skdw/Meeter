@@ -50,7 +50,6 @@ namespace Meeter.Controllers
             {
                 model.Icon = place.Icon;
                 model.Name = place.Name;
-                model.PlaceId = place.PlaceId;
                 model.PriceLevel = place.PriceLevel;
                 model.Rating = place.Rating;
                 model.Vicinity = place.Vicinity;
@@ -75,7 +74,7 @@ namespace Meeter.Controllers
                 var typeObj = await normalDataContext.Types.Where(x => x.Name == type).FirstOrDefaultAsync();
                 if(typeObj != null)
                 {
-                    var typePlace = await normalDataContext.PlaceTypes.Include(x => x.Place).Include(x => x.Type).Where(x => x.Place.PlaceId == model.PlaceId && x.Type.Name == type).FirstOrDefaultAsync();
+                    var typePlace = await normalDataContext.PlaceTypes.Include(x => x.Place).Include(x => x.Type).Where(x => x.Place.Id == model.Id && x.Type.Name == type).FirstOrDefaultAsync();
                     if(typePlace is null)
                         model.Types.Add(typeObj);
                 }

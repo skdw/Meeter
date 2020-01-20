@@ -11,8 +11,6 @@ namespace Meeter.Models
 
         public string Name { get; set; }
 
-        public string PlaceId { get; set; }
-
         public int PriceLevel { get; set; }
 
         public float Rating { get; set; }
