@@ -196,7 +196,15 @@ Removing from database
     normalDataContext.Groups.Remove(normalDataContext.Groups.Find(id));
                 await normalDataContext.SaveChangesAsync();
 
+### Authorization
 
+Thanks to the mechanism of IdentityRoles, it is possible to prevent normal users from seeing sites which are available only for admin. If needed, another roles can be defined as well. 
+
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> IndexAdmin()
+    {
+        ...
+    }
 
 ### Razor-Controller communication
 
