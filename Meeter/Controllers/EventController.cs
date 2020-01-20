@@ -205,7 +205,7 @@ namespace Meeter.Controllers
             await normalDataContext.Events.AddAsync(model);
             await normalDataContext.SaveChangesAsync();
 
-            return RedirectToAction("GetGroupInfo", "Group", new { groupid = model.GroupId });
+            return RedirectToAction("GetGroupInfo", "Group", new { id = model.GroupId });
         }
 
         public async Task<IActionResult> Delete(int? id)
@@ -214,7 +214,7 @@ namespace Meeter.Controllers
             int groupi = model.GroupId;
             normalDataContext.Events.Remove(normalDataContext.Events.Find(id));
             await normalDataContext.SaveChangesAsync();
-            return RedirectToAction("GetGroupInfo", "Group", new { groupid = groupi });
+            return RedirectToAction("GetGroupInfo", "Group", new { id = groupi });
         }
         [HttpGet]
         public JsonResult CurrentPreferenceAutocomplete([FromQuery]string term = "") // v - inserted text

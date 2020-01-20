@@ -8,7 +8,6 @@ namespace Meeter.Models
 {
     public class Group
     {
-       // [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
        // [Key]
         public int Id { get; set; }
 

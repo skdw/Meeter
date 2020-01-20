@@ -155,15 +155,16 @@ namespace Meeter.Controllers
             //model.Creator = await normalDataContext.Set<User>().FirstOrDefaultAsync(x => x.Id == model.Creator.Id);
             //model.CreatorName = model.Creator.UserName;
             model.Creator.isPesudoUser = false;
-            normalDataContext.Add(model);
-            await normalDataContext.GroupMembers.AddAsync(new GroupMember
+            await normalDataContext.Groups.AddAsync(model);
+            await normalDataContext.GroupMembers.AddAsync(
+                new GroupMember
             {
                 GroupId = model.Id,
                 User = model.Creator
                 //Userid = model.Creator.Id
             });
             await normalDataContext.SaveChangesAsync();
-            return RedirectToAction("GetGroupInfo", new { groupid = model.Id });
+            return RedirectToAction("GetGroupInfo", new { id = model.Id });
         }
         public async Task<IActionResult> Delete(int? id)
         {

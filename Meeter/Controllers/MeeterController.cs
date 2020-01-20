@@ -85,9 +85,9 @@ namespace Meeter.Controllers
                 us.Location = await normalDataContext.Locations.FirstOrDefaultAsync(l => l.Id == us.LocationId);
 
             if (us.Location is null)
-                ViewData["location"] = false;
+                ViewData["location"] = 0;
             else
-                ViewData["location"] = true;
+                ViewData["location"] = 1;
 
             if(us.Location != null)
             {
