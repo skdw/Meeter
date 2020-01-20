@@ -125,6 +125,23 @@ http://localhost:5000/api/Event/Index
 
 ## Developer guide
 
+## Services
+
+    services.AddDbContext<NormalDataContext>(options => options.UseSqlServer(connection));
+
+### Identity services
+
+    services.AddIdentity<User, IdentityRole>(config =>
+      {
+          config.Password.RequireDigit = false;
+          config.Password.RequiredLength = 4;
+          config.Password.RequireUppercase = false;
+          config.Password.RequireNonAlphanumeric = false;
+      })
+          .AddEntityFrameworkStores<NormalDataContext>()
+          .AddDefaultTokenProviders()
+          .AddRoles<IdentityRole>();
+
 ### Database
 
 Creating the database with users inheriting from IdentityUser. 
@@ -217,6 +234,8 @@ or:
 
             normalDataContext = normalD;
         }
+
+
 
 ## Authors and acknowledgment
 * Anna Buchman
