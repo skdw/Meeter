@@ -36,7 +36,10 @@
                 </div>
             </div>
         </div>
-        @await Html.PartialAsync("~/Views/Group/MembersTable.cshtml", Model.Memberships)
+        @await Html.PartialAsync("~/Views/Group/MembersTable.cshtml", Model.Memberships, new ViewDataDictionary(ViewData)
+                                {
+                                    { "showPreference", false }
+                                })
 
         <div class="pt-4">
             <a href="@Url.Action("Create","Event", new {id= Model.Id })"
