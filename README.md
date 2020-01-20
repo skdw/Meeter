@@ -78,6 +78,40 @@ Check Admin sites:
 http://localhost:5000/api/Group/Index
 http://localhost:5000/api/Event/Index
 
+### Usage demonstration
+
+![Splashscreen](http://pages.mini.pw.edu.pl/~gorzynskik/HTMLPostGIS/Meeter/splashscreen.png)
+
+Application starts from login/registration site. If the application is visited for the first time, user registration is obligatory to see next views. The browser can remember user data in a cookie and log him in automatically. 
+![Register](http://pages.mini.pw.edu.pl/~gorzynskik/HTMLPostGIS/Meeter/register.png)
+
+To update the user location in database, we can go to *SetLocation* endpoint and choose our location on the map. After that, the address is determined by Google Maps API. It is also possible to obtain the location from the client browser, it proceeds after clicking *Get current location*. After the correct location is set, we can save it to update the database record. 
+![Set Location](http://pages.mini.pw.edu.pl/~gorzynskik/HTMLPostGIS/Meeter/setlocation.png)
+
+Users have the ability to create groups. Once a new group is created, its creator becomes the first user. 
+![Create group](http://pages.mini.pw.edu.pl/~gorzynskik/HTMLPostGIS/Meeter/groupcreate.png)
+
+![Group info](http://pages.mini.pw.edu.pl/~gorzynskik/HTMLPostGIS/Meeter/groupinfo.png)
+
+After creating a group, other users can be added. Their data gets filled by itself using <a href=https://jqueryui.com/autocomplete/>jQuery Autocomplete</a>. 
+![New member](http://pages.mini.pw.edu.pl/~gorzynskik/HTMLPostGIS/Meeter/newmember2.png)
+
+![Event info](http://pages.mini.pw.edu.pl/~gorzynskik/HTMLPostGIS/Meeter/eventinfo.png)
+
+Users can define their preferences for the meeting points types. The type can be selected from the list provided by 
+<a href=https://developers.google.com/places/supported_types#table1>Google Places</a>. 
+![User preference](http://pages.mini.pw.edu.pl/~gorzynskik/HTMLPostGIS/Meeter/userpreference.png)
+
+Once the users are added to the database and they participate in events, they can list down all of their groups and events. 
+![Groups](http://pages.mini.pw.edu.pl/~gorzynskik/HTMLPostGIS/Meeter/groups.png)
+
+![Events](http://pages.mini.pw.edu.pl/~gorzynskik/HTMLPostGIS/Meeter/events.png)
+
+![Created groups](http://pages.mini.pw.edu.pl/~gorzynskik/HTMLPostGIS/Meeter/createdgroups2.png)
+
+Furthermore, Places API provides the information about the points related to the users' preferences and specifically the closest to the selected point. 
+![Places API](http://pages.mini.pw.edu.pl/~gorzynskik/HTMLPostGIS/Meeter/placesapi.png)
+
 ## Technologies used
 
 * Client-side
@@ -90,6 +124,126 @@ http://localhost:5000/api/Event/Index
 * Server-side
   * ASP .NET Core 2.1
   * Microsoft SQL Server
+
+## Developer guide
+
+### Services
+
+    services.AddDbContext<NormalDataContext>(options => options.UseSqlServer(connection));
+
+#### Identity services
+
+    services.AddIdentity<User, IdentityRole>(config =>
+      {
+          config.Password.RequireDigit = false;
+          config.Password.RequiredLength = 4;
+          config.Password.RequireUppercase = false;
+          config.Password.RequireNonAlphanumeric = false;
+      })
+          .AddEntityFrameworkStores<NormalDataContext>()
+          .AddDefaultTokenProviders()
+          .AddRoles<IdentityRole>();
+
+### Database
+
+Creating the database with users inheriting from IdentityUser. 
+
+
+    public class NormalDataContext : IdentityDbContext<User, IdentityRole, string>
+    
+
+Loading static data from json file automatically on database update.
+
+    protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+            var myJsonString = File.ReadAllText("preferences.json");
+            List<Type> ptypes = JsonConvert.DeserializeObject<List<Type>>(myJsonString);
+            builder.Entity<Type>().HasData(ptypes.ToArray());
+            // Customize the ASP.NET Core Identity model and override the defaults if needed. 
+
+            //builder.Entity<IdentityUserRole<Guid>>().HasKey(p => new { p.UserId, p.RoleId });
+        }
+
+Hiding the secret information in *appsettings.Secret.json* file (ignored by git). 
+
+    {
+      "Logging": {
+        "LogLevel": {
+          "Default": "Debug",
+          "System": "Information",
+          "Microsoft": "Information"
+        }
+      }, 
+      "AdminEmail": "YOUR_EMAIL",
+      "GoogleKey": "YOUR_GOOGLE_KEY"
+    }
+
+
+#### Adding to database 
+
+    await normalDataContext.Groups.AddAsync(model);
+                await normalDataContext.GroupMembers.AddAsync(
+                    new GroupMember
+                {
+                    GroupId = model.Id,
+                    User = model.Creator
+                    //Userid = model.Creator.Id
+                });
+                await normalDataContext.SaveChangesAsync();
+
+
+#### Removing from database  
+
+    normalDataContext.Groups.Remove(normalDataContext.Groups.Find(id));
+                await normalDataContext.SaveChangesAsync();
+
+### Authorization
+
+Thanks to the mechanism of IdentityRoles, it is possible to prevent normal users from seeing sites which are available only for admin. If needed, another roles can be defined as well. 
+
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> IndexAdmin()
+    {
+        ...
+    }
+
+### Razor-Controller communication
+
+Way of communication between .NET server and Razor form.
+
+    @using (Html.BeginForm("Create"))
+            {
+                @Html.AntiForgeryToken()
+                ...
+
+                <div class="form-group">
+                  <button type="submit" class="btn btn-primary">Create<button>
+                </div>
+            }
+or:
+
+    @Html.ActionLink(eve.Group.Name, "GetGroupInfo", "Group", new { id = eve.Group.Id }, new { @class = "btn btn-dark" })</td>
+
+### Controller communication
+
+    [Route("api/[controller]/[action]")]
+    public class GroupController : Controller
+    {
+        private readonly NormalDataContext normalDataContext;
+        private readonly UserManager<User> userManager;
+        private readonly SignInManager<User> signInManager;
+
+        public GroupController(
+            UserManager<User> usm,
+            SignInManager<User> sim,
+            NormalDataContext normalD)
+        {
+            userManager = usm;
+            signInManager = sim;
+
+            normalDataContext = normalD;
+        }
 
 ## Conclusions
 
