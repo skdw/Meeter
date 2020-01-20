@@ -4,14 +4,16 @@ using Meeter.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace MeeterAplication.Migrations
+namespace Meeter.Migrations
 {
     [DbContext(typeof(NormalDataContext))]
-    partial class NormalDataContextModelSnapshot : ModelSnapshot
+    [Migration("20200119231929_PlaceType")]
+    partial class PlaceType
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -126,27 +128,6 @@ namespace MeeterAplication.Migrations
                     b.ToTable("Places");
                 });
 
-            modelBuilder.Entity("Meeter.Models.PlaceType", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("PlaceId");
-
-                    b.Property<string>("PlaceId1");
-
-                    b.Property<int>("TypeId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PlaceId1");
-
-                    b.HasIndex("TypeId");
-
-                    b.ToTable("PlaceTypes");
-                });
-
             modelBuilder.Entity("Meeter.Models.Type", b =>
                 {
                     b.Property<int>("Id")
@@ -161,7 +142,7 @@ namespace MeeterAplication.Migrations
 
                     b.HasIndex("PlaceId");
 
-                    b.ToTable("Types");
+                    b.ToTable("PlaceTypes");
 
                     b.HasData(
                         new { Id = 1, Name = "accounting" },
@@ -496,18 +477,6 @@ namespace MeeterAplication.Migrations
                     b.HasOne("Meeter.Models.Location", "Location")
                         .WithMany()
                         .HasForeignKey("LocationId");
-                });
-
-            modelBuilder.Entity("Meeter.Models.PlaceType", b =>
-                {
-                    b.HasOne("Meeter.Models.Place", "Place")
-                        .WithMany()
-                        .HasForeignKey("PlaceId1");
-
-                    b.HasOne("Meeter.Models.Type", "Type")
-                        .WithMany()
-                        .HasForeignKey("TypeId")
-                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Meeter.Models.Type", b =>

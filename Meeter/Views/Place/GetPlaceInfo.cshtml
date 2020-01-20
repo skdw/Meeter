@@ -1,0 +1,66 @@
+﻿@model Meeter.Models.Place
+
+<div>
+    <h4>Place</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Icon)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Icon)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.PlaceId)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.PlaceId)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.PriceLevel)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.PriceLevel)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Rating)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Rating)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Vicinity)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Vicinity)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Location)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Location.Id)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.OpenNow)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.OpenNow)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.UserRatingsTotal)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.UserRatingsTotal)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

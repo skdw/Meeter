@@ -141,9 +141,9 @@ namespace Meeter.Controllers
         public JsonResult CurrentPreferenceAutocomplete([FromQuery]string term = "") // v - inserted text
         {
             var objMemberlist = normalDataContext.UserPreferences
-                            .Where(u => u.PlaceType.Type.ToUpper()
+                            .Where(u => u.Type.Name.ToUpper()
                             .Contains(term.ToUpper()))
-                            .Select(u => new { id = u.Id,type=u.PlaceType })
+                            .Select(u => new { id = u.Id,type=u.Type })
                             .Distinct().ToList();
             return Json(objMemberlist);
         }

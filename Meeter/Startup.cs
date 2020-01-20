@@ -57,7 +57,23 @@ namespace Meeter
                 config.LoginPath = "/api/meeter/Login";
             });
 
-            services.AddCors(); // Make sure you call this previous to AddMvc
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(
+                    builder =>
+                    {
+                        builder.WithOrigins("http://example.com");
+                    });
+
+                options.AddPolicy("GooglePolicy",
+                    builder =>
+                    {
+                        builder.WithOrigins("*")
+                                            .AllowAnyHeader()
+                                            .AllowAnyMethod();
+                    });
+
+            });
 
             //services.AddAuthorization(options =>
             //{

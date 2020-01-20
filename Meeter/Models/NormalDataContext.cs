@@ -20,6 +20,8 @@ namespace Meeter.Models
     {
         public NormalDataContext(DbContextOptions<NormalDataContext> options) : base(options) { }
 
+        public DbSet<Type> Types { get; set; }
+
         public DbSet<Place> Places { get; set; }
 
         public DbSet<PlaceType> PlaceTypes { get; set; }
@@ -38,8 +40,8 @@ namespace Meeter.Models
         {
             base.OnModelCreating(builder);
             var myJsonString = File.ReadAllText("preferences.json");
-            List<PlaceType> ptypes = JsonConvert.DeserializeObject<List<PlaceType>>(myJsonString);
-            builder.Entity<PlaceType>().HasData(ptypes.ToArray());
+            List<Type> ptypes = JsonConvert.DeserializeObject<List<Type>>(myJsonString);
+            builder.Entity<Type>().HasData(ptypes.ToArray());
             // Customize the ASP.NET Core Identity model and override the defaults if needed. 
 
             //builder.Entity<IdentityUserRole<Guid>>().HasKey(p => new { p.UserId, p.RoleId });

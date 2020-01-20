@@ -27,6 +27,6 @@ namespace Meeter.Models
 
         public int UserRatingsTotal { get; set; }
 
-        public virtual ICollection<PlaceType> Types { get; set; }
+        public virtual ICollection<Type> Types { get; set; }
     }
 }
