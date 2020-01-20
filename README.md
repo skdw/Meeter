@@ -125,21 +125,13 @@ Furthermore, Places API provides the information about the points related to the
   * ASP .NET Core 2.1
   * Microsoft SQL Server
 
-## Conclusions
-
-* Due to the .NET's just-in-time compilation, some errors do not prevent launching the application. It causes the app to start faster, but also to be harder to debug. 
-* Passing data between the backend and frontend by sending HTTP requests manually and fetching them is tedious. When app becomes larger, rewriting code to Razor and using Views makes it much cleaner and simpler. 
-* Models work just like database tables, that's why they should be coded not like the traditional classes nested one in another, but like the related tables, binded by marking the members as virtual. Unfortunately, we are still facing problems trying to get all the data via the relations and avoiding searching it manually by the id. 
-* Authentication and authorization are a real tough nut to crack when doing it for the first time. Range of different methods makes it hard to look for advice in online tutorials. 
-* The salary of full-stack developer is definitely deserved! 🤑
-
 ## Developer guide
 
-## Services
+### Services
 
     services.AddDbContext<NormalDataContext>(options => options.UseSqlServer(connection));
 
-### Identity services
+#### Identity services
 
     services.AddIdentity<User, IdentityRole>(config =>
       {
@@ -188,7 +180,7 @@ Hiding the secret information in *appsettings.Secret.json* file (ignored by git)
     }
 
 
-Adding to database 
+#### Adding to database 
 
     await normalDataContext.Groups.AddAsync(model);
                 await normalDataContext.GroupMembers.AddAsync(
@@ -201,7 +193,7 @@ Adding to database
                 await normalDataContext.SaveChangesAsync();
 
 
-Removing from database  
+#### Removing from database  
 
     normalDataContext.Groups.Remove(normalDataContext.Groups.Find(id));
                 await normalDataContext.SaveChangesAsync();
@@ -253,7 +245,13 @@ or:
             normalDataContext = normalD;
         }
 
+## Conclusions
 
+* Due to the .NET's just-in-time compilation, some errors do not prevent launching the application. It causes the app to start faster, but also to be harder to debug. 
+* Passing data between the backend and frontend by sending HTTP requests manually and fetching them is tedious. When app becomes larger, rewriting code to Razor and using Views makes it much cleaner and simpler. 
+* Models work just like database tables, that's why they should be coded not like the traditional classes nested one in another, but like the related tables, binded by marking the members as virtual. Unfortunately, we are still facing problems trying to get all the data via the relations and avoiding searching it manually by the id. 
+* Authentication and authorization are a real tough nut to crack when doing it for the first time. Range of different methods makes it hard to look for advice in online tutorials. 
+* The salary of full-stack developer is definitely deserved! 🤑
 
 ## Authors and acknowledgment
 * Anna Buchman
